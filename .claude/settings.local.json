@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app@latest *)",
+      "Bash(cp -r /Users/gauravmalviya/Documents/Projects/shiftai/. /Users/gauravmalviya/Documents/Projects/AICareerAccelerator/)",
+      "Bash(rm -rf /Users/gauravmalviya/Documents/Projects/shiftai)",
+      "Bash(npm install *)",
+      "Bash(npx shadcn@latest *)"
+    ]
+  }
+}
