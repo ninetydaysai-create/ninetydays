@@ -51,6 +51,10 @@ const testimonials = [
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white">
+      {/* Beta Banner */}
+      <div className="bg-indigo-600 text-white text-center py-2.5 px-4 text-sm font-semibold tracking-wide">
+        🚀 You&apos;re using an early beta version of NinetyDays — expect rough edges and share your feedback!
+      </div>
       {/* Nav */}
       <header className="border-b sticky top-0 z-50 bg-white/95 backdrop-blur">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -59,7 +63,6 @@ export default function LandingPage() {
               <Zap className="h-5 w-5 text-white" />
             </div>
             <span className="font-bold text-xl tracking-tight">NinetyDays</span>
-            <span className="text-xs font-bold uppercase tracking-widest text-white bg-indigo-500 px-2.5 py-1 rounded-full">Beta</span>
           </Link>
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
             <a href="#how-it-works" className="hover:text-slate-900 transition-colors">How it works</a>
