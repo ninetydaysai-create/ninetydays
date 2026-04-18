@@ -1,0 +1,446 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum Plan {
+  FREE
+  PRO
+}
+
+enum TargetRole {
+  product_swe
+  staff_eng
+  ml_eng
+  ai_pm
+  data_scientist
+}
+
+enum GapSeverity {
+  critical
+  major
+  minor
+}
+
+enum InterviewType {
+  behavioral
+  system_design
+  ml_concepts
+  product_sense
+}
+
+enum JobStatus {
+  saved
+  applied
+  recruiter_screen
+  technical
+  final_round
+  offer
+  rejected
+}
+
+// ─── User ─────────────────────────────────────────────────────────────────────
+
+model User {
+  id                     String      @id // Clerk userId
+  email                  String      @unique
+  name                   String?
+  avatarUrl              String?
+  currentCompany         String?
+  currentRole            String?
+  yearsExperience        Int?
+  targetRole             TargetRole?
+  onboardingDone         Boolean     @default(false)
+  plan                   Plan        @default(FREE)
+  stripeCustomerId       String?     @unique
+  stripeSubscriptionId   String?     @unique
+  stripePriceId          String?
+  stripeCurrentPeriodEnd DateTime?
+  referralCode           String?     @unique  // e.g. "gaurav-x3k2"
+  referredBy             String?              // userId of the referrer
+  referralCount          Int         @default(0)
+  createdAt              DateTime    @default(now())
+  updatedAt              DateTime    @updatedAt
+
+  resumes           Resume[]
+  gapReports        GapReport[]
+  roadmap           Roadmap?
+  portfolio         Portfolio?
+  interviewSessions InterviewSession[]
+  jobApplications   JobApplication[]
+  linkedinOpts      LinkedinOptimization[]
+  githubOpts        GithubOptimization[]
+  notifications     Notification[]
+  emailPreference   EmailPreference?
+  activityLogs      ActivityLog[]
+  featureFlags      FeatureFlag[]
+  aiLogs            AiLog[]
+  jobMatches        JobMatch[]
+  bulletRewrites    BulletRewrite[]
+  mentorMessages    MentorMessage[]
+
+  @@map("users")
+}
+
+// ─── Resume ───────────────────────────────────────────────────────────────────
+
+model Resume {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fileUrl   String
+  fileName  String
+  fileSize  Int
+  rawText   String   @db.Text
+  createdAt DateTime @default(now())
+
+  analyses ResumeAnalysis[]
+
+  @@map("resumes")
+}
+
+model ResumeAnalysis {
+  id                  String   @id @default(cuid())
+  resumeId            String
+  resume              Resume   @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  userId              String
+  overallScore        Int
+  skillsFound         Json // string[]
+  techYears           Json // { React: 3, Java: 8, ... }
+  starStoriesCount    Int
+  impactScore         Int
+  projectComplexity   Int
+  keywordDensityScore Int
+  weakBullets         Json // { original: string, rewrite: string }[]
+  roleMatchScores     Json // { role: TargetRole, score: number }[]
+  rawAnalysis         Json
+  model               String   @default("gpt-4o")
+  createdAt           DateTime @default(now())
+
+  gapReport GapReport?
+
+  @@map("resume_analyses")
+}
+
+// ─── Gap Engine ───────────────────────────────────────────────────────────────
+
+model RoleBenchmark {
+  id               String     @id @default(cuid())
+  roleKey          TargetRole @unique
+  requiredSkills   Json // string[]
+  requiredProjects Json // string[]
+  requiredStories  Json // string[]
+  jdKeywords       Json // string[]
+  updatedAt        DateTime   @updatedAt
+
+  @@map("role_benchmarks")
+}
+
+model GapReport {
+  id            String         @id @default(cuid())
+  userId        String
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  analysisId    String         @unique
+  analysis      ResumeAnalysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  skillGaps     Json // GapItem[]
+  projectGaps   Json // GapItem[]
+  storyGaps     Json // GapItem[]
+  totalGapScore Int
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  roadmap Roadmap?
+
+  @@map("gap_reports")
+}
+
+// ─── Roadmap ──────────────────────────────────────────────────────────────────
+
+model Roadmap {
+  id          String     @id @default(cuid())
+  userId      String     @unique
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gapReportId String     @unique
+  gapReport   GapReport  @relation(fields: [gapReportId], references: [id])
+  targetRole  TargetRole
+  startedAt   DateTime   @default(now())
+  createdAt   DateTime   @default(now())
+
+  weeks RoadmapWeek[]
+
+  @@map("roadmaps")
+}
+
+model RoadmapWeek {
+  id              String  @id @default(cuid())
+  roadmapId       String
+  roadmap         Roadmap @relation(fields: [roadmapId], references: [id], onDelete: Cascade)
+  weekNumber      Int
+  theme           String
+  estimatedHours  Int
+  deliverable     String
+  deliverableUrl  String?
+  deliverableDone Boolean @default(false)
+
+  tasks RoadmapTask[]
+
+  @@unique([roadmapId, weekNumber])
+  @@map("roadmap_weeks")
+}
+
+model RoadmapTask {
+  id           String      @id @default(cuid())
+  weekId       String
+  week         RoadmapWeek @relation(fields: [weekId], references: [id], onDelete: Cascade)
+  label        String
+  description  String?
+  resourceUrls Json // string[]
+  hours        Int
+  impactScore  Int         @default(5) // 1-10, how much this task boosts readiness
+  whyItMatters String?                 // "Asked in 80% ML interviews"
+  completed    Boolean     @default(false)
+  completedAt  DateTime?
+
+  @@map("roadmap_tasks")
+}
+
+// ─── Portfolio ────────────────────────────────────────────────────────────────
+
+model Portfolio {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  username     String   @unique
+  bio          String   @db.Text
+  headline     String?
+  isPublic     Boolean  @default(false)
+  githubLinked Boolean  @default(false)
+  views        Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  projects PortfolioProject[]
+
+  @@map("portfolios")
+}
+
+model PortfolioProject {
+  id          String    @id @default(cuid())
+  portfolioId String
+  portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  title       String
+  description String    @db.Text
+  url         String?
+  githubUrl   String?
+  techTags    Json // string[]
+  stars       Int?
+  language    String?
+  isGithub    Boolean   @default(false)
+  sortOrder   Int       @default(0)
+  featured    Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+
+  @@map("portfolio_projects")
+}
+
+// ─── Interview ────────────────────────────────────────────────────────────────
+
+model InterviewSession {
+  id             String        @id @default(cuid())
+  userId         String
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role           TargetRole
+  type           InterviewType
+  companyName    String?       // e.g. "Google", "Stripe" — optional company-specific mode
+  transcript     Json // { role: "user"|"assistant", content: string, timestamp: string }[]
+  scorecard      Json?
+  overallScore   Int?
+  questionsCount Int           @default(5)
+  status         String        @default("active") // "active" | "complete"
+  startedAt      DateTime      @default(now())
+  completedAt    DateTime?
+
+  @@map("interview_sessions")
+}
+
+model InterviewQuestion {
+  id         String        @id @default(cuid())
+  roleKey    TargetRole
+  type       InterviewType
+  question   String        @db.Text
+  tags       Json // string[]
+  difficulty String // "easy" | "medium" | "hard"
+
+  @@map("interview_questions")
+}
+
+// ─── LinkedIn + GitHub Optimizer ──────────────────────────────────────────────
+
+model LinkedinOptimization {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  inputHeadline  String
+  inputSummary   String   @db.Text
+  outputHeadline String
+  outputSummary  String   @db.Text
+  alternatives   Json // string[]
+  createdAt      DateTime @default(now())
+
+  @@map("linkedin_optimizations")
+}
+
+model GithubOptimization {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  inputReadme    String   @db.Text
+  outputReadme   String   @db.Text
+  pushedToGitHub Boolean  @default(false)
+  createdAt      DateTime @default(now())
+
+  @@map("github_optimizations")
+}
+
+// ─── Job Tracker ──────────────────────────────────────────────────────────────
+
+model JobApplication {
+  id              String    @id @default(cuid())
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company         String
+  roleTitle       String
+  jobUrl          String?
+  rawJd           String?   @db.Text
+  extractedData   Json? // { requiredSkills, salary, location, remote }
+  status          JobStatus @default(saved)
+  notes           String?   @db.Text
+  keywordMatchPct Int?
+  followUpDate    DateTime?
+  followUpSent    Boolean   @default(false)
+  appliedAt       DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@map("job_applications")
+}
+
+// ─── Notifications ────────────────────────────────────────────────────────────
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  title     String
+  body      String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("notifications")
+}
+
+model EmailPreference {
+  id            String  @id @default(cuid())
+  userId        String  @unique
+  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weeklyDigest  Boolean @default(true)
+  reEngagement  Boolean @default(true)
+  transactional Boolean @default(true)
+
+  @@map("email_preferences")
+}
+
+// ─── Activity Log ─────────────────────────────────────────────────────────────
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String // "task_complete" | "interview_done" | "job_applied" | "gap_resolved" | "resume_analyzed"
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@map("activity_logs")
+}
+
+// ─── Admin ────────────────────────────────────────────────────────────────────
+
+model AiLog {
+  id               String   @id @default(cuid())
+  userId           String?
+  user             User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  module           String // "resume" | "gaps" | "roadmap" | "interview" | "linkedin" | "github"
+  model            String
+  promptTokens     Int
+  completionTokens Int
+  latencyMs        Int
+  createdAt        DateTime @default(now())
+
+  @@map("ai_logs")
+}
+
+model FeatureFlag {
+  id      String  @id @default(cuid())
+  userId  String
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  flagKey String
+  value   Boolean
+
+  @@unique([userId, flagKey])
+  @@map("feature_flags")
+}
+
+// ─── Job Match ────────────────────────────────────────────────────────────────
+
+model JobMatch {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jdText          String   @db.Text
+  jdUrl           String?
+  companyName     String?
+  roleTitle       String?
+  matchScore      Int
+  strengths       Json     // string[]
+  blockingGaps    Json     // { label, severity, hoursToFix, action }[]
+  improvementPlan String?  @db.Text
+  resumeSnippet   String?  @db.Text
+  createdAt       DateTime @default(now())
+
+  @@index([userId])
+  @@map("job_matches")
+}
+
+model BulletRewrite {
+  id                String   @id @default(cuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  original          String   @db.Text
+  rewrites          Json     // { text, impactScore, reasoning }[]
+  impactScoreBefore Int
+  impactScoreAfter  Int
+  createdAt         DateTime @default(now())
+
+  @@index([userId])
+  @@map("bullet_rewrites")
+}
+
+// ─── AI Mentor ────────────────────────────────────────────────────────────────
+
+model MentorMessage {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      String   // "user" | "assistant"
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("mentor_messages")
+}
