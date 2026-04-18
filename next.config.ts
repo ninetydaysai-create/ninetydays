@@ -10,9 +10,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "utfs.io" },
     ],
   },
-  turbopack: {
-    // Turbopack config (empty = use defaults, silences the webpack warning)
-  },
+  serverExternalPackages: ["pdf-parse"],
 };
 
 export default nextConfig;
