@@ -59,6 +59,7 @@ export default function LandingPage() {
               <Zap className="h-5 w-5 text-white" />
             </div>
             <span className="font-bold text-xl tracking-tight">NinetyDays</span>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-white bg-indigo-500 px-2 py-0.5 rounded-full">Beta</span>
           </Link>
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
             <a href="#how-it-works" className="hover:text-slate-900 transition-colors">How it works</a>
