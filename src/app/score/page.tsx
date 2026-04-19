@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Zap, ArrowRight, Loader2, CheckCircle2, AlertTriangle, XCircle,
-  Share2, Lock, Brain, Map, MessageSquare, Target, TrendingUp, Star, X,
+  Share2, Brain, Map, MessageSquare, TrendingUp, Star, X,
 } from "lucide-react";
 import Link from "next/link";
 import { SignUpButton } from "@clerk/nextjs";
@@ -23,21 +23,6 @@ interface ScoreResult {
   topAction: string;
   timeToReady: string;
 }
-
-const ROADMAP_PREVIEW = [
-  { week: "Week 1–2", theme: "Fix impact metrics across every bullet", locked: false },
-  { week: "Week 3–4", theme: "System design fundamentals + mock problems", locked: true },
-  { week: "Week 5–8", theme: "Build 2 portfolio-grade projects", locked: true },
-  { week: "Week 9–12", theme: "Interview sprints + offer negotiation", locked: true },
-];
-
-const VALUE_ITEMS = [
-  { icon: Brain, label: "AI Mentor", desc: "Daily guidance on exactly what to fix next" },
-  { icon: Map, label: "Full 90-day roadmap", desc: "Week-by-week plan tailored to your gaps" },
-  { icon: MessageSquare, label: "Unlimited mock interviews", desc: "Practice until rejection isn't a surprise" },
-  { icon: Target, label: "JD readiness scoring", desc: "Know your odds before every application" },
-  { icon: TrendingUp, label: "Progress tracking", desc: "Watch your readiness climb week by week" },
-];
 
 // A/B test — pricing model × positioning (the real money test).
 // Prices shown are filled in at render time from the user's geo (useGeo hook).
@@ -283,25 +268,127 @@ export default function ScorePage() {
               </div>
             )}
 
-            {/* ── GAPS — first visible, rest blurred ── */}
-            {result.topGaps.length > 0 && (
-              <div className="space-y-3">
-                <p className="text-slate-400 font-bold text-sm tracking-wide uppercase text-xs">
-                  Gaps blocking you ({result.topGaps.length} found)
+            {/* ── GAP #1 — always fully visible ── */}
+            {result.topGaps.length > 0 && (() => {
+              const gap = result.topGaps[0];
+              const cfg = severityConfig[gap.severity];
+              const Icon = cfg.icon;
+              return (
+                <div className="space-y-3">
+                  <p className="text-slate-400 font-bold tracking-wide uppercase text-xs">
+                    Gaps blocking you ({result.topGaps.length} found)
+                  </p>
+                  <div className={cn("border rounded-xl p-4 flex items-start gap-3", cfg.bg)}>
+                    <Icon className={cn("h-4 w-4 shrink-0 mt-0.5", cfg.color)} />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-semibold text-white text-sm">{gap.label}</span>
+                        <span className={cn("text-xs font-bold px-2 py-0.5 rounded-full bg-white/10", cfg.color)}>
+                          {cfg.label}
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-400 leading-relaxed">{gap.impact}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* ── CONVERSION GATE — interrupts scroll after gap #1 ── */}
+            <div className="rounded-2xl border border-indigo-500/30 bg-gradient-to-b from-indigo-950/70 to-[#0d1020] p-7 text-center space-y-5">
+
+              {/* Hook */}
+              <div>
+                {result.topGaps.length > 1 && (
+                  <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-3">
+                    {result.topGaps.length - 1} more gap{result.topGaps.length - 1 > 1 ? "s" : ""} found
+                  </p>
+                )}
+                <p className="text-2xl font-black text-white leading-tight mb-2">
+                  {result.topGaps.length > 1
+                    ? "See every gap blocking you — and the exact fix for each"
+                    : "Get your personalised 90-day plan to close this gap"}
                 </p>
+                <p className="text-slate-400 text-sm leading-relaxed">
+                  Sign in to unlock your full gap breakdown, top action, and a 90-day roadmap tailored to these exact gaps. Free.
+                </p>
+              </div>
 
-                {result.topGaps.map((gap, i) => {
-                  const cfg = severityConfig[gap.severity];
-                  const Icon = cfg.icon;
-                  const isLocked = i >= 1; // show first gap fully; blur the rest
+              {/* Google OAuth — primary */}
+              <SignUpButton mode="modal" forceRedirectUrl={v.afterSignUpUrl}>
+                <Button
+                  className="w-full h-12 text-base font-bold bg-white hover:bg-slate-100 text-slate-900 rounded-xl gap-3"
+                  onClick={() => { localStorage.setItem("pending_plan", v.plan); track("oauth_click"); }}
+                >
+                  <svg className="h-5 w-5 shrink-0" viewBox="0 0 24 24">
+                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                  </svg>
+                  Continue with Google — it&apos;s free
+                </Button>
+              </SignUpButton>
 
-                  return (
-                    <div key={gap.label} className="relative">
-                      <div className={cn(
-                        "border rounded-xl p-4 flex items-start gap-3",
-                        cfg.bg,
-                        isLocked && "select-none"
-                      )}>
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-px bg-white/10" />
+                <span className="text-slate-600 text-xs">or</span>
+                <div className="flex-1 h-px bg-white/10" />
+              </div>
+
+              {/* Email sign-up — secondary */}
+              <Link
+                href={`/sign-up?redirect_url=${encodeURIComponent(v.afterSignUpUrl)}`}
+                className="block"
+                onClick={() => { localStorage.setItem("pending_plan", v.plan); track("cta_click"); }}
+              >
+                <Button variant="outline" className="w-full h-11 font-semibold border-white/15 bg-white/5 text-white hover:bg-white/10 rounded-xl">
+                  {v.cta}
+                  <ArrowRight className="h-4 w-4 ml-2" />
+                </Button>
+              </Link>
+
+              {/* 3 value tiles */}
+              <div className="grid grid-cols-3 gap-2 pt-1">
+                {[
+                  { icon: Brain, label: "All gaps explained" },
+                  { icon: Map, label: "90-day roadmap" },
+                  { icon: MessageSquare, label: "Mock interviews" },
+                ].map(({ icon: Icon, label }) => (
+                  <div key={label} className="flex flex-col items-center gap-1.5 p-3 bg-white/[0.03] rounded-xl border border-white/5">
+                    <Icon className="h-4 w-4 text-indigo-400" />
+                    <span className="text-white text-xs font-semibold text-center leading-tight">{label}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Social proof */}
+              <div className="bg-white/[0.03] border border-white/10 rounded-xl p-4 text-left">
+                <div className="flex gap-0.5 mb-2">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-3.5 w-3.5 text-amber-400 fill-amber-400" />
+                  ))}
+                </div>
+                <p className="text-slate-300 text-sm leading-relaxed italic">
+                  &ldquo;I scored 38% on day one. Six weeks later I was at 74% and had 3 interview callbacks.&rdquo;
+                </p>
+                <p className="text-slate-500 text-xs mt-2 font-medium">
+                  Arjun S. — ex-Infosys → ML Engineer at a Series B startup
+                </p>
+              </div>
+
+              <p className="text-slate-600 text-xs">Free to start · No credit card · 30-day money-back guarantee</p>
+            </div>
+
+            {/* ── FOMO BLUR — remaining gaps + top action, teased below gate ── */}
+            {(result.topGaps.length > 1 || result.topAction) && (
+              <div className="relative overflow-hidden rounded-2xl" style={{ maxHeight: "260px" }}>
+                <div className="blur-md pointer-events-none select-none space-y-3 p-1">
+                  {result.topGaps.slice(1).map((gap, i) => {
+                    const cfg = severityConfig[gap.severity];
+                    const Icon = cfg.icon;
+                    return (
+                      <div key={i} className={cn("border rounded-xl p-4 flex items-start gap-3", cfg.bg)}>
                         <Icon className={cn("h-4 w-4 shrink-0 mt-0.5", cfg.color)} />
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
@@ -310,188 +397,20 @@ export default function ScorePage() {
                               {cfg.label}
                             </span>
                           </div>
-                          <p className={cn(
-                            "text-xs text-slate-400 leading-relaxed",
-                            isLocked && "blur-sm pointer-events-none"
-                          )}>
-                            {gap.impact}
-                          </p>
+                          <p className="text-xs text-slate-400 leading-relaxed">{gap.impact}</p>
                         </div>
-                        {isLocked && (
-                          <div className="shrink-0 flex items-center gap-1 text-slate-500 text-xs">
-                            <Lock className="h-3.5 w-3.5" />
-                          </div>
-                        )}
                       </div>
-                      {isLocked && (
-                        <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-transparent via-transparent to-transparent" />
-                      )}
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                  <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-2xl p-5">
+                    <p className="text-indigo-400 font-bold text-xs uppercase tracking-wide mb-1">Do this first</p>
+                    <p className="text-white text-sm leading-relaxed">{result.topAction}</p>
+                  </div>
+                </div>
+                {/* Full fade to background */}
+                <div className="absolute inset-0 bg-gradient-to-b from-[#0b0e14]/10 via-[#0b0e14]/70 to-[#0b0e14] pointer-events-none" />
               </div>
             )}
-
-            {/* Top action */}
-            <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-2xl p-5">
-              <p className="text-indigo-400 font-bold text-xs uppercase tracking-wide mb-1">Do this first</p>
-              <p className="text-white text-sm leading-relaxed">{result.topAction}</p>
-            </div>
-
-            {/* ── LOCKED: 90-day roadmap preview ── */}
-            <div className="relative rounded-2xl overflow-hidden border border-white/10">
-              {/* Header — visible */}
-              <div className="bg-white/[0.04] px-5 pt-5 pb-3 flex items-center justify-between">
-                <div>
-                  <p className="text-white font-bold text-sm">Your 90-day roadmap</p>
-                  <p className="text-slate-500 text-xs mt-0.5">Tailored to close your exact gaps</p>
-                </div>
-                <span className="flex items-center gap-1.5 text-xs text-amber-400 bg-amber-400/10 border border-amber-400/20 rounded-full px-3 py-1 font-medium">
-                  <Lock className="h-3 w-3" /> Locked
-                </span>
-              </div>
-
-              {/* Week list */}
-              <div className="divide-y divide-white/5">
-                {ROADMAP_PREVIEW.map((row) => (
-                  <div key={row.week} className={cn(
-                    "flex items-center gap-4 px-5 py-3.5",
-                    row.locked ? "opacity-70" : "opacity-100"
-                  )}>
-                    <span className="text-xs text-slate-500 font-mono w-20 shrink-0">{row.week}</span>
-                    {row.locked ? (
-                      <div className="flex items-center gap-2 flex-1">
-                        <div className="h-3 rounded bg-slate-700/80 blur-sm w-56" />
-                        <Lock className="h-3.5 w-3.5 text-slate-600 shrink-0" />
-                      </div>
-                    ) : (
-                      <span className="text-sm text-slate-300">{row.theme}</span>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              {/* Fade overlay */}
-              <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#0b0e14] to-transparent pointer-events-none" />
-            </div>
-
-            {/* ── PAYWALL BLOCK — A/B tests pricing model × positioning ── */}
-            <div className="rounded-2xl border border-indigo-500/30 bg-gradient-to-b from-indigo-950/60 to-[#0b0e14] p-7 text-center space-y-6">
-
-              {/* Variant-specific badge */}
-              <div className="flex justify-center">
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-300 bg-amber-400/10 border border-amber-400/20 rounded-full px-3 py-1">
-                  <Zap className="h-3 w-3" />
-                  {userCount ? v.badgeWithCount(userCount) : v.badgeStatic}
-                </span>
-              </div>
-
-              {/* Variant-specific headline */}
-              <div>
-                <p className="text-2xl font-black text-white leading-tight mb-2">
-                  {(v.headline as (s: number, t: number) => string)(score, targetScore)}
-                </p>
-                <p className="text-slate-400 text-sm leading-relaxed">{v.sub}</p>
-              </div>
-
-              {/* Prominent price display — geo-localised per user's country */}
-              <div className="bg-white/[0.04] border border-indigo-500/20 rounded-xl p-4">
-                <div className="flex items-center justify-center gap-3">
-                  <p className="text-3xl font-black text-white">{localPlan.display}</p>
-                  {localPlan.badge && (
-                    <span className="text-xs font-bold text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 rounded-full px-2.5 py-1">
-                      {localPlan.badge}
-                    </span>
-                  )}
-                </div>
-                <p className="text-slate-500 text-xs mt-1">{localPlan.note}</p>
-              </div>
-
-              {/* Social proof testimonial */}
-              <div className="bg-white/[0.03] border border-white/10 rounded-xl p-4 text-left">
-                <div className="flex gap-0.5 mb-2">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-3.5 w-3.5 text-amber-400 fill-amber-400" />
-                  ))}
-                </div>
-                <p className="text-slate-300 text-sm leading-relaxed italic">
-                  &ldquo;I scored 38% on day one. Six weeks later I was at 74% and had 3 interview callbacks.
-                  The roadmap is what makes this real.&rdquo;
-                </p>
-                <p className="text-slate-500 text-xs mt-2 font-medium">
-                  Arjun S. — ex-Infosys → ML Engineer at a Series B startup
-                </p>
-              </div>
-
-              {/* Value stack */}
-              <div className="space-y-2.5 text-left">
-                {VALUE_ITEMS.map(({ icon: Icon, label, desc }) => (
-                  <div key={label} className="flex items-start gap-3">
-                    <div className="h-7 w-7 rounded-lg bg-indigo-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                      <Icon className="h-3.5 w-3.5 text-indigo-400" />
-                    </div>
-                    <div>
-                      <span className="text-white text-sm font-semibold">{label}</span>
-                      <span className="text-slate-500 text-sm"> — {desc}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* CTA block — primary Google OAuth, secondary email */}
-              <div className="space-y-3">
-                {/* Primary: Google one-click — carries plan intent via forceRedirectUrl */}
-                <SignUpButton mode="modal" forceRedirectUrl={v.afterSignUpUrl}>
-                  <Button
-                    className="w-full h-12 text-base font-bold bg-white hover:bg-slate-100 text-slate-900 rounded-xl gap-3"
-                    onClick={() => {
-                      // Store plan intent for downstream settings page
-                      localStorage.setItem("pending_plan", v.plan);
-                      track("oauth_click");
-                    }}
-                  >
-                    <svg className="h-5 w-5" viewBox="0 0 24 24">
-                      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                    </svg>
-                    Continue with Google
-                  </Button>
-                </SignUpButton>
-
-                <div className="flex items-center gap-3">
-                  <div className="flex-1 h-px bg-white/10" />
-                  <span className="text-slate-600 text-xs">or</span>
-                  <div className="flex-1 h-px bg-white/10" />
-                </div>
-
-                {/* Secondary: email sign-up with plan intent in URL */}
-                <Link
-                  href={`/sign-up?redirect_url=${encodeURIComponent(v.afterSignUpUrl)}`}
-                  className="block"
-                  onClick={() => {
-                    localStorage.setItem("pending_plan", v.plan);
-                    track("cta_click");
-                  }}
-                >
-                  <Button variant="outline" className="w-full h-11 font-semibold border-white/15 bg-white/5 text-white hover:bg-white/10 rounded-xl">
-                    {v.cta}
-                    <ArrowRight className="h-4 w-4 ml-2" />
-                  </Button>
-                </Link>
-
-                <p className="text-slate-600 text-xs">
-                  Takes 30 seconds · Start today, get interview-ready in 4–6 weeks
-                </p>
-                <div className="flex items-center justify-center gap-1.5 text-xs text-slate-500 pt-1">
-                  <svg className="h-3.5 w-3.5 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.955 11.955 0 013 10c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-                  </svg>
-                  30-day money-back guarantee — complete your profile &amp; roadmap, still not happy? Full refund.
-                </div>
-              </div>
-            </div>
 
             {/* Try another */}
             <button
