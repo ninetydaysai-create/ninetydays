@@ -168,7 +168,7 @@ export default function CoverLetterPage() {
           <Button
             onClick={generate}
             disabled={generating || jdText.trim().length < 10}
-            className="gap-2 h-11 px-6 bg-indigo-500 hover:bg-indigo-400"
+            className="gap-2 h-11 px-6 bg-indigo-500 hover:bg-indigo-400 text-white"
           >
             {generating ? (
               <>

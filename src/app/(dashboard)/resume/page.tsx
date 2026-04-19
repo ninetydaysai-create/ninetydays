@@ -174,7 +174,7 @@ export default function ResumePage() {
     <div className="max-w-3xl mx-auto space-y-8">
       <div>
         <h1 className="text-4xl font-bold">Resume Analyzer</h1>
-        <p className="text-slate-400 mt-2 text-base">Upload your resume and get an honest AI score against your target role.</p>
+        <p className="text-slate-300 mt-2 text-base">Upload your resume and get an honest AI score against your target role.</p>
       </div>
 
       {/* Tab switcher */}
@@ -198,7 +198,7 @@ export default function ResumePage() {
           <div className="bg-[#161820] rounded-2xl border border-white/10 p-6 space-y-4">
             <div>
               <p className="font-bold text-white text-base">Paste a weak resume bullet</p>
-              <p className="text-base text-slate-400 mt-0.5">Get 3 AI-rewritten versions with impact scores — copy the best one</p>
+              <p className="text-base text-slate-300 mt-0.5">Get 3 AI-rewritten versions with impact scores — copy the best one</p>
             </div>
             <Textarea
               value={bulletInput}
@@ -309,7 +309,7 @@ export default function ResumePage() {
                       ? "Good start — a few gaps to close."
                       : "Not ready yet — but closer than you think."}
                   </p>
-                  <p className="text-slate-400 mt-1 text-base">
+                  <p className="text-slate-300 mt-1 text-base">
                     {latestScore >= 70
                       ? "You're above the hiring threshold. Let's sharpen the edges."
                       : "Here's exactly what to fix to get hired."}
@@ -318,19 +318,19 @@ export default function ResumePage() {
                 {/* Score comparison bar */}
                 <div className="bg-white/5 rounded-2xl p-5 text-left space-y-3 max-w-sm mx-auto">
                   <div className="flex justify-between items-center">
-                    <span className="text-slate-400 text-sm">Your score</span>
+                    <span className="text-slate-300 text-sm">Your score</span>
                     <span className={`text-2xl font-black ${latestScore >= 70 ? "text-emerald-400" : latestScore >= 50 ? "text-amber-400" : "text-red-400"}`}>{latestScore}</span>
                   </div>
                   <div className="w-full bg-white/10 rounded-full h-2">
                     <div className={`h-2 rounded-full transition-all ${latestScore >= 70 ? "bg-emerald-500" : latestScore >= 50 ? "bg-amber-500" : "bg-red-500"}`} style={{ width: `${latestScore}%` }} />
                   </div>
-                  <div className="flex justify-between text-xs text-slate-500">
+                  <div className="flex justify-between text-xs text-slate-400">
                     <span>0</span>
                     <span className="text-indigo-400 font-semibold">75+ = hire-ready</span>
                     <span>100</span>
                   </div>
                   {latestScore < 75 && (
-                    <p className="text-xs text-slate-400 pt-1 border-t border-white/10">
+                    <p className="text-sm text-slate-300 pt-1 border-t border-white/10">
                       You need <span className="text-white font-bold">+{75 - latestScore} points</span> to reach the hiring threshold — your gap report shows exactly how.
                     </p>
                   )}
@@ -351,12 +351,12 @@ export default function ResumePage() {
               Analyze another resume
             </Button>
           </div>
-          <p className="text-center text-xs text-slate-500">Takes 30 seconds · Personalized to your resume</p>
+          <p className="text-center text-sm text-slate-400">Takes 30 seconds · Personalized to your resume</p>
         </div>
       ) : (
         <div className="bg-[#161820] rounded-2xl border border-white/10 p-7 shadow-sm">
           <h2 className="text-lg font-bold mb-1">Upload a new resume</h2>
-          <p className="text-sm text-slate-400 mb-5">PDF only · max 10MB · we extract the text and analyze it</p>
+          <p className="text-sm text-slate-300 mb-5">PDF only · max 10MB · we extract the text and analyze it</p>
           <label className={`flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-8 cursor-pointer transition-all mb-5 ${file ? "border-primary bg-primary/5" : "border-slate-200 hover:border-primary/50"} ${busy ? "pointer-events-none opacity-60" : ""}`} htmlFor="resume-file">
             {file ? (
               <><FileText className="h-9 w-9 text-primary mb-2" /><span className="font-semibold">{file.name}</span><span className="text-sm text-slate-400 mt-1">{(file.size / 1024).toFixed(0)} KB · click to change</span></>
@@ -380,7 +380,7 @@ export default function ResumePage() {
       {/* Unanalyzed resumes */}
       {unanalyzed.length > 0 && (
         <div className="space-y-3">
-          <h2 className="text-base font-semibold text-slate-400">Uploaded but not analyzed</h2>
+          <h2 className="text-base font-semibold text-slate-300">Uploaded but not analyzed</h2>
           {unanalyzed.map((r) => (
             <div key={r.id} className="bg-[#161820] rounded-xl border border-white/10 p-4 flex items-center justify-between gap-4">
               <div className="flex items-center gap-3">
@@ -405,7 +405,7 @@ export default function ResumePage() {
             <Upload className="h-12 w-12 mx-auto text-slate-400" />
             <div>
               <p className="font-semibold text-lg">No resume uploaded yet</p>
-              <p className="text-sm text-slate-400 mt-1">Upload your PDF above to see how you score against your target role.</p>
+              <p className="text-sm text-slate-300 mt-1">Upload your PDF above to see how you score against your target role.</p>
             </div>
           </CardContent>
         </Card>
@@ -417,13 +417,13 @@ export default function ResumePage() {
                 <div className="flex items-center justify-between gap-4">
                   <div>
                     <p className="text-base font-semibold text-slate-900">{analysis.resume.fileName}</p>
-                    <p className="text-sm text-slate-500">Analyzed {new Date(analysis.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</p>
+                    <p className="text-sm text-slate-400">Analyzed {new Date(analysis.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</p>
                   </div>
                   <div className="text-center">
                     <div className={`text-4xl font-black ${analysis.overallScore >= 70 ? "text-emerald-600" : analysis.overallScore >= 50 ? "text-amber-600" : "text-red-600"}`}>
                       {analysis.overallScore}
                     </div>
-                    <div className="text-xs text-slate-500 font-medium">/ 100</div>
+                    <div className="text-sm text-slate-500 font-medium">/ 100</div>
                   </div>
                 </div>
               </div>
@@ -438,7 +438,7 @@ export default function ResumePage() {
                   ].map((s) => (
                     <div key={s.label} className="rounded-xl bg-slate-50 border border-slate-200 py-4">
                       <div className="text-2xl font-bold text-slate-900">{s.value}</div>
-                      <div className="text-xs text-slate-500 font-medium mt-1">{s.label}</div>
+                      <div className="text-sm text-slate-500 font-medium mt-1">{s.label}</div>
                     </div>
                   ))}
                 </div>
@@ -456,9 +456,9 @@ export default function ResumePage() {
                     <div className="space-y-3">
                       {(analysis.weakBullets as WeakBullet[]).slice(0, 3).map((b, i) => (
                         <div key={i} className="rounded-xl border border-slate-200 p-4 text-sm space-y-2 bg-slate-50">
-                          <div className="text-slate-500 line-through">{b.original}</div>
+                          <div className="text-slate-400 line-through">{b.original}</div>
                           <div className="text-emerald-600 font-medium">{b.rewrite}</div>
-                          <div className="text-xs text-slate-500">Why: {b.reason}</div>
+                          <div className="text-sm text-slate-500">Why: {b.reason}</div>
                         </div>
                       ))}
                     </div>
@@ -468,7 +468,7 @@ export default function ResumePage() {
                   <div className="rounded-xl border border-dashed border-indigo-300 bg-indigo-50 p-5 text-center">
                     <p className="font-semibold text-sm text-indigo-700">Upgrade to see AI bullet rewrites</p>
                     <p className="text-xs text-indigo-600 mt-1">Pro unlocks full rewrites, unlimited analyses, and more.</p>
-                    <Link href="/settings"><Button size="sm" className="mt-3 bg-indigo-600 hover:bg-indigo-700">Upgrade to Pro</Button></Link>
+                    <Link href="/settings"><Button size="sm" className="mt-3 bg-indigo-600 hover:bg-indigo-700 text-white">Upgrade to Pro</Button></Link>
                   </div>
                 )}
                 <Link href="/gaps">

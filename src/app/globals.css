@@ -137,14 +137,24 @@
   p  { @apply text-base; }
 }
 
-/* ─── Color Token System ────────────────────────────────────────────────────
+/* ─── Color Token System (LinkedIn-grade readability) ───────────────────────
    ONE neutral hierarchy. ONE brand color. FOUR status colors. Nothing else.
 
-   Neutral (light bg)      Neutral (dark bg)
-   text-slate-900  heading  text-white         heading
-   text-slate-600  body     text-slate-300     body
-   text-slate-400  subtext  text-slate-400     subtext
-   text-slate-300  disabled text-slate-500     disabled
+   Dark backgrounds (#0b0e14, #161820):
+   text-white         → headings, KPI numbers, primary labels
+   text-slate-300     → descriptions, body text, subtitles  ← NEVER go below this for content
+   text-slate-400     → icons, timestamps, file sizes, counts (metadata ONLY)
+   text-slate-500     → disabled states only
+
+   Light card backgrounds (#ffffff, slate-50):
+   text-slate-900     → headings
+   text-slate-700     → body text
+   text-slate-500     → metadata (dates, counts)
+
+   Font size minimums (LinkedIn rule):
+   text-base (16px)   → descriptions, body content
+   text-sm (14px)     → secondary labels, button text
+   text-xs (12px)     → badges, timestamps, pill counts ONLY — never for readable content
 
    Brand:  indigo-600 (default) · indigo-700 (hover) · indigo-100 (soft)
    Success: emerald-500   Error: red-500   Warning: amber-500   Info: blue-500

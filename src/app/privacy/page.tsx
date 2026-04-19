@@ -73,7 +73,7 @@ export default function PrivacyPage() {
           We share data only with processors under strict data processing agreements (DPAs):
           <TableBlock rows={[
             ["Processor", "Purpose", "Location", "Privacy Policy"],
-            ["Anthropic", "AI analysis (Claude models)", "USA", "anthropic.com/privacy"],
+            ["NinetyDays AI Engine", "Resume and career AI analysis", "USA", "ninetydays.ai/privacy"],
             ["Clerk", "Authentication & user management", "USA (EU servers available)", "clerk.com/privacy"],
             ["Stripe", "Payment processing", "USA/EU", "stripe.com/privacy"],
             ["UploadThing", "Secure file storage (resumes)", "USA", "uploadthing.com/privacy"],
@@ -84,8 +84,7 @@ export default function PrivacyPage() {
             ["Sentry", "Error monitoring (PII stripped)", "USA", "sentry.io/privacy"],
           ]} />
           <p className="mt-3 text-xs text-slate-500">
-            Anthropic&apos;s API does not train on API-submitted data by default (as of the effective date of this policy).
-            Verify at anthropic.com/privacy for the latest terms.
+            Our AI infrastructure providers do not train on API-submitted data by default. Your career data is used only to generate your personalized results — never for model training.
           </p>
         </Section>
 

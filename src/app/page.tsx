@@ -764,6 +764,50 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Founder Section */}
+      <section className="py-24 bg-[#0b0e14] border-b border-white/5">
+        <div className="max-w-3xl mx-auto px-6">
+          <div className="bg-[#161820] rounded-2xl border border-white/10 p-10">
+            <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-6">Why I built this</p>
+            <div className="flex items-start gap-6 mb-8">
+              <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shrink-0 shadow-lg shadow-indigo-500/20">
+                <span className="text-white font-black text-xl">G</span>
+              </div>
+              <div>
+                <p className="text-white font-bold text-lg">Gaurav Malviya</p>
+                <p className="text-slate-400 text-sm mt-0.5">Founder · ex-IT services engineer → product company</p>
+              </div>
+            </div>
+
+            <blockquote className="text-lg text-slate-300 leading-relaxed mb-8 border-l-2 border-indigo-500/40 pl-6">
+              &ldquo;I spent 10 years at IT services companies thinking I was building the right skills. Then I applied to product companies — and got rejected. Repeatedly.
+              <br /><br />
+              40+ applications. 3 first-round interviews. 0 offers. Not because I wasn&apos;t good enough. Because I didn&apos;t know what &ldquo;good enough&rdquo; meant for a product company.
+              <br /><br />
+              I spent 90 days fixing the right things in the right order — and got hired. NinetyDays is the system I wish I had.&rdquo;
+            </blockquote>
+
+            <div className="grid grid-cols-3 gap-4 mb-8">
+              {[
+                { value: "10+", label: "Years in IT services" },
+                { value: "40+", label: "Rejections before cracking it" },
+                { value: "90", label: "Days to get hired" },
+              ].map(({ value, label }) => (
+                <div key={label} className="text-center bg-white/5 rounded-xl p-4">
+                  <div className="text-3xl font-black text-indigo-400">{value}</div>
+                  <div className="text-sm text-slate-400 mt-1">{label}</div>
+                </div>
+              ))}
+            </div>
+
+            <p className="text-slate-300 text-base leading-relaxed">
+              I built this for the engineers who are exactly where I was — talented, hard-working, and invisible to the companies they want to join.
+              The system works. It worked for me. It&apos;s built from that experience, not from generic career advice.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Pricing */}
       <section id="pricing" className="py-24 bg-[#0b0e14] border-t border-white/8">
         <div className="max-w-4xl mx-auto px-6">

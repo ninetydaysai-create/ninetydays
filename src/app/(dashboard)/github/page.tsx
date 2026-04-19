@@ -48,7 +48,7 @@ export default function GitHubPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-white">GitHub Profile Optimizer</h1>
-            <p className="text-slate-400 text-sm mt-0.5">AI rewrites your README to impress product company recruiters</p>
+            <p className="text-slate-300 text-sm mt-0.5">AI rewrites your README to impress product company recruiters</p>
           </div>
         </div>
 
@@ -60,7 +60,7 @@ export default function GitHubPage() {
               </div>
               <div>
                 <p className="text-sm font-semibold text-white">{title}</p>
-                <p className="text-sm text-slate-400 mt-0.5 leading-relaxed">{desc}</p>
+                <p className="text-sm text-slate-300 mt-0.5 leading-relaxed">{desc}</p>
               </div>
             </div>
           ))}
@@ -70,7 +70,7 @@ export default function GitHubPage() {
       {/* Input */}
       <div className="bg-[#161820] rounded-2xl border border-white/10 p-8 shadow-sm">
         <h2 className="text-lg font-bold text-white mb-1">Paste your current README</h2>
-        <p className="text-slate-400 text-base mb-6">Leave blank to generate a professional README from scratch based on your profile.</p>
+        <p className="text-slate-300 text-base mb-6">Leave blank to generate a professional README from scratch based on your profile.</p>
         <div className="space-y-2">
           <Label className="text-sm font-semibold text-slate-300">README.md content</Label>
           <Textarea
@@ -84,7 +84,7 @@ export default function GitHubPage() {
         <Button
           onClick={handleOptimize}
           disabled={loading}
-          className="mt-5 h-12 px-8 text-base font-semibold rounded-xl bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-500/25 transition-all hover:shadow-indigo-500/40"
+          className="mt-5 h-12 px-8 text-base font-semibold rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-500/25 transition-all hover:shadow-indigo-500/40"
         >
           {loading ? (
             <span className="flex items-center gap-2">

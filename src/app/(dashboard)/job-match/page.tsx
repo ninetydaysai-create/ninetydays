@@ -271,7 +271,7 @@ export default function JobMatchPage() {
           <Button
             onClick={analyze}
             disabled={analyzing || jdText.trim().length < 10}
-            className="gap-2 h-11 px-6 bg-indigo-600 hover:bg-indigo-500"
+            className="gap-2 h-11 px-6 bg-indigo-600 hover:bg-indigo-500 text-white"
           >
             {analyzing ? (
               <><Loader2 className="h-4 w-4 animate-spin" />Analyzing (~15s)...</>
@@ -302,7 +302,7 @@ export default function JobMatchPage() {
                 <p className="text-base text-indigo-400 mt-0.5">Your 90-day plan already includes tasks that address these gaps. Check your current week.</p>
               </div>
               <a href="/roadmap">
-                <Button size="sm" className="gap-1.5 shrink-0 bg-indigo-600 hover:bg-indigo-500">
+                <Button size="sm" className="gap-1.5 shrink-0 bg-indigo-600 hover:bg-indigo-500 text-white">
                   View roadmap <ArrowRight className="h-3.5 w-3.5" />
                 </Button>
               </a>

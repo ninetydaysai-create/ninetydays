@@ -116,7 +116,7 @@ export default function OutreachPage() {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-white">Cold Outreach Generator</h1>
-        <p className="text-slate-400 mt-1 text-base">
+        <p className="text-slate-300 mt-1 text-base">
           Paste a JD &rarr; get a personalized recruiter email in seconds
         </p>
       </div>
@@ -137,7 +137,7 @@ export default function OutreachPage() {
           </div>
           <div>
             <p className="font-bold text-white">Paste job description</p>
-            <p className="text-xs text-slate-400">
+            <p className="text-sm text-slate-300">
               Include role title, company, and requirements for the most targeted email
             </p>
           </div>
@@ -196,7 +196,7 @@ export default function OutreachPage() {
           <Button
             onClick={generate}
             disabled={generating || jdText.trim().length < 10}
-            className="gap-2 h-11 px-6 bg-red-500 hover:bg-red-400"
+            className="gap-2 h-11 px-6 bg-red-500 hover:bg-red-400 text-white"
           >
             {generating ? (
               <>

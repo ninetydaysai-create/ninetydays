@@ -9,6 +9,7 @@ import { MessageSquare, ArrowRight, Trophy, Loader2, Brain, Cpu, Users, Package,
 import { format } from "date-fns";
 import { InterviewType } from "@prisma/client";
 import { COMPANIES } from "@/lib/companies";
+import { MilestoneShareBanner } from "@/components/shared/ShareProgressCard";
 
 interface Session {
   id: string;
@@ -99,12 +100,23 @@ export default function InterviewPage() {
   const [expandedSession, setExpandedSession] = useState<string | null>(null);
   const [scorecards, setScorecards] = useState<Record<string, unknown>>({});
   const [selectedCompany, setSelectedCompany] = useState<string | null>(null);
+  const [shareBanner, setShareBanner] = useState<{ score: number; sessionId: string } | null>(null);
+  const [userContext, setUserContext] = useState<{ readinessScore: number | null; roleLabel: string; name: string | null; weeksOnPlatform: number } | null>(null);
 
   useEffect(() => {
-    fetch("/api/interview/sessions")
-      .then((r) => r.json())
-      .then((data) => { setSessions(data.sessions ?? []); setLoading(false); })
-      .catch(() => setLoading(false));
+    Promise.all([
+      fetch("/api/interview/sessions").then((r) => r.json()),
+      fetch("/api/user/plan").then((r) => r.json()),
+    ]).then(([sessionData, planData]) => {
+      setSessions(sessionData.sessions ?? []);
+      setUserContext({
+        readinessScore: planData.readinessScore ?? null,
+        roleLabel: planData.roleLabel ?? "your target role",
+        name: planData.name ?? null,
+        weeksOnPlatform: planData.weeksOnPlatform ?? 1,
+      });
+      setLoading(false);
+    }).catch(() => setLoading(false));
   }, []);
 
   async function startSession(type: InterviewType, companyName?: string) {
@@ -137,9 +149,13 @@ export default function InterviewPage() {
     const res = await fetch(`/api/interview/session/${sessionId}`);
     if (res.ok) {
       const data = await res.json();
-      // API returns fields at the top level (not nested under "session")
       setScorecards(prev => ({ ...prev, [sessionId]: data.scorecard ?? null }));
       setExpandedSession(sessionId);
+      // Show share banner if this session has a score (first time opening)
+      const session = sessions.find((s) => s.id === sessionId);
+      if (session?.overallScore != null && session.overallScore >= 60) {
+        setShareBanner({ score: session.overallScore, sessionId });
+      }
     }
   }
 
@@ -149,9 +165,22 @@ export default function InterviewPage() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
+      {/* Session scored milestone banner */}
+      {shareBanner && userContext && (
+        <MilestoneShareBanner
+          trigger="interview_scored"
+          interviewScore={shareBanner.score}
+          readinessScore={userContext.readinessScore ?? shareBanner.score}
+          weeksOnPlatform={userContext.weeksOnPlatform}
+          roleLabel={userContext.roleLabel}
+          userName={userContext.name}
+          onDismiss={() => setShareBanner(null)}
+        />
+      )}
+
       <div>
         <h1 className="text-3xl font-bold">Interview Prep</h1>
-        <p className="text-slate-400 mt-2 text-base leading-relaxed">
+        <p className="text-slate-300 mt-2 text-base leading-relaxed">
           AI mock interviews. Get scored with detailed feedback after each session.
         </p>
       </div>
@@ -162,7 +191,7 @@ export default function InterviewPage() {
           <Card>
             <CardContent className="pt-6 text-center">
               <div className="text-3xl font-bold">{sessions.length}</div>
-              <div className="text-sm text-slate-400 mt-1">Sessions done</div>
+              <div className="text-sm text-slate-300 mt-1">Sessions done</div>
             </CardContent>
           </Card>
           <Card>
@@ -171,7 +200,7 @@ export default function InterviewPage() {
                 <Trophy className="h-5 w-5 text-yellow-500" />
                 <div className="text-3xl font-bold">{avg ?? "—"}</div>
               </div>
-              <div className="text-sm text-slate-400 mt-1">Avg score</div>
+              <div className="text-sm text-slate-300 mt-1">Avg score</div>
             </CardContent>
           </Card>
           <Card>
@@ -179,7 +208,7 @@ export default function InterviewPage() {
               <div className="text-3xl font-bold">
                 {scores.length ? Math.max(...scores) : "—"}
               </div>
-              <div className="text-sm text-slate-400 mt-1">Best score</div>
+              <div className="text-sm text-slate-300 mt-1">Best score</div>
             </CardContent>
           </Card>
         </div>
@@ -253,7 +282,7 @@ export default function InterviewPage() {
                     <CardTitle className="text-base">{config.label}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-base text-slate-400 mb-4">{config.description}</p>
+                    <p className="text-base text-slate-300 mb-4">{config.description}</p>
                     <Button
                       size="sm"
                       className="w-full gap-2"
@@ -313,7 +342,7 @@ export default function InterviewPage() {
                           </span>
                         )}
                       </div>
-                      <p className="text-sm text-slate-400">{format(new Date(session.startedAt), "MMM d, yyyy")}</p>
+                      <p className="text-sm text-slate-300">{format(new Date(session.startedAt), "MMM d, yyyy")}</p>
                     </div>
                     {session.overallScore !== null && (
                       <div className={`text-2xl font-black shrink-0 ${scoreColor}`}>
@@ -370,7 +399,7 @@ export default function InterviewPage() {
                           </span>
                         )}
                       </div>
-                      <div className="text-sm text-slate-400">
+                      <div className="text-sm text-slate-300">
                         {format(new Date(s.startedAt), "MMM d, yyyy")}
                       </div>
                     </div>

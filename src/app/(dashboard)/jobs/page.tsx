@@ -225,7 +225,7 @@ export default function JobsPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Job Tracker</h1>
-          <p className="text-slate-400 mt-1.5 text-base leading-relaxed">
+          <p className="text-slate-300 mt-1.5 text-base leading-relaxed">
             {jobs.length} application{jobs.length !== 1 ? "s" : ""} tracked
           </p>
         </div>
@@ -243,7 +243,7 @@ export default function JobsPage() {
             </div>
             <div>
               <p className="text-lg font-semibold">No applications tracked yet</p>
-              <p className="text-slate-400 mt-1 text-base">
+              <p className="text-slate-300 mt-1 text-base">
                 Add jobs you&apos;re interested in and track them through each stage.
               </p>
             </div>
@@ -269,9 +269,9 @@ export default function JobsPage() {
                     <Card key={job.id} className="hover:shadow-md transition-shadow">
                       <CardContent className="pt-3 pb-3 px-3">
                         <p className="font-semibold text-sm leading-tight">{job.company}</p>
-                        <p className="text-xs text-slate-400 mt-0.5 leading-tight">{job.roleTitle}</p>
+                        <p className="text-sm text-slate-300 mt-0.5 leading-tight">{job.roleTitle}</p>
                         {job.location && (
-                          <p className="text-xs text-slate-400 mt-1">{job.location}</p>
+                          <p className="text-sm text-slate-300 mt-1">{job.location}</p>
                         )}
                         {job.salary && (
                           <p className="text-xs font-medium text-primary mt-1">{job.salary}</p>

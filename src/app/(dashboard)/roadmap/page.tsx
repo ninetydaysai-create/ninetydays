@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import Link from "next/link";
+import { MilestoneShareBanner } from "@/components/shared/ShareProgressCard";
 import {
   ArrowRight,
   Lock,
@@ -51,6 +52,10 @@ interface Roadmap {
 
 interface UserPlan {
   plan: "FREE" | "PRO";
+  name?: string | null;
+  readinessScore?: number | null;
+  roleLabel?: string;
+  weeksOnPlatform?: number;
 }
 
 const FREE_WEEKS_VISIBLE = 4;
@@ -112,8 +117,8 @@ function getDomainLabel(url: string): string {
       "coursera.org": "Coursera",
       "fast.ai": "fast.ai",
       "deeplearning.ai": "DeepLearning.AI",
-      "openai.com": "OpenAI Docs",
-      "anthropic.com": "Anthropic",
+      "openai.com": "AI Research",
+      "anthropic.com": "AI Research",
       "langchain.com": "LangChain",
     };
     return map[host] ?? host;
@@ -131,6 +136,7 @@ export default function RoadmapPage() {
   const [generating, setGenerating] = useState(false);
   const [readinessBump, setReadinessBump] = useState<{ label: string; prev: number; next: number } | null>(null);
   const [expandedWeeks, setExpandedWeeks] = useState<Set<string>>(new Set());
+  const [weekCompleteBanner, setWeekCompleteBanner] = useState<{ weekNumber: number } | null>(null);
 
   const loadData = useCallback(async () => {
     const [roadmapRes, planRes] = await Promise.all([
@@ -176,7 +182,7 @@ export default function RoadmapPage() {
     });
   }
 
-  async function toggleTask(taskId: string, currentCompleted: boolean, taskLabel: string, impactScore: number) {
+  async function toggleTask(taskId: string, currentCompleted: boolean, taskLabel: string, impactScore: number, weekNumber: number) {
     setToggling(taskId);
     const res = await fetch(`/api/roadmap/tasks/${taskId}`, {
       method: "PATCH",
@@ -185,14 +191,22 @@ export default function RoadmapPage() {
     });
     if (res.ok) {
       const data = await res.json();
-      setWeeks((prev) =>
-        prev.map((w) => ({
+      setWeeks((prev) => {
+        const updated = prev.map((w) => ({
           ...w,
           tasks: w.tasks.map((t) =>
             t.id === taskId ? { ...t, completed: !currentCompleted } : t
           ),
-        }))
-      );
+        }));
+        // Check if this task just completed a week
+        if (!currentCompleted) {
+          const week = updated.find((w) => w.weekNumber === weekNumber);
+          if (week && week.tasks.length > 0 && week.tasks.every((t) => t.completed)) {
+            setWeekCompleteBanner({ weekNumber });
+          }
+        }
+        return updated;
+      });
       if (!currentCompleted && data.newReadiness !== null && data.newReadiness !== undefined) {
         const prev = data.newReadiness - Math.round(impactScore / 2);
         setReadinessBump({ label: taskLabel, prev, next: data.newReadiness });
@@ -275,7 +289,7 @@ export default function RoadmapPage() {
               ].map(({ label, desc }) => (
                 <div key={label} className="bg-white/5 rounded-xl p-3 text-left">
                   <p className="text-xs font-bold text-indigo-400">{label}</p>
-                  <p className="text-xs text-slate-400 mt-1 leading-tight">{desc}</p>
+                  <p className="text-xs text-slate-300 mt-1 leading-tight">{desc}</p>
                 </div>
               ))}
             </div>
@@ -313,7 +327,7 @@ export default function RoadmapPage() {
 
           {/* Transformation hook */}
           <div className="border-t border-white/8 bg-white/3 px-8 py-5 text-center">
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-slate-300">
               Users who follow their plan go from <span className="text-white font-semibold">avg. 31 → 72 score</span> and land interviews in <span className="text-white font-semibold">8–10 weeks</span>
             </p>
           </div>
@@ -324,6 +338,19 @@ export default function RoadmapPage() {
 
   return (
     <div className="max-w-3xl mx-auto space-y-8">
+      {/* Week complete milestone banner */}
+      {weekCompleteBanner && userPlan?.readinessScore != null && (
+        <MilestoneShareBanner
+          trigger="week_complete"
+          weekNumber={weekCompleteBanner.weekNumber}
+          readinessScore={userPlan.readinessScore}
+          weeksOnPlatform={userPlan.weeksOnPlatform ?? 1}
+          roleLabel={userPlan.roleLabel ?? "your target role"}
+          userName={userPlan.name ?? null}
+          onDismiss={() => setWeekCompleteBanner(null)}
+        />
+      )}
+
       {/* Readiness bump toast */}
       {readinessBump && (
         <div className="fixed bottom-6 right-6 z-50 bg-emerald-600 text-white rounded-2xl px-5 py-4 shadow-xl shadow-emerald-500/30 flex items-center gap-3 animate-in slide-in-from-bottom-4">
@@ -340,7 +367,7 @@ export default function RoadmapPage() {
         <div className="flex items-start justify-between gap-4 mb-4">
           <div>
             <h1 className="text-3xl font-bold text-white">90-Day Roadmap</h1>
-            <p className="text-slate-400 mt-1 text-base">Generated from your resume · every task targets a gap in your profile</p>
+            <p className="text-slate-300 mt-1 text-base">Generated from your resume · every task targets a gap in your profile</p>
           </div>
           <Badge variant="outline" className="shrink-0 text-sm px-3 py-1.5 font-semibold border-white/15 text-slate-300">
             Week {currentWeek} / 12
@@ -352,9 +379,9 @@ export default function RoadmapPage() {
           <div className="flex items-center justify-between mb-3">
             <div>
               <span className="text-2xl font-black text-white">{pct}%</span>
-              <span className="text-slate-400 text-base ml-2">complete</span>
+              <span className="text-slate-300 text-base ml-2">complete</span>
             </div>
-            <span className="text-base text-slate-400">{doneTasks} / {allTasks.length} tasks done</span>
+            <span className="text-base text-slate-300">{doneTasks} / {allTasks.length} tasks done</span>
           </div>
           <Progress value={pct} className="h-3 rounded-full" />
           <div className="flex gap-4 mt-4">
@@ -367,7 +394,7 @@ export default function RoadmapPage() {
               return (
                 <div key={phase.label} className="flex-1">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-semibold text-slate-400">{phase.label}</span>
+                    <span className="text-sm font-semibold text-slate-300">{phase.label}</span>
                     <span className="text-sm font-bold text-slate-300">{phasePct}%</span>
                   </div>
                   <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
@@ -393,7 +420,7 @@ export default function RoadmapPage() {
               <div className={`h-2.5 w-2.5 rounded-full shrink-0 ${colors.dot}`} />
               <div className="flex-1 min-w-0">
                 <span className="font-bold text-white text-base">{phase.label} — {phase.name}</span>
-                <span className="text-slate-400 text-sm ml-2">Week {phase.weeks[0]}–{phase.weeks[phase.weeks.length - 1]}</span>
+                <span className="text-slate-300 text-sm ml-2">Week {phase.weeks[0]}–{phase.weeks[phase.weeks.length - 1]}</span>
               </div>
               <Badge className={`text-sm font-semibold ${colors.badge} border-0 px-3 py-1`}>
                 {phaseWeeks.filter((w) => w.deliverableDone).length}/{phaseWeeks.length} weeks done
@@ -458,7 +485,7 @@ export default function RoadmapPage() {
                             style={{ width: `${weekPct}%` }}
                           />
                         </div>
-                        <span className="text-sm text-slate-400">{weekDoneTasks}/{week.tasks.length} tasks · {week.estimatedHours}h</span>
+                        <span className="text-sm text-slate-300">{weekDoneTasks}/{week.tasks.length} tasks · {week.estimatedHours}h</span>
                       </div>
                     </div>
 
@@ -484,7 +511,7 @@ export default function RoadmapPage() {
                               ? "bg-slate-50 border-slate-200 opacity-70"
                               : "bg-white border-slate-200 hover:border-indigo-400 hover:shadow-sm"
                           }`}
-                          onClick={() => !toggling && toggleTask(task.id, task.completed, task.label, task.impactScore)}
+                          onClick={() => !toggling && toggleTask(task.id, task.completed, task.label, task.impactScore, week.weekNumber)}
                         >
                           <div className="p-5">
                             <div className="flex items-start gap-3">
@@ -503,7 +530,7 @@ export default function RoadmapPage() {
                                 {/* Title row */}
                                 <div className="flex items-start justify-between gap-2">
                                   <p className={`text-base font-bold leading-snug ${
-                                    task.completed ? "line-through text-slate-500" : "text-slate-900"
+                                    task.completed ? "line-through text-slate-400" : "text-slate-900"
                                   }`}>
                                     {task.label}
                                   </p>
@@ -534,12 +561,12 @@ export default function RoadmapPage() {
 
                                     {/* Meta row */}
                                     <div className="flex items-center gap-4 mt-3 flex-wrap">
-                                      <span className="inline-flex items-center gap-1.5 text-sm text-slate-500">
+                                      <span className="inline-flex items-center gap-1.5 text-sm text-slate-600">
                                         <Clock className="h-3.5 w-3.5" />
                                         {task.hours}h estimated
                                       </span>
                                       {task.impactScore > 0 && (
-                                        <span className="inline-flex items-center gap-1.5 text-sm text-slate-500">
+                                        <span className="inline-flex items-center gap-1.5 text-sm text-slate-600">
                                           <Target className="h-3.5 w-3.5" />
                                           Impact: {task.impactScore}/10
                                         </span>

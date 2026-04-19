@@ -215,7 +215,7 @@ export default async function DashboardPage() {
             <div className={`text-4xl font-black ${readinessScore >= TARGET_READINESS ? "text-emerald-400" : readinessScore >= 50 ? "text-amber-400" : "text-red-400"}`}>
               {readinessScore}%
             </div>
-            <div className="text-sm text-slate-400 mt-1">Target: {TARGET_READINESS}% to apply</div>
+            <div className="text-sm text-slate-300 mt-1">Target: {TARGET_READINESS}% to apply</div>
           </div>
 
           {/* Rejection risk */}
@@ -228,7 +228,7 @@ export default async function DashboardPage() {
                 <span className="text-xs font-bold uppercase tracking-widest text-slate-400">Rejection risk</span>
               </div>
               <div className={`text-3xl font-black ${rejectionRisk.color}`}>{rejectionRisk.label}</div>
-              <div className="text-sm text-slate-400 mt-1">{rejectionRisk.advice}</div>
+              <div className="text-sm text-slate-300 mt-1">{rejectionRisk.advice}</div>
             </div>
           )}
 
@@ -241,7 +241,7 @@ export default async function DashboardPage() {
               <span className="text-xs font-bold uppercase tracking-widest text-slate-400">Interviews</span>
             </div>
             <div className={`text-3xl font-black ${interviewReadiness.color}`}>{interviewReadiness.label}</div>
-            <div className="text-sm text-slate-400 mt-1">
+            <div className="text-sm text-slate-300 mt-1">
               {scores.length === 0 ? "Start mock interviews" : `${scores.length} session${scores.length > 1 ? "s" : ""} · avg ${avgScore}/100`}
             </div>
           </div>
@@ -255,7 +255,7 @@ export default async function DashboardPage() {
               <span className="text-xs font-bold uppercase tracking-widest text-slate-400">Gaps left</span>
             </div>
             <div className="text-4xl font-black text-white">{openGaps.length}</div>
-            <div className="text-sm text-slate-400 mt-1">
+            <div className="text-sm text-slate-300 mt-1">
               {criticalGaps.length > 0 ? `${criticalGaps.length} critical` : "No critical gaps"}
             </div>
           </div>
@@ -274,7 +274,7 @@ export default async function DashboardPage() {
                 <div className="h-3 w-3 rounded-full bg-current opacity-60" />
               </div>
               <div className="text-4xl font-bold text-white">{s.value}</div>
-              <div className="text-sm text-slate-400 mt-1 font-semibold uppercase tracking-wide">{s.sub}</div>
+              <div className="text-sm text-slate-300 mt-1">{s.sub}</div>
             </div>
           ))}
         </div>
@@ -321,7 +321,7 @@ export default async function DashboardPage() {
               </div>
               <div>
                 <p className="font-bold text-white">{levelInfo.label}</p>
-                <p className="text-sm text-slate-400 mt-0.5">
+                <p className="text-sm text-slate-300 mt-0.5">
                   {levelInfo.level < 10
                     ? `${levelInfo.next - readinessScore!}% to Level ${levelInfo.level + 1}`
                     : "Max level reached"}
@@ -348,8 +348,8 @@ export default async function DashboardPage() {
               <div className="min-w-0">
                 <p className="text-xs font-bold uppercase tracking-widest text-red-400 mb-1">Biggest blocker right now</p>
                 <p className="font-bold text-white text-lg leading-snug">{biggestBlocker.label}</p>
-                <p className="text-slate-400 text-base mt-1 leading-relaxed">{biggestBlocker.description}</p>
-                <p className="text-sm text-slate-400 mt-2">~{biggestBlocker.estimatedHours}h to close · Addressing this alone could raise your readiness by 5–10%</p>
+                <p className="text-slate-300 text-base mt-1 leading-relaxed">{biggestBlocker.description}</p>
+                <p className="text-sm text-slate-300 mt-2">~{biggestBlocker.estimatedHours}h to close · Addressing this alone could raise your readiness by 5–10%</p>
               </div>
             </div>
             <Link href="/gaps" className="shrink-0">
@@ -378,7 +378,7 @@ export default async function DashboardPage() {
           <div className="w-full bg-white/10 rounded-full h-2.5">
             <div className="bg-indigo-500 h-2.5 rounded-full transition-all" style={{ width: `${progressPct}%` }} />
           </div>
-          <p className="text-sm text-slate-400 mt-2">{completedTasks} of {allTasks.length} tasks done</p>
+          <p className="text-sm text-slate-300 mt-2">{completedTasks} of {allTasks.length} tasks done</p>
 
           {/* Share progress — only show if there's meaningful progress */}
           {readinessScore !== null && readinessScore >= 30 && (
@@ -417,7 +417,7 @@ export default async function DashboardPage() {
                   <span className="text-slate-400 group-hover:text-indigo-400 transition-colors text-lg leading-none">→</span>
                 </div>
                 <p className="font-bold text-white">{action.label}</p>
-                <p className="text-base text-slate-400 mt-1 leading-relaxed">{action.desc}</p>
+                <p className="text-base text-slate-300 mt-1 leading-relaxed">{action.desc}</p>
               </div>
             </Link>
           ))}
@@ -429,7 +429,7 @@ export default async function DashboardPage() {
         <div className="rounded-2xl border border-indigo-500/20 bg-indigo-500/5 p-6 flex items-center justify-between gap-6 flex-wrap">
           <div>
             <p className="text-base font-bold text-white">Unlock your full 90-day transformation</p>
-            <p className="text-slate-400 mt-1 text-base">
+            <p className="text-slate-300 mt-1 text-base">
               Pro unlocks unlimited analyses, full roadmap, unlimited mock interviews, and a public portfolio.
             </p>
           </div>

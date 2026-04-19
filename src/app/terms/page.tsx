@@ -155,7 +155,7 @@ export default function TermsPage() {
 
         <Section title="7. AI-Generated Content and Limitations">
           <ul className="space-y-1.5 mt-2">
-            <li>The Service uses large language models (including Anthropic Claude) to generate career advice, resume feedback, roadmaps, and interview coaching.</li>
+            <li>The Service uses the NinetyDays AI engine to generate career advice, resume feedback, roadmaps, and interview coaching. The NinetyDays AI engine is powered by large language models from leading AI research companies, including Anthropic and OpenAI, operating under their respective enterprise data agreements.</li>
             <li>AI-generated content is for <strong className="text-white">informational and educational purposes only</strong>. It does not constitute professional career counseling, legal advice, financial advice, or employment guarantees.</li>
             <li>AI outputs may contain errors, inaccuracies, or hallucinations. You should exercise independent judgment before acting on any AI-generated recommendation.</li>
             <li>We make <strong className="text-white">no guarantees of employment outcomes</strong>. Results vary based on individual effort, market conditions, and factors beyond our control.</li>
@@ -200,7 +200,7 @@ export default function TermsPage() {
         </Section>
 
         <Section title="10. Third-Party Services">
-          The Service integrates third-party providers including Anthropic (AI), Clerk (authentication), Stripe (payments),
+          The Service integrates third-party providers including Clerk (authentication), Stripe (payments),
           UploadThing (file storage), Resend (email), and others listed in our{" "}
           <Link href="/privacy" className="text-indigo-400 hover:underline">Privacy Policy</Link>. Your use of the Service
           is also subject to the terms of these third-party providers where applicable (e.g., Stripe&apos;s{" "}

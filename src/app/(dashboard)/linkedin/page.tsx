@@ -64,7 +64,7 @@ export default function LinkedInPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-white">LinkedIn Optimizer</h1>
-            <p className="text-slate-400 text-sm mt-0.5">AI rewrites your headline and About section for product company hiring</p>
+            <p className="text-slate-300 text-sm mt-0.5">AI rewrites your headline and About section for product company hiring</p>
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
@@ -75,7 +75,7 @@ export default function LinkedInPage() {
               </div>
               <div>
                 <p className="text-sm font-semibold text-white">{title}</p>
-                <p className="text-sm text-slate-400 mt-0.5 leading-relaxed">{desc}</p>
+                <p className="text-sm text-slate-300 mt-0.5 leading-relaxed">{desc}</p>
               </div>
             </div>
           ))}
@@ -85,7 +85,7 @@ export default function LinkedInPage() {
       {/* Input */}
       <div className="bg-[#161820] rounded-2xl border border-white/10 p-8 shadow-sm">
         <h2 className="text-lg font-bold text-white mb-1">Your current LinkedIn profile</h2>
-        <p className="text-slate-400 text-base mb-6">Paste what you currently have. The AI will improve it for product company recruiters.</p>
+        <p className="text-slate-300 text-base mb-6">Paste what you currently have. The AI will improve it for product company recruiters.</p>
         <div className="space-y-5">
           <div className="space-y-2">
             <Label className="text-sm font-semibold text-slate-300">Current headline <span className="text-red-400">*</span></Label>
@@ -110,7 +110,7 @@ export default function LinkedInPage() {
           <Button
             onClick={handleOptimize}
             disabled={loading}
-            className="h-12 px-8 text-base font-semibold rounded-xl bg-[#0077b5] hover:bg-[#006097] shadow-lg shadow-blue-500/25 transition-all w-full sm:w-auto"
+            className="h-12 px-8 text-base font-semibold rounded-xl bg-[#0077b5] hover:bg-[#006097] text-white shadow-lg shadow-blue-500/25 transition-all w-full sm:w-auto"
           >
             {loading ? (
               <span className="flex items-center gap-2">
@@ -197,7 +197,7 @@ export default function LinkedInPage() {
           </div>
           <div>
             <h2 className="text-xl font-bold text-white">Post Generator</h2>
-            <p className="text-slate-400 text-sm">Turn your career wins into 3 ready-to-post LinkedIn updates</p>
+            <p className="text-slate-300 text-sm">Turn your career wins into 3 ready-to-post LinkedIn updates</p>
           </div>
         </div>
         <LinkedInPostGenerator />

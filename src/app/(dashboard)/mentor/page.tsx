@@ -234,7 +234,7 @@ export default function MentorPage() {
           <Button
             onClick={() => sendMessage(input)}
             disabled={!input.trim() || loading}
-            className="h-11 w-11 p-0 shrink-0 rounded-xl bg-indigo-600 hover:bg-indigo-700 shadow-sm"
+            className="h-11 w-11 p-0 shrink-0 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm"
           >
             {loading
               ? <Loader2 className="h-4 w-4 animate-spin" />

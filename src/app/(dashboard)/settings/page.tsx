@@ -57,7 +57,7 @@ export default async function SettingsPage() {
     <div className="max-w-2xl mx-auto space-y-8">
       <div>
         <h1 className="text-4xl font-bold">Settings</h1>
-        <p className="text-slate-400 mt-2 text-base">Manage your account and subscription.</p>
+        <p className="text-slate-300 mt-2 text-base">Manage your account and subscription.</p>
       </div>
 
       {/* Account */}
@@ -132,7 +132,7 @@ export default async function SettingsPage() {
                   <div className="mt-1">
                     <span className="text-2xl font-bold">{sprint.display}</span>
                   </div>
-                  <p className="text-xs text-slate-400 mt-1">{sprint.note}</p>
+                  <p className="text-sm text-slate-300 mt-1">{sprint.note}</p>
                 </div>
                 <form action="/api/checkout" method="POST">
                   <input type="hidden" name="plan" value="sprint" />
@@ -149,7 +149,7 @@ export default async function SettingsPage() {
                   <div className="mt-1">
                     <span className="text-2xl font-bold">{monthly.display}</span>
                   </div>
-                  <p className="text-xs text-slate-400 mt-1">{monthly.note}</p>
+                  <p className="text-sm text-slate-300 mt-1">{monthly.note}</p>
                 </div>
                 <form action="/api/checkout" method="POST">
                   <input type="hidden" name="plan" value="monthly" />
@@ -192,7 +192,7 @@ export default async function SettingsPage() {
               </svg>
               <div>
                 <p className="text-sm font-semibold text-emerald-400">30-day money-back guarantee</p>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-sm text-slate-300 mt-0.5">
                   Complete your profile and generate your roadmap. If you don&apos;t find value within 30 days, email us for a full refund — no questions asked.
                 </p>
               </div>
@@ -205,7 +205,7 @@ export default async function SettingsPage() {
                   <Users className="h-4 w-4 text-indigo-500" />
                   <p className="font-semibold text-sm">Team plan — coming soon</p>
                 </div>
-                <p className="text-xs text-slate-400">5 seats · $29/mo · Perfect for bootcamps, college placement cells, and study groups</p>
+                <p className="text-sm text-slate-300">5 seats · $29/mo · Perfect for bootcamps, college placement cells, and study groups</p>
               </div>
               <a href="mailto:team@ninetydays.ai?subject=Team Plan Interest" target="_blank" rel="noopener noreferrer">
                 <Button variant="outline" size="sm" className="shrink-0">Join waitlist</Button>
@@ -232,7 +232,7 @@ export default async function SettingsPage() {
             {isSprint ? (
               // Sprint users: offer to convert to subscription before expiry
               <div className="space-y-3">
-                <p className="text-base text-slate-400">
+                <p className="text-base text-slate-300">
                   Continue your progress with a full subscription when your sprint ends.
                 </p>
                 <div className="grid grid-cols-2 gap-3">
