@@ -242,7 +242,7 @@ export default function InterviewPage() {
                 onClick={() => setSelectedCompany(selectedCompany === company.id ? null : company.id)}
                 className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-all ${
                   selectedCompany === company.id
-                    ? "bg-primary text-primary-foreground border-primary"
+                    ? "bg-primary text-white border-primary"
                     : "bg-white/5 text-slate-400 border-white/10 hover:border-primary/50 hover:text-primary"
                 }`}
               >

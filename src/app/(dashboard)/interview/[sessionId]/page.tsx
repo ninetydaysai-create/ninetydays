@@ -286,7 +286,7 @@ export default function InterviewSessionPage() {
                   className={cn(
                     "max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed",
                     msg.role === "user"
-                      ? "bg-primary text-primary-foreground rounded-br-sm"
+                      ? "bg-primary text-white rounded-br-sm"
                       : "bg-muted text-foreground rounded-bl-sm"
                   )}
                 >

@@ -39,7 +39,7 @@ export default function OnboardingGoals() {
         {[1, 2, 3].map((s) => (
           <div key={s} className="flex items-center gap-2">
             <div className={`h-7 w-7 rounded-full flex items-center justify-center text-xs font-semibold transition-all ${
-              s === 3 ? "bg-primary text-primary-foreground shadow-md shadow-primary/30" : "bg-primary/30 text-primary"
+              s === 3 ? "bg-primary text-white shadow-md shadow-primary/30" : "bg-primary/30 text-primary"
             }`}>{s}</div>
             {s < 3 && <div className="h-px w-8 bg-primary/30" />}
           </div>

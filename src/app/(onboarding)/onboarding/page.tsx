@@ -69,7 +69,7 @@ export default function OnboardingStep1() {
         {[1, 2, 3].map((s) => (
           <div key={s} className="flex items-center gap-2">
             <div className={`h-7 w-7 rounded-full flex items-center justify-center text-xs font-semibold transition-all ${
-              s === 1 ? "bg-primary text-primary-foreground shadow-md shadow-primary/30" : "bg-border text-muted-foreground"
+              s === 1 ? "bg-primary text-white shadow-md shadow-primary/30" : "bg-border text-muted-foreground"
             }`}>{s}</div>
             {s < 3 && <div className={`h-px w-8 ${s < 1 ? "bg-primary/40" : "bg-border"}`} />}
           </div>
