@@ -3,9 +3,10 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 
 async function parsePdf(buffer: Buffer): Promise<string> {
-  // pdf-parse is a CJS module; dynamic import wraps it under `.default` at runtime
+  // Use the inner lib path to avoid pdf-parse loading its test fixture file at
+  // require-time — that file does not exist in Vercel serverless and causes a crash.
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const pdfParse = require("pdf-parse") as (buf: Buffer) => Promise<{ text: string }>;
+  const pdfParse = require("pdf-parse/lib/pdf-parse") as (buf: Buffer) => Promise<{ text: string }>;
   const result = await pdfParse(buffer);
   return result.text ?? "";
 }

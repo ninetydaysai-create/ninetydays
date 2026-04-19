@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "utfs.io" },
     ],
   },
-  serverExternalPackages: ["pdf-parse"],
+  serverExternalPackages: ["pdf-parse", "pdf-parse/lib/pdf-parse"],
 };
 
 export default withSentryConfig(nextConfig, {
