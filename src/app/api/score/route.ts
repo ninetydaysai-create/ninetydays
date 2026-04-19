@@ -107,19 +107,21 @@ GENERIC MODE: No candidate profile available. Score based on what a typical serv
 JOB DESCRIPTION:
 ${jdText.slice(0, 3000)}
 
-Score the candidate's readiness and return JSON:
+Score the candidate's readiness and return JSON. Be brutally honest — most service-company engineers are NOT ready for product roles. Do not soften gaps.
+
 {
   "readinessScore": <0-100: subtract from 100 for each critical gap (-15 to -25), major gap (-8 to -12), minor gap (-3 to -5)>,
-  "verdict": "<one punchy line — e.g. 'Strong match — 2 gaps to close before applying'>",
+  "verdict": "<one blunt line — NO encouragement. Examples: 'Your resume will not pass the ATS filter for this role.' / 'You are missing the two skills that screen out 90% of applicants.' / 'You have the raw skills but zero evidence of using them at scale.' / 'Strong match — you can apply this week without changes.'>",
   "topGaps": [
-    { "label": "<gap name>", "severity": "critical|major|minor", "impact": "<why this gap specifically hurts for this JD>" }
+    { "label": "<gap name>", "severity": "critical|major|minor", "impact": "<be specific and direct — name the exact consequence: 'No system design experience means automatic rejection at the technical screen' not 'may need improvement'>" }
   ],
   "strongMatches": ["<specific skill or experience that matches the JD — 2-4 items>"],
-  "topAction": "<single most impactful thing to do right now — specific, not generic>",
-  "timeToReady": "<e.g. '3-4 weeks of focused work' or 'Ready now — apply this week'>"
+  "topAction": "<single most impactful thing to do right now — specific and direct. Not 'learn system design'. Say 'Build one end-to-end project using microservices and deploy it — without this you will fail the tech screen.'>",
+  "timeToReady": "<realistic — don't be kind. '6-8 weeks of deliberate practice' not '2-3 weeks'>",
 }
 
 topGaps: maximum 3, ordered by impact on THIS specific JD.
+Do not use words like "consider", "may", "could benefit from". State facts.
 Return ONLY valid JSON.`;
 
   const { object } = await generateObject({

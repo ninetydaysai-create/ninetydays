@@ -153,6 +153,15 @@ export default function ScorePage() {
     ? `You're ahead of ${Math.max(20, score - 12)}% of candidates who tried this role`
     : `Most candidates start below 50% — you can close this gap in 4–6 weeks`;
 
+  // Brutal verdict — deterministic, score-mapped. Not left to AI phrasing.
+  const brutalVerdict = score >= 75
+    ? { label: "Apply now", sub: "You have enough of this JD covered to get a callback. Don't wait.", color: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-500/30", dot: "bg-emerald-400" }
+    : score >= 60
+    ? { label: "Borderline — risky", sub: "You could get through, but these gaps make rejection the more likely outcome. Fix them first.", color: "text-amber-400", bg: "bg-amber-500/10 border-amber-500/30", dot: "bg-amber-400" }
+    : score >= 40
+    ? { label: "You will likely be rejected", sub: "With these gaps, 9 out of 10 recruiters will pass. Your profile doesn't clear the bar for this role yet.", color: "text-orange-400", bg: "bg-orange-500/10 border-orange-500/30", dot: "bg-orange-400" }
+    : { label: "You will be rejected", sub: "Your profile does not meet the minimum bar for this role. Applying now wastes your shot — fix the critical gaps first.", color: "text-red-400", bg: "bg-red-500/10 border-red-500/30", dot: "bg-red-400" };
+
   return (
     <div className="min-h-screen bg-[#0b0e14]">
       {/* Nav */}
@@ -177,9 +186,9 @@ export default function ScorePage() {
             <Zap className="h-3.5 w-3.5" />
             Instant JD Readiness Score
           </div>
-          <h1 className="text-4xl font-black text-white mb-3">How ready are you for this role?</h1>
+          <h1 className="text-4xl font-black text-white mb-3">Will you get rejected for this role?</h1>
           <p className="text-slate-400 text-lg">
-            Paste any job description. Get your readiness score in seconds — no signup required.
+            Paste any job description. Get a brutal, honest readiness verdict in seconds — no signup required.
           </p>
         </div>
 
@@ -213,17 +222,30 @@ export default function ScorePage() {
         {result && (
           <div className="space-y-5 animate-in fade-in slide-in-from-bottom-4 duration-500">
 
+            {/* Brutal verdict — the hero */}
+            <div className={cn("border rounded-2xl p-6", brutalVerdict.bg)}>
+              <div className="flex items-center gap-2 mb-3">
+                <span className={cn("h-2.5 w-2.5 rounded-full shrink-0", brutalVerdict.dot)} />
+                <p className="text-slate-400 text-xs font-semibold uppercase tracking-widest">Verdict</p>
+              </div>
+              <p className={cn("text-3xl font-black leading-tight mb-2", brutalVerdict.color)}>
+                {brutalVerdict.label}
+              </p>
+              <p className="text-slate-400 text-sm leading-relaxed">{brutalVerdict.sub}</p>
+            </div>
+
             {/* Score ring */}
             <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-8 text-center">
               <div className={cn(
-                "inline-flex items-center justify-center h-36 w-36 rounded-full border-8 mb-5",
+                "inline-flex items-center justify-center h-32 w-32 rounded-full border-8 mb-4",
                 "bg-gradient-radial", ringBg, "to-transparent",
                 scoreRing
               )}>
-                <span className={cn("text-6xl font-black tabular-nums", scoreColor)}>{score}</span>
+                <span className={cn("text-5xl font-black tabular-nums", scoreColor)}>{score}</span>
               </div>
-              <p className="text-white font-bold text-xl mb-2">{result.verdict}</p>
-              <p className="text-slate-400 text-sm">Time to ready: <span className="text-slate-300 font-medium">{result.timeToReady}</span></p>
+              <p className="text-slate-400 text-xs font-semibold uppercase tracking-widest mb-1">Readiness score</p>
+              <p className="text-slate-300 text-sm italic">&ldquo;{result.verdict}&rdquo;</p>
+              <p className="text-slate-500 text-xs mt-2">Time to ready: <span className="text-slate-400 font-medium">{result.timeToReady}</span></p>
 
               {/* Percentile framing */}
               <div className={cn(
@@ -494,10 +516,10 @@ export default function ScorePage() {
               {/* Copy */}
               <div className="flex-1 min-w-0">
                 <p className="text-white text-sm font-bold leading-tight">
-                  Don&apos;t leave your {score}% score behind
+                  {score < 60 ? "You're not ready yet — here's how to fix it" : `${score}% ready — close the gap before applying`}
                 </p>
                 <p className="text-slate-400 text-xs mt-0.5">
-                  Your full plan + roadmap is one click away
+                  Full 90-day plan tailored to your exact gaps
                 </p>
               </div>
 
