@@ -8,6 +8,9 @@ const isPublicRoute = createRouteMatcher([
   "/beta(.*)",                  // beta invite page — public so unauthenticated testers can land here
   "/p/(.*)",                    // public portfolio pages
   "/prep(.*)",                  // public interview prep pages
+  "/terms(.*)",                 // legal pages — must be publicly accessible
+  "/privacy(.*)",
+  "/refund(.*)",
   "/api/score",
   "/api/stats/public",
   "/api/og/share-card",
