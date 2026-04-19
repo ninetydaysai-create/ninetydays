@@ -253,32 +253,69 @@ export default function RoadmapPage() {
           <h1 className="text-3xl font-bold">90-Day Roadmap</h1>
           <p className="text-slate-400 mt-2 text-base">Your personalized week-by-week plan to get hired in AI.</p>
         </div>
-        <div className="rounded-2xl border border-white/10 bg-[#161820] text-center py-16 px-8">
-          <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center mx-auto mb-6 shadow-lg shadow-indigo-500/25">
-            <Sparkles className="h-8 w-8 text-white" />
-          </div>
-          <p className="text-xl font-bold text-white">Your roadmap hasn&apos;t been generated yet</p>
-          <p className="text-slate-400 mt-2 max-w-sm mx-auto text-base leading-relaxed">
-            We&apos;ll build a 12-week plan from your gap report — every task mapped to a specific gap in your profile.
-          </p>
-          {generating && (
-            <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-xl px-5 py-4 text-sm text-indigo-400 flex items-center gap-3 max-w-sm mx-auto mt-6">
-              <Loader2 className="h-4 w-4 animate-spin shrink-0" />
-              <span>Building your personalized plan — Claude is analyzing your gaps (~30s)...</span>
+        <div className="rounded-2xl border border-white/10 bg-[#161820] overflow-hidden">
+          {/* Top section */}
+          <div className="text-center py-12 px-8 space-y-4">
+            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center mx-auto shadow-lg shadow-indigo-500/25">
+              <Sparkles className="h-8 w-8 text-white" />
             </div>
-          )}
-          <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
-            <Link href="/gaps">
-              <Button variant="outline" className="gap-2">
-                View gap analysis
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
-            <Button onClick={generateRoadmap} disabled={generating} className="gap-2 min-w-[220px]">
-              {generating
-                ? <><Loader2 className="h-4 w-4 animate-spin" />Building your plan...</>
-                : <><Sparkles className="h-4 w-4" />Generate my 90-day plan</>}
-            </Button>
+            <div>
+              <p className="text-2xl font-black text-white">Your 90-Day Hiring Plan</p>
+              <p className="text-slate-400 mt-2 max-w-sm mx-auto text-base leading-relaxed">
+                We map every gap in your resume to a specific task — so you always know exactly what to do next.
+              </p>
+            </div>
+
+            {/* Outcome preview */}
+            <div className="grid grid-cols-3 gap-4 max-w-sm mx-auto pt-2">
+              {[
+                { label: "Week 1–2", desc: "Fix resume + close top gaps" },
+                { label: "Week 3–8", desc: "Build portfolio + apply" },
+                { label: "Week 9–12", desc: "Interview prep + offers" },
+              ].map(({ label, desc }) => (
+                <div key={label} className="bg-white/5 rounded-xl p-3 text-left">
+                  <p className="text-xs font-bold text-indigo-400">{label}</p>
+                  <p className="text-xs text-slate-400 mt-1 leading-tight">{desc}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Loading steps when generating */}
+            {generating ? (
+              <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-xl px-5 py-4 max-w-xs mx-auto space-y-2 text-left mt-2">
+                <p className="text-sm font-semibold text-indigo-300 mb-3">Building your hiring roadmap…</p>
+                {[
+                  { label: "Analyzing your gaps", done: true },
+                  { label: "Mapping learning plan", done: true },
+                  { label: "Creating weekly tasks", done: false },
+                ].map(({ label, done }) => (
+                  <div key={label} className="flex items-center gap-2 text-sm">
+                    {done
+                      ? <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+                      : <Loader2 className="h-4 w-4 animate-spin text-indigo-400 shrink-0" />}
+                    <span className={done ? "text-slate-300" : "text-indigo-400"}>{label}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+                <Link href="/gaps">
+                  <Button variant="outline" className="gap-2">
+                    View gap analysis <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
+                <Button onClick={generateRoadmap} disabled={generating} className="gap-2 min-w-[220px] h-11 font-bold">
+                  <Sparkles className="h-4 w-4" />Generate my 90-day plan
+                </Button>
+              </div>
+            )}
+          </div>
+
+          {/* Transformation hook */}
+          <div className="border-t border-white/8 bg-white/3 px-8 py-5 text-center">
+            <p className="text-sm text-slate-400">
+              Users who follow their plan go from <span className="text-white font-semibold">avg. 31 → 72 score</span> and land interviews in <span className="text-white font-semibold">8–10 weeks</span>
+            </p>
           </div>
         </div>
       </div>

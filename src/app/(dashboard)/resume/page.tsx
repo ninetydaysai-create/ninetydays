@@ -293,28 +293,65 @@ export default function ResumePage() {
         <>
       {/* Upload section — shows success card when done, form otherwise */}
       {uploadStep === "done" ? (
-        <div className="bg-[#161820] rounded-2xl border border-emerald-500/20 p-8 shadow-sm text-center space-y-5">
-          <div className="h-16 w-16 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto">
-            <CheckCircle2 className="h-8 w-8 text-emerald-400" />
-          </div>
-          <div>
-            <p className="text-xl font-bold text-white">Analysis complete!</p>
-            {latestScore !== null && (
-              <p className="text-slate-400 mt-1 text-base">
-                Your resume scored <span className={`font-bold ${latestScore >= 70 ? "text-emerald-400" : latestScore >= 50 ? "text-amber-400" : "text-red-400"}`}>{latestScore}/100</span> against your target role.
-              </p>
+        <div className="bg-[#161820] rounded-2xl border border-white/10 p-8 shadow-sm space-y-6">
+          {/* Score header */}
+          <div className="text-center space-y-3">
+            <div className="h-16 w-16 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto">
+              <CheckCircle2 className="h-8 w-8 text-emerald-400" />
+            </div>
+            {latestScore !== null ? (
+              <>
+                <div>
+                  <p className="text-2xl font-black text-white">
+                    {latestScore >= 70
+                      ? "Strong resume — ready to apply."
+                      : latestScore >= 50
+                      ? "Good start — a few gaps to close."
+                      : "Not ready yet — but closer than you think."}
+                  </p>
+                  <p className="text-slate-400 mt-1 text-base">
+                    {latestScore >= 70
+                      ? "You're above the hiring threshold. Let's sharpen the edges."
+                      : "Here's exactly what to fix to get hired."}
+                  </p>
+                </div>
+                {/* Score comparison bar */}
+                <div className="bg-white/5 rounded-2xl p-5 text-left space-y-3 max-w-sm mx-auto">
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-400 text-sm">Your score</span>
+                    <span className={`text-2xl font-black ${latestScore >= 70 ? "text-emerald-400" : latestScore >= 50 ? "text-amber-400" : "text-red-400"}`}>{latestScore}</span>
+                  </div>
+                  <div className="w-full bg-white/10 rounded-full h-2">
+                    <div className={`h-2 rounded-full transition-all ${latestScore >= 70 ? "bg-emerald-500" : latestScore >= 50 ? "bg-amber-500" : "bg-red-500"}`} style={{ width: `${latestScore}%` }} />
+                  </div>
+                  <div className="flex justify-between text-xs text-slate-500">
+                    <span>0</span>
+                    <span className="text-indigo-400 font-semibold">75+ = hire-ready</span>
+                    <span>100</span>
+                  </div>
+                  {latestScore < 75 && (
+                    <p className="text-xs text-slate-400 pt-1 border-t border-white/10">
+                      You need <span className="text-white font-bold">+{75 - latestScore} points</span> to reach the hiring threshold — your gap report shows exactly how.
+                    </p>
+                  )}
+                </div>
+              </>
+            ) : (
+              <p className="text-xl font-bold text-white">Analysis complete!</p>
             )}
           </div>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center pt-1">
+          {/* CTAs */}
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/gaps">
-              <Button className="h-11 px-6 gap-2 font-semibold">
-                View your gap report <ArrowRight className="h-4 w-4" />
+              <Button className="h-12 px-7 gap-2 font-bold text-base">
+                See what&apos;s blocking you <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
-            <Button variant="outline" className="h-11 px-6" onClick={() => { setUploadStep("idle"); setLatestScore(null); }}>
+            <Button variant="outline" className="h-12 px-6" onClick={() => { setUploadStep("idle"); setLatestScore(null); }}>
               Analyze another resume
             </Button>
           </div>
+          <p className="text-center text-xs text-slate-500">Takes 30 seconds · Personalized to your resume</p>
         </div>
       ) : (
         <div className="bg-[#161820] rounded-2xl border border-white/10 p-7 shadow-sm">
