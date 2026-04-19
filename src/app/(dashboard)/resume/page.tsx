@@ -95,7 +95,12 @@ export default function ResumePage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ resumeId }),
     });
-    if (!analyzeRes.ok) { toast.error("Analysis failed"); setUploadStep("idle"); return; }
+    if (!analyzeRes.ok) {
+      const errData = await analyzeRes.json().catch(() => ({}));
+      toast.error(errData.error ?? `Analysis failed (${analyzeRes.status})`);
+      setUploadStep("idle");
+      return;
+    }
     const { score } = await analyzeRes.json();
     setUploadStep("done");
     setLatestScore(score ?? null);
@@ -116,7 +121,8 @@ export default function ResumePage() {
       await loadData();
       setUploadStep("done");
     } else {
-      toast.error("Analysis failed. Try again.");
+      const errData = await res.json().catch(() => ({}));
+      toast.error(errData.error ?? `Analysis failed (${res.status})`);
     }
     setAnalyzingId(null);
   }
@@ -175,13 +181,13 @@ export default function ResumePage() {
       <div className="flex gap-1 bg-white/5 p-1 rounded-xl w-fit">
         <button
           onClick={() => setTab("analyze")}
-          className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${tab === "analyze" ? "bg-[#1e1f28] shadow-sm text-white" : "text-slate-400 hover:text-slate-300"}`}
+          className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${tab === "analyze" ? "bg-[#1a1b23] shadow-sm text-white" : "text-slate-400 hover:text-slate-300"}`}
         >
           Upload & Analyze
         </button>
         <button
           onClick={() => setTab("rewrite")}
-          className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${tab === "rewrite" ? "bg-[#1e1f28] shadow-sm text-white" : "text-slate-400 hover:text-slate-300"}`}
+          className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${tab === "rewrite" ? "bg-[#1a1b23] shadow-sm text-white" : "text-slate-400 hover:text-slate-300"}`}
         >
           ✦ Rewrite Bullets
         </button>
@@ -189,7 +195,7 @@ export default function ResumePage() {
 
       {tab === "rewrite" && (
         <div className="space-y-6">
-          <div className="bg-[#1a1b23] rounded-2xl border border-white/10 p-6 space-y-4">
+          <div className="bg-[#161820] rounded-2xl border border-white/10 p-6 space-y-4">
             <div>
               <p className="font-bold text-white text-base">Paste a weak resume bullet</p>
               <p className="text-base text-slate-400 mt-0.5">Get 3 AI-rewritten versions with impact scores — copy the best one</p>
@@ -214,24 +220,24 @@ export default function ResumePage() {
           {bulletResult && (
             <div className="space-y-4">
               {/* Before / After score bar */}
-              <div className="bg-[#1a1b23] rounded-2xl border border-white/10 p-5">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Impact score improvement</p>
+              <div className="bg-white rounded-2xl border border-slate-200 p-5">
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Impact score improvement</p>
                 <div className="space-y-3">
                   <div>
                     <div className="flex justify-between mb-1.5">
-                      <span className="text-sm font-medium text-slate-400">Original</span>
-                      <span className="text-sm font-bold text-red-400">{bulletResult.impactScoreBefore}/10</span>
+                      <span className="text-sm font-medium text-slate-700">Original</span>
+                      <span className="text-sm font-bold text-red-600">{bulletResult.impactScoreBefore}/10</span>
                     </div>
-                    <div className="h-2.5 bg-white/10 rounded-full overflow-hidden">
+                    <div className="h-2.5 bg-slate-50 border border-slate-200 rounded-full overflow-hidden">
                       <div className="h-full bg-red-400 rounded-full transition-all" style={{ width: `${bulletResult.impactScoreBefore * 10}%` }} />
                     </div>
                   </div>
                   <div>
                     <div className="flex justify-between mb-1.5">
-                      <span className="text-sm font-medium text-slate-400">Best rewrite</span>
-                      <span className="text-sm font-bold text-emerald-400">{bulletResult.impactScoreAfter}/10</span>
+                      <span className="text-sm font-medium text-slate-700">Best rewrite</span>
+                      <span className="text-sm font-bold text-emerald-600">{bulletResult.impactScoreAfter}/10</span>
                     </div>
-                    <div className="h-2.5 bg-white/10 rounded-full overflow-hidden">
+                    <div className="h-2.5 bg-slate-50 border border-slate-200 rounded-full overflow-hidden">
                       <div className="h-full bg-emerald-500 rounded-full transition-all" style={{ width: `${bulletResult.impactScoreAfter * 10}%` }} />
                     </div>
                   </div>
@@ -239,25 +245,25 @@ export default function ResumePage() {
               </div>
 
               {/* Original bullet */}
-              <div className="bg-red-500/10 rounded-xl border border-red-500/20 p-4">
-                <p className="text-xs font-bold text-red-400 uppercase tracking-widest mb-2">Before</p>
-                <p className="text-sm text-slate-300 italic">&quot;{bulletInput}&quot;</p>
+              <div className="bg-red-50 rounded-xl border border-red-200 p-4">
+                <p className="text-xs font-bold text-red-600 uppercase tracking-widest mb-2">Before</p>
+                <p className="text-sm text-slate-700 italic">&quot;{bulletInput}&quot;</p>
               </div>
 
               {/* Rewrites */}
               <div className="space-y-3">
                 {bulletResult.rewrites.map((r, i) => (
-                  <div key={i} className="bg-[#1a1b23] rounded-xl border border-white/10 p-4 hover:border-indigo-500/40 transition-colors">
+                  <div key={i} className="bg-white rounded-xl border border-slate-200 p-4 hover:border-indigo-400 transition-colors">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-2">
-                          <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Option {i + 1}</span>
-                          <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400">
+                          <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Option {i + 1}</span>
+                          <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200">
                             {r.impactScore}/10
                           </span>
                         </div>
-                        <p className="text-sm font-medium text-white leading-relaxed">&quot;{r.text}&quot;</p>
-                        <p className="text-xs text-indigo-400 font-medium mt-2 flex items-start gap-1">
+                        <p className="text-sm font-medium text-slate-900 leading-relaxed">&quot;{r.text}&quot;</p>
+                        <p className="text-xs text-indigo-600 font-medium mt-2 flex items-start gap-1">
                           <Zap className="h-3 w-3 mt-0.5 shrink-0" />
                           {r.reasoning}
                         </p>
@@ -287,7 +293,7 @@ export default function ResumePage() {
         <>
       {/* Upload section — shows success card when done, form otherwise */}
       {uploadStep === "done" ? (
-        <div className="bg-[#1a1b23] rounded-2xl border border-emerald-500/20 p-8 shadow-sm text-center space-y-5">
+        <div className="bg-[#161820] rounded-2xl border border-emerald-500/20 p-8 shadow-sm text-center space-y-5">
           <div className="h-16 w-16 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto">
             <CheckCircle2 className="h-8 w-8 text-emerald-400" />
           </div>
@@ -311,7 +317,7 @@ export default function ResumePage() {
           </div>
         </div>
       ) : (
-        <div className="bg-[#1a1b23] rounded-2xl border border-white/10 p-7 shadow-sm">
+        <div className="bg-[#161820] rounded-2xl border border-white/10 p-7 shadow-sm">
           <h2 className="text-lg font-bold mb-1">Upload a new resume</h2>
           <p className="text-sm text-slate-400 mb-5">PDF only · max 10MB · we extract the text and analyze it</p>
           <label className={`flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-8 cursor-pointer transition-all mb-5 ${file ? "border-primary bg-primary/5" : "border-slate-200 hover:border-primary/50"} ${busy ? "pointer-events-none opacity-60" : ""}`} htmlFor="resume-file">
@@ -339,7 +345,7 @@ export default function ResumePage() {
         <div className="space-y-3">
           <h2 className="text-base font-semibold text-slate-400">Uploaded but not analyzed</h2>
           {unanalyzed.map((r) => (
-            <div key={r.id} className="bg-[#1a1b23] rounded-xl border border-white/10 p-4 flex items-center justify-between gap-4">
+            <div key={r.id} className="bg-[#161820] rounded-xl border border-white/10 p-4 flex items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <FileText className="h-5 w-5 text-slate-400" />
                 <div>
@@ -369,22 +375,22 @@ export default function ResumePage() {
       ) : (
         <div className="space-y-6">
           {analyses.map((analysis) => (
-            <Card key={analysis.id} className="overflow-hidden">
-              <CardHeader>
+            <div key={analysis.id} className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+              <div className="px-6 pt-6 pb-4">
                 <div className="flex items-center justify-between gap-4">
                   <div>
-                    <CardTitle className="text-base">{analysis.resume.fileName}</CardTitle>
-                    <CardDescription>Analyzed {new Date(analysis.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</CardDescription>
+                    <p className="text-base font-semibold text-slate-900">{analysis.resume.fileName}</p>
+                    <p className="text-sm text-slate-500">Analyzed {new Date(analysis.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</p>
                   </div>
                   <div className="text-center">
-                    <div className={`text-4xl font-black ${analysis.overallScore >= 70 ? "text-emerald-600" : analysis.overallScore >= 50 ? "text-amber-500" : "text-red-500"}`}>
+                    <div className={`text-4xl font-black ${analysis.overallScore >= 70 ? "text-emerald-600" : analysis.overallScore >= 50 ? "text-amber-600" : "text-red-600"}`}>
                       {analysis.overallScore}
                     </div>
-                    <div className="text-xs text-slate-400 font-medium">/ 100</div>
+                    <div className="text-xs text-slate-500 font-medium">/ 100</div>
                   </div>
                 </div>
-              </CardHeader>
-              <CardContent className="space-y-6">
+              </div>
+              <div className="px-6 pb-6 space-y-6">
                 <Progress value={analysis.overallScore} className="h-2" />
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                   {[
@@ -393,14 +399,14 @@ export default function ResumePage() {
                     { label: "Projects", value: analysis.projectComplexity },
                     { label: "Stories", value: Math.min(analysis.starStoriesCount * 10, 100) },
                   ].map((s) => (
-                    <div key={s.label} className="rounded-xl bg-white/5 border border-white/8 py-4">
-                      <div className="text-2xl font-bold text-white">{s.value}</div>
-                      <div className="text-xs text-slate-400 font-medium mt-1">{s.label}</div>
+                    <div key={s.label} className="rounded-xl bg-slate-50 border border-slate-200 py-4">
+                      <div className="text-2xl font-bold text-slate-900">{s.value}</div>
+                      <div className="text-xs text-slate-500 font-medium mt-1">{s.label}</div>
                     </div>
                   ))}
                 </div>
                 <div>
-                  <p className="text-sm font-semibold mb-2">Skills detected</p>
+                  <p className="text-sm font-semibold text-slate-900 mb-2">Skills detected</p>
                   <div className="flex flex-wrap gap-2">
                     {(analysis.skillsFound as string[]).map((skill) => (
                       <Badge key={skill} variant="secondary" className="text-xs">{skill}</Badge>
@@ -409,30 +415,30 @@ export default function ResumePage() {
                 </div>
                 {plan === "PRO" && (analysis.weakBullets as WeakBullet[])?.length > 0 && (
                   <div>
-                    <p className="text-sm font-semibold mb-3">Top bullet rewrites</p>
+                    <p className="text-sm font-semibold text-slate-900 mb-3">Top bullet rewrites</p>
                     <div className="space-y-3">
                       {(analysis.weakBullets as WeakBullet[]).slice(0, 3).map((b, i) => (
-                        <div key={i} className="rounded-xl border border-white/10 p-4 text-sm space-y-2 bg-white/5">
-                          <div className="text-slate-400 line-through">{b.original}</div>
-                          <div className="text-emerald-400 font-medium">{b.rewrite}</div>
-                          <div className="text-xs text-slate-400">Why: {b.reason}</div>
+                        <div key={i} className="rounded-xl border border-slate-200 p-4 text-sm space-y-2 bg-slate-50">
+                          <div className="text-slate-500 line-through">{b.original}</div>
+                          <div className="text-emerald-600 font-medium">{b.rewrite}</div>
+                          <div className="text-xs text-slate-500">Why: {b.reason}</div>
                         </div>
                       ))}
                     </div>
                   </div>
                 )}
                 {plan === "FREE" && (
-                  <div className="rounded-xl border border-dashed border-indigo-500/30 bg-indigo-500/10 p-5 text-center">
-                    <p className="font-semibold text-sm text-indigo-300">Upgrade to see AI bullet rewrites</p>
-                    <p className="text-xs text-indigo-400 mt-1">Pro unlocks full rewrites, unlimited analyses, and more.</p>
+                  <div className="rounded-xl border border-dashed border-indigo-300 bg-indigo-50 p-5 text-center">
+                    <p className="font-semibold text-sm text-indigo-700">Upgrade to see AI bullet rewrites</p>
+                    <p className="text-xs text-indigo-600 mt-1">Pro unlocks full rewrites, unlimited analyses, and more.</p>
                     <Link href="/settings"><Button size="sm" className="mt-3 bg-indigo-600 hover:bg-indigo-700">Upgrade to Pro</Button></Link>
                   </div>
                 )}
                 <Link href="/gaps">
                   <Button className="w-full gap-2">View your gap report <ArrowRight className="h-4 w-4" /></Button>
                 </Link>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           ))}
         </div>
       )}

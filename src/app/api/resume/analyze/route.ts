@@ -1,3 +1,5 @@
+export const maxDuration = 60;
+
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
@@ -50,11 +52,18 @@ export async function POST(req: Request) {
   });
 
   const start = Date.now();
-  const { object } = await generateObject({
-    model: defaultModel,
-    schema: ResumeAnalysisSchema,
-    prompt: buildResumeAnalysisPrompt(resume.rawText, user?.targetRole ?? "product_swe"),
-  });
+  let object: z.infer<typeof ResumeAnalysisSchema>;
+  try {
+    ({ object } = await generateObject({
+      model: defaultModel,
+      schema: ResumeAnalysisSchema,
+      prompt: buildResumeAnalysisPrompt(resume.rawText, user?.targetRole ?? "product_swe"),
+    }));
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("AI analysis error:", msg);
+    return NextResponse.json({ error: `AI analysis failed: ${msg}` }, { status: 500 });
+  }
 
   // Merge deterministic timeline-parsed years with model-inferred years
   // Timeline evidence takes precedence over model inference
