@@ -6,7 +6,8 @@ import { extractText } from "unpdf";
 async function parsePdf(buffer: Buffer): Promise<string> {
   // unpdf uses a browser-API-free build of pdfjs-dist — works in Vercel serverless
   const pages = await extractText(new Uint8Array(buffer), { mergePages: true });
-  return Array.isArray(pages) ? pages.join("\n") : (pages as string) ?? "";
+  if (Array.isArray(pages)) return pages.join("\n");
+  return (pages as unknown as { text: string }).text ?? "";
 }
 
 export async function POST(req: Request) {
