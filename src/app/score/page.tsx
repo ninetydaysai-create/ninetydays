@@ -23,36 +23,12 @@ interface ScoreResult {
   timeToReady: string;
 }
 
-// A/B test — pricing model × positioning (the real money test).
-// Prices shown are filled in at render time from the user's geo (useGeo hook).
+// A/B test — tracks which plan intent to carry through signup.
+// Only plan + afterSignUpUrl are used at this stage (Phase 3 adds pricing copy).
 const PRICING_VARIANT_COPY = {
-  control: {
-    badgeStatic: "Early access — cancel anytime",
-    badgeWithCount: (count: number) => `Join ${count.toLocaleString()}+ engineers`,
-    headline: (score: number, target: number) => `You're ${score}% ready — let's get you to ${target}%+`,
-    sub: "You're closer than most candidates. Fix these last gaps and start getting interview callbacks.",
-    cta: "Unlock My Full Plan",
-    plan: "monthly" as const,
-    afterSignUpUrl: "/onboarding?plan=monthly",
-  },
-  sprint: {
-    badgeStatic: "One-time payment · No subscription",
-    badgeWithCount: () => "One-time payment · Full access for 90 days · No subscription",
-    headline: () => "Get Interview-Ready in 90 Days — Guaranteed Direction",
-    sub: "Pay once. Get everything unlocked for 90 days. Your AI mentor, full roadmap, unlimited mock interviews — until you land the job.",
-    cta: "Start My 90-Day Sprint",
-    plan: "sprint" as const,
-    afterSignUpUrl: "/onboarding?plan=sprint",
-  },
-  mentor: {
-    badgeStatic: "AI-guided daily · Cancel anytime",
-    badgeWithCount: () => "AI-guided daily · Cancel anytime",
-    headline: () => "Get an AI Mentor That Guides You Daily Until You're Hired",
-    sub: "Stop guessing what to fix. Your AI mentor knows your exact profile and tells you exactly what to do next — every single day.",
-    cta: "Start With My Mentor",
-    plan: "monthly_15" as const,
-    afterSignUpUrl: "/onboarding?plan=monthly_15",
-  },
+  control: { plan: "monthly" as const, afterSignUpUrl: "/onboarding?plan=monthly" },
+  sprint:  { plan: "sprint"  as const, afterSignUpUrl: "/onboarding?plan=sprint"  },
+  mentor:  { plan: "monthly_15" as const, afterSignUpUrl: "/onboarding?plan=monthly_15" },
 } as const;
 
 type PricingVariant = keyof typeof PRICING_VARIANT_COPY;
