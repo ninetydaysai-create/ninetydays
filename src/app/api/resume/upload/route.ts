@@ -3,8 +3,9 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 
 async function parsePdf(buffer: Buffer): Promise<string> {
-  // pdf-parse is listed in serverExternalPackages so it runs in Node.js context on Vercel
-  const pdfParse = (await import("pdf-parse")).default;
+  // pdf-parse is a CJS module; dynamic import wraps it under `.default` at runtime
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const pdfParse = require("pdf-parse") as (buf: Buffer) => Promise<{ text: string }>;
   const result = await pdfParse(buffer);
   return result.text ?? "";
 }
