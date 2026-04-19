@@ -104,7 +104,7 @@ export default function CoverLetterPage() {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-slate-900">Cover Letter Generator</h1>
-        <p className="text-slate-500 mt-1 text-sm">
+        <p className="text-slate-500 mt-1 text-base">
           Paste a job description and get a tailored, non-generic cover letter in seconds.
         </p>
       </div>
@@ -207,7 +207,7 @@ export default function CoverLetterPage() {
               Your cover letter
             </p>
             <div className="bg-slate-50 rounded-xl border border-slate-200 px-5 py-5">
-              <p className="text-sm text-slate-800 leading-relaxed whitespace-pre-wrap">
+              <p className="text-base text-slate-800 leading-relaxed whitespace-pre-wrap">
                 {result.coverLetter}
               </p>
             </div>

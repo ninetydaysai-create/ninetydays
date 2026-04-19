@@ -225,7 +225,7 @@ export default function JobsPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Job Tracker</h1>
-          <p className="text-muted-foreground mt-1.5 text-base">
+          <p className="text-muted-foreground mt-1.5 text-base leading-relaxed">
             {jobs.length} application{jobs.length !== 1 ? "s" : ""} tracked
           </p>
         </div>
@@ -243,7 +243,7 @@ export default function JobsPage() {
             </div>
             <div>
               <p className="text-lg font-semibold">No applications tracked yet</p>
-              <p className="text-muted-foreground mt-1">
+              <p className="text-muted-foreground mt-1 text-base">
                 Add jobs you&apos;re interested in and track them through each stage.
               </p>
             </div>

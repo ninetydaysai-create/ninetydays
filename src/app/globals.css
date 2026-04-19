@@ -137,6 +137,23 @@
   p  { @apply text-base; }
 }
 
+/* ─── Typography Token System ───────────────────────────────────────────────
+   Use these classes instead of raw text-* utilities for consistent hierarchy.
+   Max 5 tiers: hero → section → subsection → body → meta
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* Headings */
+.t-hero    { @apply text-6xl font-black tracking-tight leading-[1.05]; }
+.t-section { @apply text-4xl font-bold tracking-tight; }
+.t-sub     { @apply text-2xl font-semibold tracking-tight; }
+
+/* Body */
+.t-body    { @apply text-base leading-relaxed; }
+.t-meta    { @apply text-sm text-muted-foreground; }
+
+/* Only use these for genuine micro-labels: badges, timestamps, pill counts */
+.t-caption { @apply text-xs text-muted-foreground; }
+
 /* Gradient utility */
 .gradient-primary {
   background: linear-gradient(135deg, oklch(0.511 0.237 264.376), oklch(0.55 0.24 292));

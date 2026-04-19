@@ -49,7 +49,7 @@ function GapSection({ title, gaps, icon: Icon }: { title: string; gaps: GapItem[
                   <Badge variant={severityVariant(gap.severity)} className="text-xs capitalize">{gap.severity}</Badge>
                   <span className="text-xs text-muted-foreground flex items-center gap-1"><Clock className="h-3 w-3" /> ~{gap.estimatedHours}h</span>
                 </div>
-                <p className="text-sm text-muted-foreground leading-relaxed">{gap.description}</p>
+                <p className="text-base text-muted-foreground leading-relaxed">{gap.description}</p>
               </div>
             </CardContent>
           </Card>
@@ -73,7 +73,7 @@ export default async function GapsPage() {
       <div className="max-w-3xl mx-auto space-y-6">
         <div>
           <h1 className="text-4xl font-bold">Gap Engine</h1>
-          <p className="text-muted-foreground mt-2 text-lg">AI identifies every skill, project, and story gap between you and your target role.</p>
+          <p className="text-muted-foreground mt-2 text-base">AI identifies every skill, project, and story gap between you and your target role.</p>
         </div>
         <Card className="text-center py-20">
           <CardContent className="space-y-5">
@@ -120,10 +120,10 @@ export default async function GapsPage() {
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-4xl font-bold">Gap Engine</h1>
-          <p className="text-muted-foreground mt-2 text-lg">{totalOpen} gaps remaining · ~{totalHours}h of work to close them</p>
+          <p className="text-muted-foreground mt-2 text-base">{totalOpen} gaps remaining · ~{totalHours}h of work to close them</p>
         </div>
         <div className="text-center shrink-0">
-          <div className="text-6xl font-bold text-primary">{report.totalGapScore}</div>
+          <div className="text-4xl md:text-6xl font-bold text-primary">{report.totalGapScore}</div>
           <div className="text-base text-muted-foreground font-medium">readiness score</div>
         </div>
       </div>

@@ -57,7 +57,7 @@ export default async function SettingsPage() {
     <div className="max-w-2xl mx-auto space-y-8">
       <div>
         <h1 className="text-4xl font-bold">Settings</h1>
-        <p className="text-muted-foreground mt-2 text-lg">Manage your account and subscription.</p>
+        <p className="text-muted-foreground mt-2 text-base">Manage your account and subscription.</p>
       </div>
 
       {/* Account */}
@@ -232,7 +232,7 @@ export default async function SettingsPage() {
             {isSprint ? (
               // Sprint users: offer to convert to subscription before expiry
               <div className="space-y-3">
-                <p className="text-sm text-muted-foreground">
+                <p className="text-base text-muted-foreground">
                   Continue your progress with a full subscription when your sprint ends.
                 </p>
                 <div className="grid grid-cols-2 gap-3">

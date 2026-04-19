@@ -75,7 +75,7 @@ export default function LinkedInPage() {
               </div>
               <div>
                 <p className="text-sm font-semibold text-slate-800">{title}</p>
-                <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">{desc}</p>
+                <p className="text-sm text-slate-500 mt-0.5 leading-relaxed">{desc}</p>
               </div>
             </div>
           ))}
@@ -85,7 +85,7 @@ export default function LinkedInPage() {
       {/* Input */}
       <div className="bg-white rounded-2xl border border-slate-100 p-8 shadow-sm">
         <h2 className="text-lg font-bold text-slate-900 mb-1">Your current LinkedIn profile</h2>
-        <p className="text-slate-500 text-sm mb-6">Paste what you currently have. The AI will improve it for product company recruiters.</p>
+        <p className="text-slate-500 text-base mb-6">Paste what you currently have. The AI will improve it for product company recruiters.</p>
         <div className="space-y-5">
           <div className="space-y-2">
             <Label className="text-sm font-semibold text-slate-700">Current headline <span className="text-red-400">*</span></Label>
@@ -170,7 +170,7 @@ export default function LinkedInPage() {
               </Button>
             </div>
             <div className="px-6 py-5">
-              <p className="text-sm text-slate-700 whitespace-pre-wrap leading-relaxed">{result.outputSummary}</p>
+              <p className="text-base text-slate-700 whitespace-pre-wrap leading-relaxed">{result.outputSummary}</p>
             </div>
           </div>
 

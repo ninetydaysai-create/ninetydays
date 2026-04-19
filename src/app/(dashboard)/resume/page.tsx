@@ -163,7 +163,7 @@ export default function ResumePage() {
     <div className="max-w-3xl mx-auto space-y-8">
       <div>
         <h1 className="text-4xl font-bold">Resume Analyzer</h1>
-        <p className="text-muted-foreground mt-2 text-lg">Upload your resume and get an honest AI score against your target role.</p>
+        <p className="text-muted-foreground mt-2 text-base">Upload your resume and get an honest AI score against your target role.</p>
       </div>
 
       {/* Tab switcher */}
@@ -187,7 +187,7 @@ export default function ResumePage() {
           <div className="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
             <div>
               <p className="font-bold text-slate-900 text-base">Paste a weak resume bullet</p>
-              <p className="text-sm text-slate-500 mt-0.5">Get 3 AI-rewritten versions with impact scores — copy the best one</p>
+              <p className="text-base text-slate-500 mt-0.5">Get 3 AI-rewritten versions with impact scores — copy the best one</p>
             </div>
             <Textarea
               value={bulletInput}

@@ -130,7 +130,7 @@ export default function PortfolioPage() {
     <div className="max-w-3xl mx-auto space-y-8">
       <div>
         <h1 className="text-4xl font-bold">Portfolio Builder</h1>
-        <p className="text-muted-foreground mt-2 text-lg">Your public portfolio page — the link you put on every application.</p>
+        <p className="text-muted-foreground mt-2 text-base">Your public portfolio page — the link you put on every application.</p>
       </div>
 
       {/* GitHub Import */}
@@ -226,7 +226,7 @@ export default function PortfolioPage() {
                 {generatingBio ? <><Loader2 className="h-3 w-3 animate-spin" />Generating...</> : <><Sparkles className="h-3 w-3" />Generate with AI</>}
               </Button>
             </div>
-            <p className="text-sm text-muted-foreground leading-relaxed">
+            <p className="text-base text-muted-foreground leading-relaxed">
               {portfolio.bio || "No bio yet. Click 'Generate with AI' to create one automatically from your profile."}
             </p>
           </div>
@@ -240,7 +240,7 @@ export default function PortfolioPage() {
               <div className="bg-white rounded-2xl border border-slate-200 p-10 text-center shadow-sm">
                 <GitFork className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
                 <p className="font-semibold">No projects yet</p>
-                <p className="text-sm text-muted-foreground mt-1">Enter your GitHub username above to import your repositories.</p>
+                <p className="text-base text-muted-foreground mt-1">Enter your GitHub username above to import your repositories.</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -253,7 +253,7 @@ export default function PortfolioPage() {
                           {p.featured && <Badge variant="secondary" className="text-xs">Featured</Badge>}
                           {p.stars !== null && <span className="text-xs text-muted-foreground">⭐ {p.stars}</span>}
                         </div>
-                        <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">{p.description}</p>
+                        <p className="text-base text-muted-foreground leading-relaxed line-clamp-2">{p.description}</p>
                         <div className="flex flex-wrap gap-1.5 mt-2">
                           {(p.techTags as string[]).map((tag) => (
                             <Badge key={tag} variant="outline" className="text-xs">{tag}</Badge>
@@ -280,7 +280,7 @@ export default function PortfolioPage() {
         <div className="bg-white rounded-2xl border border-slate-200 p-10 text-center shadow-sm">
           <Globe className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
           <p className="font-semibold text-lg">No portfolio yet</p>
-          <p className="text-sm text-muted-foreground mt-1">Enter your GitHub username above to create your portfolio automatically.</p>
+          <p className="text-base text-muted-foreground mt-1">Enter your GitHub username above to create your portfolio automatically.</p>
         </div>
       )}
     </div>

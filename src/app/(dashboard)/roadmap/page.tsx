@@ -258,7 +258,7 @@ export default function RoadmapPage() {
             <Sparkles className="h-8 w-8 text-white" />
           </div>
           <p className="text-xl font-bold text-slate-900">Your roadmap hasn&apos;t been generated yet</p>
-          <p className="text-slate-500 mt-2 max-w-sm mx-auto text-sm leading-relaxed">
+          <p className="text-slate-500 mt-2 max-w-sm mx-auto text-base leading-relaxed">
             We&apos;ll build a 12-week plan from your gap report — every task mapped to a specific gap in your profile.
           </p>
           {generating && (
@@ -303,7 +303,7 @@ export default function RoadmapPage() {
         <div className="flex items-start justify-between gap-4 mb-4">
           <div>
             <h1 className="text-3xl font-bold text-slate-900">90-Day Roadmap</h1>
-            <p className="text-slate-500 mt-1 text-sm">Generated from your resume · every task targets a gap in your profile</p>
+            <p className="text-slate-500 mt-1 text-base">Generated from your resume · every task targets a gap in your profile</p>
           </div>
           <Badge variant="outline" className="shrink-0 text-sm px-3 py-1.5 font-semibold border-slate-300">
             Week {currentWeek} / 12
@@ -481,7 +481,7 @@ export default function RoadmapPage() {
 
                                 {!task.completed && (
                                   <>
-                                    <p className="text-sm text-slate-500 mt-2 leading-relaxed">
+                                    <p className="text-base text-slate-500 mt-2 leading-relaxed">
                                       {task.description}
                                     </p>
 

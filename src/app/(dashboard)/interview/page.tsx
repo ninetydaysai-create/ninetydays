@@ -151,7 +151,7 @@ export default function InterviewPage() {
     <div className="max-w-4xl mx-auto space-y-8">
       <div>
         <h1 className="text-3xl font-bold">Interview Prep</h1>
-        <p className="text-muted-foreground mt-2 text-base">
+        <p className="text-muted-foreground mt-2 text-base leading-relaxed">
           AI mock interviews. Get scored with detailed feedback after each session.
         </p>
       </div>
@@ -253,7 +253,7 @@ export default function InterviewPage() {
                     <CardTitle className="text-base">{config.label}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm text-muted-foreground mb-4">{config.description}</p>
+                    <p className="text-base text-muted-foreground mb-4">{config.description}</p>
                     <Button
                       size="sm"
                       className="w-full gap-2"

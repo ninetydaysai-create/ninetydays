@@ -99,7 +99,7 @@ export default function LandingPage() {
             From service company → product company in 90 days
           </div>
 
-          <h1 className="text-5xl md:text-6xl lg:text-[4.25rem] font-black tracking-tight leading-[1.06] mb-6">
+          <h1 className="text-4xl md:text-6xl lg:text-[4.25rem] font-black tracking-tight leading-[1.06] mb-6">
             Get interview-ready in 90 days —
             <br />
             <span className="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">
@@ -107,7 +107,7 @@ export default function LandingPage() {
             </span>
           </h1>
 
-          <p className="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
+          <p className="text-base text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
             NinetyDays tracks your readiness, fixes what&apos;s blocking you, and keeps you on track with an AI mentor, real interviews, and measurable progress — every week.
           </p>
 
@@ -163,7 +163,7 @@ export default function LandingPage() {
           <h2 className="text-4xl font-black text-slate-900 mb-6">
             You&apos;ve done everything &ldquo;right&rdquo;...
           </h2>
-          <p className="text-xl text-slate-500 leading-relaxed mb-10">
+          <p className="text-base text-slate-500 leading-relaxed mb-10">
             Years of experience. Dozens of applications. Still no callbacks from product companies.
           </p>
           <div className="grid sm:grid-cols-3 gap-4 mb-10">
@@ -237,7 +237,7 @@ export default function LandingPage() {
           <div className="text-center mb-14">
             <p className="text-sm font-bold uppercase tracking-widest text-indigo-600 mb-3">The transformation</p>
             <h2 className="text-4xl font-black text-slate-900">From rejected to interview-ready</h2>
-            <p className="text-slate-500 mt-4 text-lg max-w-xl mx-auto">
+            <p className="text-slate-500 mt-4 text-base max-w-xl mx-auto">
               The gap between rejection and an offer isn&apos;t talent — it&apos;s clarity. See what changes in 90 days.
             </p>
           </div>
@@ -314,7 +314,7 @@ export default function LandingPage() {
         <div className="text-center mb-16">
           <p className="text-sm font-bold uppercase tracking-widest text-indigo-600 mb-3">The core engine</p>
           <h2 className="text-4xl font-black text-slate-900">Your gap report — brutal, specific, actionable</h2>
-          <p className="text-slate-500 mt-4 text-lg max-w-xl mx-auto">
+          <p className="text-slate-500 mt-4 text-base max-w-xl mx-auto">
             Not &ldquo;improve your skills.&rdquo; Exactly what&apos;s missing, why it&apos;s blocking you, and how many hours to fix it.
           </p>
         </div>
@@ -385,7 +385,7 @@ export default function LandingPage() {
           <div className="text-center mb-14">
             <p className="text-sm font-bold uppercase tracking-widest text-indigo-600 mb-3">Why NinetyDays</p>
             <h2 className="text-4xl font-black text-slate-900">This isn&apos;t another AI chatbot.</h2>
-            <p className="text-slate-500 mt-4 text-lg">You don&apos;t just get answers. You get a system.</p>
+            <p className="text-slate-500 mt-4 text-base">You don&apos;t just get answers. You get a system.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {[
@@ -438,7 +438,7 @@ export default function LandingPage() {
                   Knows everything about you.
                 </span>
               </h2>
-              <p className="text-slate-400 text-lg leading-relaxed mb-6">
+              <p className="text-slate-400 text-base leading-relaxed mb-6">
                 Unlike generic AI tools, your mentor knows your resume, your exact gaps, and where you are in your roadmap. Ask it what to do next — it gives one specific answer, not 10 vague suggestions.
               </p>
               <div className="space-y-3 mb-8">
@@ -500,7 +500,7 @@ export default function LandingPage() {
             <div className="bg-[#0a0b0f] rounded-2xl p-7 border border-white/5">
               <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-5">Job Readiness Score</p>
               <div className="flex items-end gap-4 mb-5">
-                <div className="text-7xl font-black text-amber-400 leading-none">71</div>
+                <div className="text-6xl font-black text-amber-400 leading-none">71</div>
                 <div>
                   <div className="text-white font-bold mb-1">ML Engineer · Stripe</div>
                   <div className="text-slate-500 text-sm">3 gaps to close before applying</div>
@@ -532,7 +532,7 @@ export default function LandingPage() {
                 Paste any job description.<br />
                 <span className="text-indigo-600">Know if you&apos;re ready.</span>
               </h2>
-              <p className="text-slate-500 text-lg leading-relaxed mb-6">
+              <p className="text-slate-500 text-base leading-relaxed mb-6">
                 No guessing. Paste any JD and get your readiness score instantly — with the exact gaps blocking you and the single most impactful thing to do next.
               </p>
               <div className="space-y-3 mb-8">
@@ -564,7 +564,7 @@ export default function LandingPage() {
           <h2 className="text-4xl font-black text-slate-900 mb-5">
             Share your readiness. Stay accountable.
           </h2>
-          <p className="text-slate-500 text-lg max-w-xl mx-auto mb-10">
+          <p className="text-slate-500 text-base max-w-xl mx-auto mb-10">
             Every week, your progress card updates. One click to share on LinkedIn or Twitter. Your network sees your journey — and keeps you moving.
           </p>
           {/* Sample card */}
@@ -609,7 +609,7 @@ export default function LandingPage() {
           <div className="text-center mb-14">
             <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">Built for consistency</p>
             <h2 className="text-4xl font-black text-white">See your progress. Stay motivated.</h2>
-            <p className="text-slate-400 mt-4 text-lg max-w-xl mx-auto">
+            <p className="text-slate-400 mt-4 text-base max-w-xl mx-auto">
               Most career tools give you a report and leave you guessing. NinetyDays keeps you moving every week.
             </p>
           </div>
@@ -770,7 +770,7 @@ export default function LandingPage() {
           <div className="text-center mb-14">
             <p className="text-sm font-bold uppercase tracking-widest text-indigo-600 mb-3">Pricing</p>
             <h2 className="text-4xl font-black text-slate-900">Start free. Upgrade when you&apos;re ready.</h2>
-            <p className="text-slate-500 mt-3 text-lg">Early access pricing — locked in forever when you join now.</p>
+            <p className="text-slate-500 mt-3 text-base">Early access pricing — locked in forever when you join now.</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
@@ -871,7 +871,7 @@ export default function LandingPage() {
               You need a plan that works.
             </span>
           </h2>
-          <p className="text-slate-400 text-xl mb-10 leading-relaxed">
+          <p className="text-slate-400 text-base mb-10 leading-relaxed">
             Upload your resume. Get your readiness score and exact gap breakdown in 2 minutes. Free.
           </p>
           <Link href="/sign-up">

@@ -157,7 +157,7 @@ export default function MentorPage() {
             </div>
             <div>
               <h2 className="text-xl font-bold text-slate-900 mb-2">Your personal career mentor</h2>
-              <p className="text-slate-500 text-sm max-w-sm mx-auto leading-relaxed">
+              <p className="text-slate-500 text-base max-w-sm mx-auto leading-relaxed">
                 I know your resume, your gaps, and where you are in your roadmap. Ask me anything — or start with one of these:
               </p>
             </div>

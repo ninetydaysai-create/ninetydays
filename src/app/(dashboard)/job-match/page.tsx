@@ -232,7 +232,7 @@ export default function JobMatchPage() {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-slate-900">Job Match Score</h1>
-        <p className="text-slate-500 mt-1 text-sm">
+        <p className="text-slate-500 mt-1 text-base">
           Paste any job description — see exactly how well you match and what&apos;s blocking you.
         </p>
       </div>
@@ -299,7 +299,7 @@ export default function JobMatchPage() {
               <Zap className="h-5 w-5 text-indigo-500 shrink-0 mt-0.5" />
               <div className="flex-1">
                 <p className="font-bold text-indigo-900 text-sm">Close these gaps with your roadmap</p>
-                <p className="text-sm text-indigo-700 mt-0.5">Your 90-day plan already includes tasks that address these gaps. Check your current week.</p>
+                <p className="text-base text-indigo-700 mt-0.5">Your 90-day plan already includes tasks that address these gaps. Check your current week.</p>
               </div>
               <a href="/roadmap">
                 <Button size="sm" className="gap-1.5 shrink-0 bg-indigo-600 hover:bg-indigo-500">
@@ -313,7 +313,7 @@ export default function JobMatchPage() {
               <TrendingUp className="h-5 w-5 text-emerald-600 shrink-0 mt-0.5" />
               <div className="flex-1">
                 <p className="font-bold text-emerald-900 text-sm">You&apos;re a strong candidate — apply now</p>
-                <p className="text-sm text-emerald-700 mt-0.5">A 70%+ match means you should apply. Most engineers wait too long. Go for it.</p>
+                <p className="text-base text-emerald-700 mt-0.5">A 70%+ match means you should apply. Most engineers wait too long. Go for it.</p>
               </div>
             </div>
           )}
@@ -335,7 +335,7 @@ export default function JobMatchPage() {
         <div className="text-center py-12 text-slate-400">
           <Target className="h-10 w-10 mx-auto mb-3 text-slate-200" />
           <p className="font-medium text-slate-500">No analyses yet</p>
-          <p className="text-sm mt-1">Paste a job description above to see how well you match</p>
+          <p className="text-base mt-1">Paste a job description above to see how well you match</p>
         </div>
       )}
     </div>

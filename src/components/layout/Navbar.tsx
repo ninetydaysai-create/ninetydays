@@ -12,7 +12,7 @@ export function Navbar() {
     <header className="md:hidden border-b bg-background px-4 py-3 flex items-center justify-between">
       <Link href="/dashboard" className="flex items-center gap-2">
         <Zap className="h-5 w-5 text-primary" />
-        <span className="font-bold">NinetyDays</span>
+        <span className="text-sm font-bold">NinetyDays</span>
       </Link>
       <div className="flex items-center gap-3">
         <NotificationBell />

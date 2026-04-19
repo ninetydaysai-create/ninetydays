@@ -116,7 +116,7 @@ export default function OutreachPage() {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-slate-900">Cold Outreach Generator</h1>
-        <p className="text-slate-500 mt-1 text-sm">
+        <p className="text-slate-500 mt-1 text-base">
           Paste a JD &rarr; get a personalized recruiter email in seconds
         </p>
       </div>
@@ -240,7 +240,7 @@ export default function OutreachPage() {
                   </span>
                   <CopyButton text={`Subject: ${result.subject}\n\n${email.content}`} />
                 </div>
-                <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">
+                <p className="text-base text-slate-700 leading-relaxed whitespace-pre-wrap">
                   {email.content}
                 </p>
               </div>

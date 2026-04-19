@@ -60,7 +60,7 @@ export default function GitHubPage() {
               </div>
               <div>
                 <p className="text-sm font-semibold text-slate-800">{title}</p>
-                <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">{desc}</p>
+                <p className="text-sm text-slate-500 mt-0.5 leading-relaxed">{desc}</p>
               </div>
             </div>
           ))}
@@ -70,7 +70,7 @@ export default function GitHubPage() {
       {/* Input */}
       <div className="bg-white rounded-2xl border border-slate-100 p-8 shadow-sm">
         <h2 className="text-lg font-bold text-slate-900 mb-1">Paste your current README</h2>
-        <p className="text-slate-500 text-sm mb-6">Leave blank to generate a professional README from scratch based on your profile.</p>
+        <p className="text-slate-500 text-base mb-6">Leave blank to generate a professional README from scratch based on your profile.</p>
         <div className="space-y-2">
           <Label className="text-sm font-semibold text-slate-700">README.md content</Label>
           <Textarea
