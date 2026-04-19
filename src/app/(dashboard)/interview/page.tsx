@@ -30,7 +30,7 @@ const typeConfig: Record<InterviewType, { label: string; description: string; ic
     label: "System Design",
     description: "Scalability, architecture, trade-offs",
     icon: Cpu,
-    color: "text-purple-500",
+    color: "text-blue-500",
   },
   ml_concepts: {
     label: "ML Concepts",
@@ -42,7 +42,7 @@ const typeConfig: Record<InterviewType, { label: string; description: string; ic
     label: "Product Sense",
     description: "Product thinking, metrics, prioritization",
     icon: Package,
-    color: "text-orange-500",
+    color: "text-amber-500",
   },
 };
 

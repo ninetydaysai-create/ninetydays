@@ -72,8 +72,8 @@ export function Sidebar() {
                   : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
               )}
             >
-              <div className={cn("h-8 w-8 rounded-lg flex items-center justify-center shrink-0 transition-all", active ? bg : "bg-white/5 group-hover:bg-white/8")}>
-                <Icon className={cn("h-4 w-4", active ? color : "text-slate-400 group-hover:text-slate-300")} />
+              <div className={cn("h-8 w-8 rounded-lg flex items-center justify-center shrink-0 transition-all", active ? "bg-indigo-500/10" : "bg-white/5 group-hover:bg-white/8")}>
+                <Icon className={cn("h-4 w-4", active ? "text-indigo-400" : "text-slate-400 group-hover:text-slate-300")} />
               </div>
               <span className="flex-1">{label}</span>
               {active && <ChevronRight className="h-3.5 w-3.5 text-slate-400 shrink-0" />}

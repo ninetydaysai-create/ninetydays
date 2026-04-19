@@ -121,7 +121,7 @@ export default function MentorPage() {
       {/* Header */}
       <div className="px-6 py-5 border-b bg-white shrink-0 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-md shadow-violet-500/25">
+          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center shadow-md shadow-indigo-500/25">
             <Bot className="h-5 w-5 text-white" />
           </div>
           <div>
@@ -152,7 +152,7 @@ export default function MentorPage() {
 
         {isEmpty && (
           <div className="flex flex-col items-center justify-center h-full gap-6 text-center pb-10">
-            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-xl shadow-violet-500/25">
+            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center shadow-xl shadow-indigo-500/25">
               <Sparkles className="h-8 w-8 text-white" />
             </div>
             <div>
@@ -184,7 +184,7 @@ export default function MentorPage() {
             <div className={cn(
               "h-8 w-8 rounded-lg shrink-0 flex items-center justify-center mt-0.5",
               msg.role === "assistant"
-                ? "bg-gradient-to-br from-violet-500 to-indigo-600 shadow-sm"
+                ? "bg-gradient-to-br from-indigo-500 to-blue-600 shadow-sm"
                 : "bg-slate-100"
             )}>
               {msg.role === "assistant"

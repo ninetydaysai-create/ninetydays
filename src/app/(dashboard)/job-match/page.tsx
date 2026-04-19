@@ -29,14 +29,14 @@ interface JobMatch {
 }
 
 const SEVERITY_STYLE = {
-  critical: "bg-red-100 text-red-700 border-red-200",
-  major: "bg-orange-100 text-orange-700 border-orange-200",
+  critical: "bg-red-100 text-red-600 border-red-200",
+  major: "bg-amber-100 text-amber-700 border-amber-200",
   minor: "bg-yellow-100 text-yellow-700 border-yellow-200",
 };
 
 const SEVERITY_DOT = {
   critical: "bg-red-500",
-  major: "bg-orange-400",
+  major: "bg-amber-500",
   minor: "bg-yellow-400",
 };
 
@@ -118,11 +118,11 @@ function MatchCard({ match, defaultOpen = false }: { match: JobMatch; defaultOpe
             <div className="rounded-xl border-2 border-red-200 bg-red-50 p-4">
               <div className="flex items-center gap-2 mb-3">
                 <ShieldAlert className="h-4 w-4 text-red-600 shrink-0" />
-                <p className="text-sm font-bold text-red-700 uppercase tracking-widest">Red flags detected</p>
+                <p className="text-sm font-bold text-red-600 uppercase tracking-widest">Red flags detected</p>
               </div>
               <div className="space-y-2">
                 {match.redFlags.map((flag, i) => (
-                  <div key={i} className="flex items-start gap-2 text-sm text-red-700">
+                  <div key={i} className="flex items-start gap-2 text-sm text-red-600">
                     <span className="font-bold mt-0.5 shrink-0">✕</span>
                     {flag}
                   </div>
@@ -139,7 +139,7 @@ function MatchCard({ match, defaultOpen = false }: { match: JobMatch; defaultOpe
             <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Blocking gaps — what&apos;s actually missing</p>
             <div className="space-y-3">
               {match.blockingGaps.map((gap, i) => (
-                <div key={i} className={`rounded-xl border p-4 ${gap.severity === "critical" ? "border-red-200 bg-red-50/40" : gap.severity === "major" ? "border-orange-200 bg-orange-50/30" : "border-slate-200"}`}>
+                <div key={i} className={`rounded-xl border p-4 ${gap.severity === "critical" ? "border-red-200 bg-red-50/40" : gap.severity === "major" ? "border-amber-200 bg-amber-50/30" : "border-slate-200"}`}>
                   <div className="flex items-start gap-3">
                     <div className={`h-2.5 w-2.5 rounded-full shrink-0 mt-1.5 ${SEVERITY_DOT[gap.severity]}`} />
                     <div className="flex-1 min-w-0">
@@ -312,7 +312,7 @@ export default function JobMatchPage() {
             <div className="bg-emerald-50 rounded-2xl border border-emerald-100 p-5 flex items-start gap-4">
               <TrendingUp className="h-5 w-5 text-emerald-600 shrink-0 mt-0.5" />
               <div className="flex-1">
-                <p className="font-bold text-emerald-900 text-sm">You&apos;re a strong candidate — apply now</p>
+                <p className="font-bold text-emerald-700 text-sm">You&apos;re a strong candidate — apply now</p>
                 <p className="text-base text-emerald-700 mt-0.5">A 70%+ match means you should apply. Most engineers wait too long. Go for it.</p>
               </div>
             </div>

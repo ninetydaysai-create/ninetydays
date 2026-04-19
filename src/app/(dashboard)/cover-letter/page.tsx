@@ -112,8 +112,8 @@ export default function CoverLetterPage() {
       {/* Input card */}
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
         <div className="flex items-center gap-2 mb-1">
-          <div className="h-9 w-9 rounded-xl bg-teal-100 flex items-center justify-center">
-            <FileEdit className="h-5 w-5 text-teal-600" />
+          <div className="h-9 w-9 rounded-xl bg-indigo-100 flex items-center justify-center">
+            <FileEdit className="h-5 w-5 text-indigo-600" />
           </div>
           <div>
             <p className="font-bold text-slate-900">Paste job description</p>
@@ -127,7 +127,7 @@ export default function CoverLetterPage() {
           value={jdText}
           onChange={(e) => setJdText(e.target.value)}
           placeholder="Paste the full job description here..."
-          className="min-h-[160px] text-sm resize-none rounded-xl border-slate-200 focus:border-teal-300"
+          className="min-h-[160px] text-sm resize-none rounded-xl border-slate-200 focus:border-indigo-300"
           disabled={generating}
         />
 
@@ -142,8 +142,8 @@ export default function CoverLetterPage() {
                 disabled={generating}
                 className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all ${
                   tone === value
-                    ? "bg-teal-500 text-white border-teal-500 shadow-sm"
-                    : "bg-white text-slate-600 border-slate-200 hover:border-teal-300 hover:text-teal-600"
+                    ? "bg-indigo-500 text-white border-indigo-500 shadow-sm"
+                    : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:text-indigo-600"
                 }`}
               >
                 {label}
@@ -168,7 +168,7 @@ export default function CoverLetterPage() {
           <Button
             onClick={generate}
             disabled={generating || jdText.trim().length < 10}
-            className="gap-2 h-11 px-6 bg-teal-500 hover:bg-teal-400"
+            className="gap-2 h-11 px-6 bg-indigo-500 hover:bg-indigo-400"
           >
             {generating ? (
               <>
@@ -189,13 +189,13 @@ export default function CoverLetterPage() {
       {result && (
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-5">
           {/* Key highlights */}
-          <div className="bg-teal-50 rounded-xl border border-teal-100 p-4 space-y-2">
-            <p className="text-xs font-bold text-teal-700 uppercase tracking-widest mb-3">
+          <div className="bg-indigo-50 rounded-xl border border-indigo-100 p-4 space-y-2">
+            <p className="text-xs font-bold text-indigo-700 uppercase tracking-widest mb-3">
               Key highlights
             </p>
             {result.highlights.map((highlight, i) => (
-              <div key={i} className="flex items-start gap-2 text-sm text-teal-900">
-                <CheckCircle2 className="h-4 w-4 text-teal-500 shrink-0 mt-0.5" />
+              <div key={i} className="flex items-start gap-2 text-sm text-indigo-900">
+                <CheckCircle2 className="h-4 w-4 text-indigo-500 shrink-0 mt-0.5" />
                 {highlight}
               </div>
             ))}

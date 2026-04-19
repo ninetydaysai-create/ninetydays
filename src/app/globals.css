@@ -137,6 +137,21 @@
   p  { @apply text-base; }
 }
 
+/* ─── Color Token System ────────────────────────────────────────────────────
+   ONE neutral hierarchy. ONE brand color. FOUR status colors. Nothing else.
+
+   Neutral (light bg)      Neutral (dark bg)
+   text-slate-900  heading  text-white         heading
+   text-slate-600  body     text-slate-300     body
+   text-slate-400  subtext  text-slate-400     subtext
+   text-slate-300  disabled text-slate-500     disabled
+
+   Brand:  indigo-600 (default) · indigo-700 (hover) · indigo-100 (soft)
+   Success: emerald-500   Error: red-500   Warning: amber-500   Info: blue-500
+
+   DO NOT USE: teal, rose, violet (outside hero gradient), purple, orange
+   ─────────────────────────────────────────────────────────────────────────── */
+
 /* ─── Typography Token System ───────────────────────────────────────────────
    Use these classes instead of raw text-* utilities for consistent hierarchy.
    Max 5 tiers: hero → section → subsection → body → meta

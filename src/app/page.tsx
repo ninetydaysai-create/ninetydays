@@ -215,9 +215,9 @@ export default function LandingPage() {
                 number: "03",
                 title: "Practice like real interviews",
                 desc: "Run AI mock interviews in behavioral, system design, ML concepts, and product sense. Get scored with specific strengths and improvements.",
-                color: "from-violet-500 to-purple-500",
-                bg: "bg-violet-50",
-                border: "border-violet-100",
+                color: "from-indigo-500 to-blue-500",
+                bg: "bg-indigo-50",
+                border: "border-indigo-100",
               },
             ].map((item) => (
               <div key={item.number} className={`${item.bg} border ${item.border} rounded-2xl p-7`}>
@@ -333,11 +333,11 @@ export default function LandingPage() {
 
           {gapExamples.map((gap, i) => (
             <div key={i} className="bg-white/5 border border-white/8 rounded-xl p-5 flex items-start gap-4">
-              <div className={`h-2.5 w-2.5 rounded-full shrink-0 mt-1.5 ${gap.severity === "critical" ? "bg-red-500" : "bg-orange-400"}`} />
+              <div className={`h-2.5 w-2.5 rounded-full shrink-0 mt-1.5 ${gap.severity === "critical" ? "bg-red-500" : "bg-amber-400"}`} />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap mb-1">
                   <span className="font-semibold text-white">{gap.skill}</span>
-                  <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${gap.severity === "critical" ? "bg-red-500/20 text-red-400" : "bg-orange-500/20 text-orange-400"}`}>
+                  <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${gap.severity === "critical" ? "bg-red-500/20 text-red-400" : "bg-amber-500/20 text-amber-400"}`}>
                     {gap.severity}
                   </span>
                 </div>
@@ -364,9 +364,9 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-4 gap-6">
             {[
               { step: "01", title: "Upload resume", desc: "PDF upload. AI scores it 0–100 against your target role in 60 seconds.", color: "from-blue-500 to-indigo-500" },
-              { step: "02", title: "See your gaps", desc: "Skill gaps, project gaps, story gaps — each with severity, hours to close, and why it matters.", color: "from-indigo-500 to-violet-500" },
-              { step: "03", title: "Get your plan", desc: "12-week roadmap built from your gaps. Every task mapped to a specific blocker in your profile.", color: "from-violet-500 to-purple-500" },
-              { step: "04", title: "Execute & track", desc: "Check off tasks. Practice interviews. Watch readiness climb. Apply when you hit 70%.", color: "from-purple-500 to-pink-500" },
+              { step: "02", title: "See your gaps", desc: "Skill gaps, project gaps, story gaps — each with severity, hours to close, and why it matters.", color: "from-indigo-500 to-indigo-600" },
+              { step: "03", title: "Get your plan", desc: "12-week roadmap built from your gaps. Every task mapped to a specific blocker in your profile.", color: "from-indigo-600 to-indigo-700" },
+              { step: "04", title: "Execute & track", desc: "Check off tasks. Practice interviews. Watch readiness climb. Apply when you hit 70%.", color: "from-indigo-700 to-blue-700" },
             ].map((item) => (
               <div key={item.step} className="relative">
                 <div className="text-[4rem] font-black text-slate-100 leading-none mb-3 select-none">{item.step}</div>
@@ -428,13 +428,13 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="inline-flex items-center gap-2 bg-violet-500/15 border border-violet-500/30 rounded-full px-4 py-1.5 text-sm font-medium text-violet-300 mb-5">
+              <div className="inline-flex items-center gap-2 bg-indigo-500/15 border border-indigo-500/30 rounded-full px-4 py-1.5 text-sm font-medium text-indigo-300 mb-5">
                 <Bot className="h-3.5 w-3.5" />
                 New: AI Mentor
               </div>
               <h2 className="text-4xl font-black text-white mb-5">
                 Your personal mentor.<br />
-                <span className="bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent">
                   Knows everything about you.
                 </span>
               </h2>
@@ -448,13 +448,13 @@ export default function LandingPage() {
                   "\"Which gap will hurt most in interviews?\" → Calibrated to your target company",
                 ].map((q) => (
                   <div key={q} className="flex items-start gap-3 text-sm text-slate-300">
-                    <Sparkles className="h-4 w-4 text-violet-400 shrink-0 mt-0.5" />
+                    <Sparkles className="h-4 w-4 text-indigo-400 shrink-0 mt-0.5" />
                     {q}
                   </div>
                 ))}
               </div>
               <Link href="/sign-up">
-                <Button className="h-12 px-7 font-bold bg-violet-600 hover:bg-violet-500 rounded-xl gap-2">
+                <Button className="h-12 px-7 font-bold bg-indigo-600 hover:bg-indigo-500 rounded-xl gap-2">
                   Get your AI mentor free <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
@@ -462,7 +462,7 @@ export default function LandingPage() {
             {/* Chat preview */}
             <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
               <div className="px-5 py-4 border-b border-white/8 flex items-center gap-3">
-                <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center">
+                <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center">
                   <Bot className="h-4 w-4 text-white" />
                 </div>
                 <div>
@@ -478,7 +478,7 @@ export default function LandingPage() {
                   { role: "assistant", text: "Not yet. You're at 58% — Google's bar sits around 75%. The gap: no production ML project on your GitHub. Apply in 5–6 weeks after you ship the RAG pipeline from Week 7. I'll tell you when you're ready." },
                 ].map((m, i) => (
                   <div key={i} className={`flex gap-2.5 ${m.role === "user" ? "flex-row-reverse" : ""}`}>
-                    <div className={`h-7 w-7 rounded-lg shrink-0 flex items-center justify-center text-xs font-bold ${m.role === "assistant" ? "bg-violet-500/20 text-violet-400" : "bg-white/10 text-slate-400"}`}>
+                    <div className={`h-7 w-7 rounded-lg shrink-0 flex items-center justify-center text-xs font-bold ${m.role === "assistant" ? "bg-indigo-500/20 text-indigo-400" : "bg-white/10 text-slate-400"}`}>
                       {m.role === "assistant" ? "M" : "U"}
                     </div>
                     <div className={`rounded-xl px-3 py-2 text-xs leading-relaxed max-w-[80%] ${m.role === "assistant" ? "bg-white/8 text-slate-300" : "bg-indigo-600 text-white"}`}>
@@ -516,9 +516,9 @@ export default function LandingPage() {
                   { label: "System design case study", sev: "major" },
                 ].map((g) => (
                   <div key={g.label} className="flex items-center gap-3 text-sm">
-                    <span className={`h-2 w-2 rounded-full shrink-0 ${g.sev === "critical" ? "bg-red-500" : "bg-orange-400"}`} />
+                    <span className={`h-2 w-2 rounded-full shrink-0 ${g.sev === "critical" ? "bg-red-500" : "bg-amber-400"}`} />
                     <span className="text-slate-300">{g.label}</span>
-                    <span className={`ml-auto text-xs font-bold ${g.sev === "critical" ? "text-red-400" : "text-orange-400"}`}>{g.sev}</span>
+                    <span className={`ml-auto text-xs font-bold ${g.sev === "critical" ? "text-red-400" : "text-amber-400"}`}>{g.sev}</span>
                   </div>
                 ))}
               </div>

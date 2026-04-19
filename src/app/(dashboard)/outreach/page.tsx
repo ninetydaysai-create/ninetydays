@@ -132,8 +132,8 @@ export default function OutreachPage() {
       {/* Input card */}
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
         <div className="flex items-center gap-2 mb-1">
-          <div className="h-9 w-9 rounded-xl bg-rose-100 flex items-center justify-center">
-            <Mail className="h-5 w-5 text-rose-600" />
+          <div className="h-9 w-9 rounded-xl bg-red-100 flex items-center justify-center">
+            <Mail className="h-5 w-5 text-red-600" />
           </div>
           <div>
             <p className="font-bold text-slate-900">Paste job description</p>
@@ -147,7 +147,7 @@ export default function OutreachPage() {
           value={jdText}
           onChange={(e) => setJdText(e.target.value)}
           placeholder="Paste the full job description here..."
-          className="min-h-[160px] text-sm resize-none rounded-xl border-slate-200 focus:border-rose-300"
+          className="min-h-[160px] text-sm resize-none rounded-xl border-slate-200 focus:border-red-300"
           disabled={generating}
         />
 
@@ -155,7 +155,7 @@ export default function OutreachPage() {
           value={recruiterName}
           onChange={(e) => setRecruiterName(e.target.value)}
           placeholder="Recruiter / hiring manager name (optional)"
-          className="rounded-xl border-slate-200 text-sm focus:border-rose-300"
+          className="rounded-xl border-slate-200 text-sm focus:border-red-300"
           disabled={generating}
         />
 
@@ -170,8 +170,8 @@ export default function OutreachPage() {
                 disabled={generating}
                 className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all ${
                   tone === value
-                    ? "bg-rose-500 text-white border-rose-500 shadow-sm"
-                    : "bg-white text-slate-600 border-slate-200 hover:border-rose-300 hover:text-rose-600"
+                    ? "bg-red-500 text-white border-red-500 shadow-sm"
+                    : "bg-white text-slate-600 border-slate-200 hover:border-red-300 hover:text-red-600"
                 }`}
               >
                 {label}
@@ -196,7 +196,7 @@ export default function OutreachPage() {
           <Button
             onClick={generate}
             disabled={generating || jdText.trim().length < 10}
-            className="gap-2 h-11 px-6 bg-rose-500 hover:bg-rose-400"
+            className="gap-2 h-11 px-6 bg-red-500 hover:bg-red-400"
           >
             {generating ? (
               <>

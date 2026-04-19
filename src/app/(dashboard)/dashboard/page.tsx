@@ -37,7 +37,7 @@ function getLevel(readiness: number): { level: number; label: string; next: numb
 
 function getRejectionRisk(score: number): { label: string; color: string; bg: string; advice: string } {
   if (score < 40) return { label: "Very High", color: "text-red-600", bg: "bg-red-50", advice: "Apply after reaching 60%" };
-  if (score < 60) return { label: "High", color: "text-orange-600", bg: "bg-orange-50", advice: "Close critical gaps first" };
+  if (score < 60) return { label: "High", color: "text-amber-500", bg: "bg-amber-50", advice: "Close critical gaps first" };
   if (score < 75) return { label: "Medium", color: "text-amber-600", bg: "bg-amber-50", advice: "Strengthen interview skills" };
   if (score < 88) return { label: "Low", color: "text-emerald-600", bg: "bg-emerald-50", advice: "Start applying now" };
   return { label: "Very Low", color: "text-emerald-700", bg: "bg-emerald-50", advice: "You're highly competitive" };
@@ -235,8 +235,8 @@ export default async function DashboardPage() {
           {/* Interview readiness */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
             <div className="flex items-center gap-2 mb-3">
-              <div className="h-8 w-8 rounded-lg bg-purple-50 flex items-center justify-center">
-                <Brain className="h-4 w-4 text-purple-600" />
+              <div className="h-8 w-8 rounded-lg bg-blue-50 flex items-center justify-center">
+                <Brain className="h-4 w-4 text-blue-500" />
               </div>
               <span className="text-xs font-bold uppercase tracking-widest text-slate-400">Interviews</span>
             </div>
@@ -249,8 +249,8 @@ export default async function DashboardPage() {
           {/* Gaps remaining */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
             <div className="flex items-center gap-2 mb-3">
-              <div className="h-8 w-8 rounded-lg bg-orange-50 flex items-center justify-center">
-                <Target className="h-4 w-4 text-orange-500" />
+              <div className="h-8 w-8 rounded-lg bg-amber-50 flex items-center justify-center">
+                <Target className="h-4 w-4 text-amber-500" />
               </div>
               <span className="text-xs font-bold uppercase tracking-widest text-slate-400">Gaps left</span>
             </div>
@@ -264,7 +264,7 @@ export default async function DashboardPage() {
         /* Fallback vanity metrics if no gap report yet */
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { label: "Day", value: dayOfJourney || "—", sub: "of 90", color: "text-orange-500", bg: "bg-orange-50" },
+            { label: "Day", value: dayOfJourney || "—", sub: "of 90", color: "text-amber-500", bg: "bg-amber-50" },
             { label: "Tasks", value: `${completedTasks}/${allTasks.length}`, sub: "completed", color: "text-indigo-500", bg: "bg-indigo-50" },
             { label: "Interview", value: avgScore ? `${avgScore}` : "—", sub: "avg score /100", color: "text-yellow-600", bg: "bg-yellow-50" },
             { label: "Jobs", value: user.jobApplications.length, sub: "tracked", color: "text-emerald-600", bg: "bg-emerald-50" },

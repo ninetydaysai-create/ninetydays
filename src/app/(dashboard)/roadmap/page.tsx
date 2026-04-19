@@ -57,8 +57,8 @@ const FREE_WEEKS_VISIBLE = 4;
 
 const PHASES = [
   { label: "Phase 1", name: "Foundations", weeks: [1, 2, 3, 4], color: "blue", gradient: "from-blue-500 to-indigo-500" },
-  { label: "Phase 2", name: "Real Skills", weeks: [5, 6, 7, 8], color: "violet", gradient: "from-violet-500 to-purple-600" },
-  { label: "Phase 3", name: "Market Ready", weeks: [9, 10, 11, 12], color: "emerald", gradient: "from-emerald-500 to-teal-600" },
+  { label: "Phase 2", name: "Real Skills", weeks: [5, 6, 7, 8], color: "indigo", gradient: "from-indigo-500 to-blue-600" },
+  { label: "Phase 3", name: "Market Ready", weeks: [9, 10, 11, 12], color: "emerald", gradient: "from-emerald-500 to-emerald-600" },
 ];
 
 const PHASE_COLORS = {
@@ -70,13 +70,13 @@ const PHASE_COLORS = {
     current: "border-blue-400 shadow-blue-100",
     bar: "bg-blue-500",
   },
-  violet: {
-    header: "bg-violet-50 border-violet-200",
-    badge: "bg-violet-100 text-violet-700",
-    dot: "bg-violet-500",
-    ring: "ring-violet-200",
-    current: "border-violet-400 shadow-violet-100",
-    bar: "bg-violet-500",
+  indigo: {
+    header: "bg-indigo-50 border-indigo-200",
+    badge: "bg-indigo-100 text-indigo-700",
+    dot: "bg-indigo-500",
+    ring: "ring-indigo-200",
+    current: "border-indigo-400 shadow-indigo-100",
+    bar: "bg-indigo-500",
   },
   emerald: {
     header: "bg-emerald-50 border-emerald-200",
@@ -254,7 +254,7 @@ export default function RoadmapPage() {
           <p className="text-muted-foreground mt-2 text-base">Your personalized week-by-week plan to get hired in AI.</p>
         </div>
         <div className="rounded-2xl border bg-white text-center py-16 px-8">
-          <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center mx-auto mb-6 shadow-lg shadow-indigo-500/25">
+          <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center mx-auto mb-6 shadow-lg shadow-indigo-500/25">
             <Sparkles className="h-8 w-8 text-white" />
           </div>
           <p className="text-xl font-bold text-slate-900">Your roadmap hasn&apos;t been generated yet</p>
