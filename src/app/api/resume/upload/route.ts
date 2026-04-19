@@ -1,13 +1,12 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { extractText } from "unpdf";
 
 async function parsePdf(buffer: Buffer): Promise<string> {
-  // pdf-parse is in serverExternalPackages — loaded by Node.js at runtime, not bundled.
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const pdfParse = require("pdf-parse") as (buf: Buffer) => Promise<{ text: string; numpages: number }>;
-  const result = await pdfParse(buffer);
-  return result.text ?? "";
+  // unpdf uses a browser-API-free build of pdfjs-dist — works in Vercel serverless
+  const pages = await extractText(new Uint8Array(buffer), { mergePages: true });
+  return Array.isArray(pages) ? pages.join("\n") : (pages as string) ?? "";
 }
 
 export async function POST(req: Request) {
