@@ -54,17 +54,17 @@ function ScorecardView({ scorecard }: { scorecard: unknown }) {
   return (
     <div className="space-y-3 text-sm">
       {!!sc.feedback && (
-        <div className="bg-slate-50 rounded-xl p-4 border">
-          <p className="font-bold text-slate-700 text-xs uppercase tracking-widest mb-2">Overall feedback</p>
-          <p className="text-slate-600 leading-relaxed">{String(sc.feedback)}</p>
+        <div className="bg-white/5 rounded-xl p-4 border border-white/8">
+          <p className="font-bold text-slate-300 text-xs uppercase tracking-widest mb-2">Overall feedback</p>
+          <p className="text-slate-300 leading-relaxed">{String(sc.feedback)}</p>
         </div>
       )}
       {Array.isArray(sc.strengths) && sc.strengths.length > 0 && (
         <div>
-          <p className="font-bold text-slate-700 text-xs uppercase tracking-widest mb-2">Strengths</p>
+          <p className="font-bold text-slate-300 text-xs uppercase tracking-widest mb-2">Strengths</p>
           <ul className="space-y-1">
             {sc.strengths.map((s: unknown, i: number) => (
-              <li key={i} className="flex items-start gap-2 text-slate-600">
+              <li key={i} className="flex items-start gap-2 text-slate-300">
                 <span className="text-emerald-500 font-bold shrink-0">✓</span>{String(s)}
               </li>
             ))}
@@ -73,10 +73,10 @@ function ScorecardView({ scorecard }: { scorecard: unknown }) {
       )}
       {Array.isArray(sc.improvements) && sc.improvements.length > 0 && (
         <div>
-          <p className="font-bold text-slate-700 text-xs uppercase tracking-widest mb-2">To improve</p>
+          <p className="font-bold text-slate-300 text-xs uppercase tracking-widest mb-2">To improve</p>
           <ul className="space-y-1">
             {sc.improvements.map((s: unknown, i: number) => (
-              <li key={i} className="flex items-start gap-2 text-slate-600">
+              <li key={i} className="flex items-start gap-2 text-slate-300">
                 <span className="text-amber-500 font-bold shrink-0">→</span>{String(s)}
               </li>
             ))}
@@ -85,7 +85,7 @@ function ScorecardView({ scorecard }: { scorecard: unknown }) {
       )}
       {/* Fallback: render all keys */}
       {!sc.feedback && !sc.strengths && !sc.improvements && (
-        <pre className="text-xs text-slate-400 bg-slate-50 rounded-lg p-3 overflow-auto">{JSON.stringify(sc, null, 2)}</pre>
+        <pre className="text-xs text-slate-400 bg-white/5 rounded-lg p-3 overflow-auto">{JSON.stringify(sc, null, 2)}</pre>
       )}
     </div>
   );
@@ -193,7 +193,7 @@ export default function InterviewPage() {
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <Building2 className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm font-medium text-slate-700">Optimize for a company</span>
+            <span className="text-sm font-medium text-slate-300">Optimize for a company</span>
             <span className="text-xs text-muted-foreground">(optional)</span>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -201,8 +201,8 @@ export default function InterviewPage() {
               onClick={() => setSelectedCompany(null)}
               className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-all ${
                 selectedCompany === null
-                  ? "bg-slate-900 text-white border-slate-900"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-slate-400"
+                  ? "bg-white/15 text-white border-white/20"
+                  : "bg-white/5 text-slate-400 border-white/10 hover:border-white/20"
               }`}
             >
               Any company
@@ -214,7 +214,7 @@ export default function InterviewPage() {
                 className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-all ${
                   selectedCompany === company.id
                     ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-white text-slate-600 border-slate-200 hover:border-primary hover:text-primary"
+                    : "bg-white/5 text-slate-400 border-white/10 hover:border-primary/50 hover:text-primary"
                 }`}
               >
                 {company.name}
@@ -283,7 +283,7 @@ export default function InterviewPage() {
       {/* Past sessions with scorecard */}
       {!loading && completedSessions.length > 0 && (
         <div className="space-y-4">
-          <h2 className="text-xl font-bold text-slate-900">Past sessions</h2>
+          <h2 className="text-xl font-bold text-white">Past sessions</h2>
           <div className="space-y-3">
             {completedSessions.map(session => {
               const cfg = typeConfig[session.type];
@@ -296,17 +296,17 @@ export default function InterviewPage() {
                   ? "text-amber-600"
                   : "text-red-500";
               return (
-                <div key={session.id} className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div key={session.id} className="bg-[#1a1b23] rounded-2xl border border-white/10 shadow-sm overflow-hidden">
                   <button
                     className="w-full text-left px-5 py-4 flex items-center gap-4"
                     onClick={() => loadScorecard(session.id)}
                   >
-                    <div className="h-10 w-10 rounded-xl bg-slate-100 flex items-center justify-center shrink-0">
+                    <div className="h-10 w-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0">
                       <Icon className={`h-5 w-5 ${cfg.color}`} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <p className="font-bold text-slate-900">{cfg.label}</p>
+                        <p className="font-bold text-white">{cfg.label}</p>
                         {session.companyName && (
                           <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full">
                             {COMPANIES.find(c => c.id === session.companyName)?.name ?? session.companyName}
@@ -326,7 +326,7 @@ export default function InterviewPage() {
                     }
                   </button>
                   {isExpanded && (
-                    <div className="px-5 pb-5 border-t border-slate-100 pt-4 space-y-4">
+                    <div className="px-5 pb-5 border-t border-white/8 pt-4 space-y-4">
                       <ScorecardView scorecard={scorecards[session.id]} />
                       <Button
                         size="sm"

@@ -78,9 +78,9 @@ export function ShareProgressCard({ readinessScore, weeksOnPlatform, roleLabel, 
       </div>
 
       {/* Share text preview */}
-      <div className="bg-slate-50 rounded-xl border border-slate-200 p-4">
+      <div className="bg-[#1e1f28] rounded-xl border border-white/10 p-4">
         <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">LinkedIn / Twitter caption</p>
-        <p className="text-sm text-slate-700 whitespace-pre-line leading-relaxed">{shareText}</p>
+        <p className="text-sm text-slate-300 whitespace-pre-line leading-relaxed">{shareText}</p>
       </div>
 
       {/* Actions */}

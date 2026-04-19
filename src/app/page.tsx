@@ -50,13 +50,13 @@ const testimonials = [
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#0f1117]">
       {/* Beta Banner */}
       <div className="bg-indigo-600 text-white text-center py-2.5 px-4 text-sm font-semibold tracking-wide">
         🚀 You&apos;re using an early beta version of NinetyDays — expect rough edges and share your feedback!
       </div>
       {/* Nav */}
-      <header className="border-b sticky top-0 z-50 bg-white/95 backdrop-blur">
+      <header className="border-b border-white/8 sticky top-0 z-50 bg-[#0f1117]/95 backdrop-blur">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
             <div className="h-9 w-9 rounded-xl flex items-center justify-center bg-gradient-to-br from-indigo-500 to-violet-600 shadow-md shadow-indigo-500/25">
@@ -64,10 +64,10 @@ export default function LandingPage() {
             </div>
             <span className="font-bold text-xl tracking-tight">NinetyDays</span>
           </Link>
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
-            <a href="#how-it-works" className="hover:text-slate-900 transition-colors">How it works</a>
-            <a href="#gap-engine" className="hover:text-slate-900 transition-colors">Gap Engine</a>
-            <a href="#pricing" className="hover:text-slate-900 transition-colors">Pricing</a>
+          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
+            <a href="#how-it-works" className="hover:text-white transition-colors">How it works</a>
+            <a href="#gap-engine" className="hover:text-white transition-colors">Gap Engine</a>
+            <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
           </nav>
           <div className="flex items-center gap-3">
             <Link href="/sign-in">
@@ -157,13 +157,13 @@ export default function LandingPage() {
       </section>
 
       {/* Problem Section */}
-      <section className="py-24 bg-white border-b">
+      <section className="py-24 bg-[#111318] border-b border-white/5">
         <div className="max-w-3xl mx-auto px-6 text-center">
-          <p className="text-sm font-bold uppercase tracking-widest text-red-500 mb-4">Sound familiar?</p>
-          <h2 className="text-4xl font-black text-slate-900 mb-6">
+          <p className="text-sm font-bold uppercase tracking-widest text-red-400 mb-4">Sound familiar?</p>
+          <h2 className="text-4xl font-black text-white mb-6">
             You&apos;ve done everything &ldquo;right&rdquo;...
           </h2>
-          <p className="text-base text-slate-500 leading-relaxed mb-10">
+          <p className="text-base text-slate-400 leading-relaxed mb-10">
             Years of experience. Dozens of applications. Still no callbacks from product companies.
           </p>
           <div className="grid sm:grid-cols-3 gap-4 mb-10">
@@ -172,24 +172,24 @@ export default function LandingPage() {
               { icon: XCircle, text: "You don't know exactly what's missing" },
               { icon: XCircle, text: "You're guessing what to fix and in what order" },
             ].map(({ icon: Icon, text }) => (
-              <div key={text} className="flex items-start gap-3 bg-red-50 border border-red-100 rounded-xl p-4 text-left">
+              <div key={text} className="flex items-start gap-3 bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-left">
                 <Icon className="h-4 w-4 text-red-400 shrink-0 mt-0.5" />
-                <p className="text-sm text-slate-700 font-medium">{text}</p>
+                <p className="text-sm text-slate-300 font-medium">{text}</p>
               </div>
             ))}
           </div>
-          <div className="bg-slate-900 rounded-2xl px-8 py-6 inline-block">
+          <div className="bg-white/10 rounded-2xl px-8 py-6 inline-block border border-white/10">
             <p className="text-white text-lg font-bold">The problem isn&apos;t effort. It&apos;s direction.</p>
           </div>
         </div>
       </section>
 
       {/* Solution Pillars */}
-      <section className="py-24 bg-slate-50 border-b">
+      <section className="py-24 bg-[#0f1117] border-b border-white/5">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-14">
-            <p className="text-sm font-bold uppercase tracking-widest text-indigo-600 mb-3">The solution</p>
-            <h2 className="text-4xl font-black text-slate-900">
+            <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">The solution</p>
+            <h2 className="text-4xl font-black text-white">
               NinetyDays gives you a clear path from<br />where you are → where you want to be
             </h2>
           </div>
@@ -200,31 +200,31 @@ export default function LandingPage() {
                 title: "Know what's holding you back",
                 desc: "Upload your resume and get a readiness score with a detailed gap analysis. Not generic advice — the exact competencies missing for your target role.",
                 color: "from-blue-500 to-indigo-500",
-                bg: "bg-blue-50",
-                border: "border-blue-100",
+                bg: "bg-blue-500/10",
+                border: "border-blue-500/20",
               },
               {
                 number: "02",
                 title: "Follow a proven 90-day plan",
                 desc: "Get a week-by-week roadmap built from your specific gaps. Every task maps to a real blocker — ordered by what moves your score the most.",
                 color: "from-indigo-500 to-violet-500",
-                bg: "bg-indigo-50",
-                border: "border-indigo-100",
+                bg: "bg-indigo-500/10",
+                border: "border-indigo-500/20",
               },
               {
                 number: "03",
                 title: "Practice like real interviews",
                 desc: "Run AI mock interviews in behavioral, system design, ML concepts, and product sense. Get scored with specific strengths and improvements.",
                 color: "from-indigo-500 to-blue-500",
-                bg: "bg-indigo-50",
-                border: "border-indigo-100",
+                bg: "bg-indigo-500/10",
+                border: "border-indigo-500/20",
               },
             ].map((item) => (
               <div key={item.number} className={`${item.bg} border ${item.border} rounded-2xl p-7`}>
                 <div className={`h-1 w-10 rounded-full bg-gradient-to-r ${item.color} mb-5`} />
-                <p className="text-4xl font-black text-slate-200 mb-2">{item.number}</p>
-                <h3 className="text-lg font-bold text-slate-900 mb-3">{item.title}</h3>
-                <p className="text-sm text-slate-600 leading-relaxed">{item.desc}</p>
+                <p className="text-4xl font-black text-white/20 mb-2">{item.number}</p>
+                <h3 className="text-lg font-bold text-white mb-3">{item.title}</h3>
+                <p className="text-sm text-slate-400 leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -232,79 +232,79 @@ export default function LandingPage() {
       </section>
 
       {/* Before / After */}
-      <section className="py-20 bg-white border-b">
+      <section className="py-20 bg-[#111318] border-b border-white/5">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-14">
-            <p className="text-sm font-bold uppercase tracking-widest text-indigo-600 mb-3">The transformation</p>
-            <h2 className="text-4xl font-black text-slate-900">From rejected to interview-ready</h2>
-            <p className="text-slate-500 mt-4 text-base max-w-xl mx-auto">
+            <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">The transformation</p>
+            <h2 className="text-4xl font-black text-white">From rejected to interview-ready</h2>
+            <p className="text-slate-400 mt-4 text-base max-w-xl mx-auto">
               The gap between rejection and an offer isn&apos;t talent — it&apos;s clarity. See what changes in 90 days.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto mb-10">
             {/* Before */}
-            <div className="bg-white rounded-2xl border-2 border-red-200 p-7 shadow-sm">
+            <div className="bg-[#1a1b23] rounded-2xl border-2 border-red-500/20 p-7 shadow-sm">
               <div className="flex items-center gap-2 mb-5">
                 <div className="h-3 w-3 rounded-full bg-red-500" />
-                <span className="text-sm font-bold text-red-600 uppercase tracking-widest">Before NinetyDays</span>
+                <span className="text-sm font-bold text-red-400 uppercase tracking-widest">Before NinetyDays</span>
               </div>
               <div className="space-y-4">
                 <div>
                   <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Readiness score</p>
                   <div className="flex items-center gap-3">
-                    <div className="flex-1 bg-slate-100 rounded-full h-2.5">
+                    <div className="flex-1 bg-white/10 rounded-full h-2.5">
                       <div className="h-2.5 rounded-full bg-red-400 transition-all" style={{ width: "32%" }} />
                     </div>
-                    <span className="font-black text-2xl text-red-500">32%</span>
+                    <span className="font-black text-2xl text-red-400">32%</span>
                   </div>
                 </div>
                 <div className="space-y-2">
                   {["Missing ML production experience", "No system design portfolio", "Generic resume bullets", "No STAR stories prepared"].map((g) => (
-                    <div key={g} className="flex items-start gap-2 text-sm text-slate-500">
+                    <div key={g} className="flex items-start gap-2 text-sm text-slate-400">
                       <span className="text-red-400 font-bold mt-0.5">✕</span> {g}
                     </div>
                   ))}
                 </div>
-                <div className="bg-red-50 rounded-xl p-3 text-center">
-                  <p className="text-sm font-bold text-red-600">If you apply today → Likely rejected</p>
+                <div className="bg-red-500/10 rounded-xl p-3 text-center">
+                  <p className="text-sm font-bold text-red-400">If you apply today → Likely rejected</p>
                 </div>
               </div>
             </div>
 
             {/* After */}
-            <div className="bg-white rounded-2xl border-2 border-emerald-200 p-7 shadow-sm">
+            <div className="bg-[#1a1b23] rounded-2xl border-2 border-emerald-500/20 p-7 shadow-sm">
               <div className="flex items-center gap-2 mb-5">
                 <div className="h-3 w-3 rounded-full bg-emerald-500" />
-                <span className="text-sm font-bold text-emerald-600 uppercase tracking-widest">After 90 days</span>
+                <span className="text-sm font-bold text-emerald-400 uppercase tracking-widest">After 90 days</span>
               </div>
               <div className="space-y-4">
                 <div>
                   <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Readiness score</p>
                   <div className="flex items-center gap-3">
-                    <div className="flex-1 bg-slate-100 rounded-full h-2.5">
+                    <div className="flex-1 bg-white/10 rounded-full h-2.5">
                       <div className="h-2.5 rounded-full bg-emerald-500 transition-all" style={{ width: "74%" }} />
                     </div>
-                    <span className="font-black text-2xl text-emerald-600">74%</span>
+                    <span className="font-black text-2xl text-emerald-400">74%</span>
                   </div>
                 </div>
                 <div className="space-y-2">
                   {["2 ML projects on GitHub", "System design case study written", "Resume bullets rewritten with impact", "5 STAR stories ready"].map((g) => (
-                    <div key={g} className="flex items-start gap-2 text-sm text-slate-600">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                    <div key={g} className="flex items-start gap-2 text-sm text-slate-300">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
                       {g}
                     </div>
                   ))}
                 </div>
-                <div className="bg-emerald-50 rounded-xl p-3 text-center">
-                  <p className="text-sm font-bold text-emerald-700">Interview-ready → Apply confidently</p>
+                <div className="bg-emerald-500/10 rounded-xl p-3 text-center">
+                  <p className="text-sm font-bold text-emerald-400">Interview-ready → Apply confidently</p>
                 </div>
               </div>
             </div>
           </div>
 
           <p className="text-center text-slate-400 text-sm">
-            Average user goes from <strong className="text-slate-600">31% → 72% readiness</strong> in 8–10 weeks following their personalized plan
+            Average user goes from <strong className="text-slate-300">31% → 72% readiness</strong> in 8–10 weeks following their personalized plan
           </p>
         </div>
       </section>
@@ -312,9 +312,9 @@ export default function LandingPage() {
       {/* Gap Engine */}
       <section id="gap-engine" className="py-24 max-w-5xl mx-auto px-6">
         <div className="text-center mb-16">
-          <p className="text-sm font-bold uppercase tracking-widest text-indigo-600 mb-3">The core engine</p>
-          <h2 className="text-4xl font-black text-slate-900">Your gap report — brutal, specific, actionable</h2>
-          <p className="text-slate-500 mt-4 text-base max-w-xl mx-auto">
+          <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">The core engine</p>
+          <h2 className="text-4xl font-black text-white">Your gap report — brutal, specific, actionable</h2>
+          <p className="text-slate-400 mt-4 text-base max-w-xl mx-auto">
             Not &ldquo;improve your skills.&rdquo; Exactly what&apos;s missing, why it&apos;s blocking you, and how many hours to fix it.
           </p>
         </div>
@@ -354,11 +354,11 @@ export default function LandingPage() {
       </section>
 
       {/* How it works */}
-      <section id="how-it-works" className="py-20 bg-slate-50 border-y">
+      <section id="how-it-works" className="py-20 bg-[#111318] border-y border-white/5">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-14">
-            <p className="text-sm font-bold uppercase tracking-widest text-indigo-600 mb-3">The system</p>
-            <h2 className="text-4xl font-black text-slate-900">One pipeline. From resume to offer.</h2>
+            <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">The system</p>
+            <h2 className="text-4xl font-black text-white">One pipeline. From resume to offer.</h2>
           </div>
 
           <div className="grid md:grid-cols-4 gap-6">
@@ -369,10 +369,10 @@ export default function LandingPage() {
               { step: "04", title: "Execute & track", desc: "Check off tasks. Practice interviews. Watch readiness climb. Apply when you hit 70%.", color: "from-indigo-700 to-blue-700" },
             ].map((item) => (
               <div key={item.step} className="relative">
-                <div className="text-[4rem] font-black text-slate-100 leading-none mb-3 select-none">{item.step}</div>
+                <div className="text-[4rem] font-black text-white/10 leading-none mb-3 select-none">{item.step}</div>
                 <div className={`h-1 w-10 rounded-full bg-gradient-to-r ${item.color} mb-4`} />
-                <h3 className="text-lg font-bold text-slate-900 mb-2">{item.title}</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">{item.desc}</p>
+                <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
+                <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -380,12 +380,12 @@ export default function LandingPage() {
       </section>
 
       {/* Differentiation */}
-      <section className="py-24 bg-white border-b">
+      <section className="py-24 bg-[#0f1117] border-b border-white/5">
         <div className="max-w-4xl mx-auto px-6">
           <div className="text-center mb-14">
-            <p className="text-sm font-bold uppercase tracking-widest text-indigo-600 mb-3">Why NinetyDays</p>
-            <h2 className="text-4xl font-black text-slate-900">This isn&apos;t another AI chatbot.</h2>
-            <p className="text-slate-500 mt-4 text-base">You don&apos;t just get answers. You get a system.</p>
+            <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">Why NinetyDays</p>
+            <h2 className="text-4xl font-black text-white">This isn&apos;t another AI chatbot.</h2>
+            <p className="text-slate-400 mt-4 text-base">You don&apos;t just get answers. You get a system.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {[
@@ -408,15 +408,15 @@ export default function LandingPage() {
                 icon: TrendingUp,
               },
             ].map(({ bad, good, desc, icon: Icon }) => (
-              <div key={good} className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-                <div className="h-10 w-10 rounded-xl bg-indigo-100 flex items-center justify-center mb-4">
-                  <Icon className="h-5 w-5 text-indigo-600" />
+              <div key={good} className="bg-[#1a1b23] rounded-2xl border border-white/10 p-6">
+                <div className="h-10 w-10 rounded-xl bg-indigo-500/10 flex items-center justify-center mb-4">
+                  <Icon className="h-5 w-5 text-indigo-400" />
                 </div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xs line-through text-slate-400">{bad}</span>
+                  <span className="text-xs line-through text-slate-500">{bad}</span>
                 </div>
-                <h3 className="font-bold text-slate-900 mb-2">{good}</h3>
-                <p className="text-sm text-slate-500 leading-relaxed">{desc}</p>
+                <h3 className="font-bold text-white mb-2">{good}</h3>
+                <p className="text-sm text-slate-400 leading-relaxed">{desc}</p>
               </div>
             ))}
           </div>
@@ -493,7 +493,7 @@ export default function LandingPage() {
       </section>
 
       {/* JD Readiness Score */}
-      <section className="py-24 bg-white border-b">
+      <section className="py-24 bg-[#0f1117] border-b border-white/5">
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Score preview */}
@@ -524,15 +524,15 @@ export default function LandingPage() {
               </div>
             </div>
             <div>
-              <div className="inline-flex items-center gap-2 bg-indigo-100 rounded-full px-4 py-1.5 text-sm font-medium text-indigo-700 mb-5">
+              <div className="inline-flex items-center gap-2 bg-indigo-500/15 border border-indigo-500/30 rounded-full px-4 py-1.5 text-sm font-medium text-indigo-300 mb-5">
                 <Target className="h-3.5 w-3.5" />
                 Viral feature — no login required
               </div>
-              <h2 className="text-4xl font-black text-slate-900 mb-5">
+              <h2 className="text-4xl font-black text-white mb-5">
                 Paste any job description.<br />
-                <span className="text-indigo-600">Know if you&apos;re ready.</span>
+                <span className="text-indigo-400">Know if you&apos;re ready.</span>
               </h2>
-              <p className="text-slate-500 text-base leading-relaxed mb-6">
+              <p className="text-slate-400 text-base leading-relaxed mb-6">
                 No guessing. Paste any JD and get your readiness score instantly — with the exact gaps blocking you and the single most impactful thing to do next.
               </p>
               <div className="space-y-3 mb-8">
@@ -541,8 +541,8 @@ export default function LandingPage() {
                   "Personalized if you're signed in",
                   "Shareable — one click to post on LinkedIn",
                 ].map((f) => (
-                  <div key={f} className="flex items-center gap-3 text-sm text-slate-600">
-                    <CheckCircle2 className="h-4 w-4 text-indigo-500 shrink-0" />
+                  <div key={f} className="flex items-center gap-3 text-sm text-slate-400">
+                    <CheckCircle2 className="h-4 w-4 text-indigo-400 shrink-0" />
                     {f}
                   </div>
                 ))}
@@ -558,13 +558,13 @@ export default function LandingPage() {
       </section>
 
       {/* Share Cards */}
-      <section className="py-20 bg-slate-50 border-b">
+      <section className="py-20 bg-[#111318] border-b border-white/5">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <p className="text-sm font-bold uppercase tracking-widest text-indigo-600 mb-3">Your progress = your marketing</p>
-          <h2 className="text-4xl font-black text-slate-900 mb-5">
+          <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">Your progress = your marketing</p>
+          <h2 className="text-4xl font-black text-white mb-5">
             Share your readiness. Stay accountable.
           </h2>
-          <p className="text-slate-500 text-base max-w-xl mx-auto mb-10">
+          <p className="text-slate-400 text-base max-w-xl mx-auto mb-10">
             Every week, your progress card updates. One click to share on LinkedIn or Twitter. Your network sees your journey — and keeps you moving.
           </p>
           {/* Sample card */}
@@ -697,24 +697,24 @@ export default function LandingPage() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-24 bg-white border-b">
+      <section className="py-24 bg-[#0f1117] border-b border-white/5">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-14">
-            <p className="text-sm font-bold uppercase tracking-widest text-indigo-600 mb-3">Results</p>
-            <h2 className="text-4xl font-black text-slate-900">Engineers who closed the gap</h2>
-            <p className="text-slate-500 mt-3 text-base">Built on real patterns from engineers stuck in service companies — and who got out.</p>
+            <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">Results</p>
+            <h2 className="text-4xl font-black text-white">Engineers who closed the gap</h2>
+            <p className="text-slate-400 mt-3 text-base">Built on real patterns from engineers stuck in service companies — and who got out.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {testimonials.map((t) => (
-              <div key={t.name} className="bg-slate-50 rounded-2xl border border-slate-200 p-7">
+              <div key={t.name} className="bg-[#1a1b23] rounded-2xl border border-white/10 p-7">
                 <div className="flex items-center gap-4 mb-5">
                   <div className="text-center">
-                    <div className="text-2xl font-black text-red-500">{t.score.before}%</div>
+                    <div className="text-2xl font-black text-red-400">{t.score.before}%</div>
                     <div className="text-xs text-slate-400">before</div>
                   </div>
                   <ArrowRight className="h-4 w-4 text-slate-400 shrink-0" />
                   <div className="text-center">
-                    <div className="text-2xl font-black text-emerald-600">{t.score.after}%</div>
+                    <div className="text-2xl font-black text-emerald-400">{t.score.after}%</div>
                     <div className="text-xs text-slate-400">after</div>
                   </div>
                   <div className="flex-1 ml-2">
@@ -723,11 +723,11 @@ export default function LandingPage() {
                     ))}
                   </div>
                 </div>
-                <p className="text-slate-700 text-sm leading-relaxed mb-5 italic">&ldquo;{t.quote}&rdquo;</p>
+                <p className="text-slate-300 text-sm leading-relaxed mb-5 italic">&ldquo;{t.quote}&rdquo;</p>
                 <div>
-                  <p className="font-bold text-sm text-slate-900">{t.name}</p>
-                  <p className="text-xs text-slate-500 mt-0.5 flex items-center gap-1">
-                    <ChevronRight className="h-3 w-3 text-indigo-500" />{t.from}
+                  <p className="font-bold text-sm text-white">{t.name}</p>
+                  <p className="text-xs text-slate-400 mt-0.5 flex items-center gap-1">
+                    <ChevronRight className="h-3 w-3 text-indigo-400" />{t.from}
                   </p>
                 </div>
               </div>
@@ -737,7 +737,7 @@ export default function LandingPage() {
       </section>
 
       {/* Feature credibility strip */}
-      <section className="py-16 bg-slate-50 border-b">
+      <section className="py-16 bg-[#111318] border-b border-white/5">
         <div className="max-w-4xl mx-auto px-6">
           <p className="text-center text-sm font-bold uppercase tracking-widest text-slate-400 mb-8">Everything you need to go from &ldquo;confused&rdquo; to &ldquo;interview-ready&rdquo;</p>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
@@ -755,8 +755,8 @@ export default function LandingPage() {
               "Public portfolio page",
               "Cold outreach + cover letter generator",
             ].map((f) => (
-              <div key={f} className="flex items-center gap-2.5 text-sm text-slate-600">
-                <CheckCircle2 className="h-4 w-4 text-indigo-500 shrink-0" />
+              <div key={f} className="flex items-center gap-2.5 text-sm text-slate-300">
+                <CheckCircle2 className="h-4 w-4 text-indigo-400 shrink-0" />
                 {f}
               </div>
             ))}
@@ -765,22 +765,22 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="py-24 bg-white border-t">
+      <section id="pricing" className="py-24 bg-[#0f1117] border-t border-white/8">
         <div className="max-w-4xl mx-auto px-6">
           <div className="text-center mb-14">
-            <p className="text-sm font-bold uppercase tracking-widest text-indigo-600 mb-3">Pricing</p>
-            <h2 className="text-4xl font-black text-slate-900">Start free. Upgrade when you&apos;re ready.</h2>
-            <p className="text-slate-500 mt-3 text-base">Early access pricing — locked in forever when you join now.</p>
+            <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">Pricing</p>
+            <h2 className="text-4xl font-black text-white">Start free. Upgrade when you&apos;re ready.</h2>
+            <p className="text-slate-400 mt-3 text-base">Early access pricing — locked in forever when you join now.</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
             {/* Free */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
-              <h3 className="text-2xl font-black text-slate-900">Free</h3>
+            <div className="bg-[#1a1b23] rounded-2xl border border-white/10 p-8 shadow-sm">
+              <h3 className="text-2xl font-black text-white">Free</h3>
               <div className="mt-4 mb-1">
-                <span className="text-5xl font-black text-slate-900">$0</span>
+                <span className="text-5xl font-black text-white">$0</span>
               </div>
-              <p className="text-slate-500 text-sm mb-8">Forever free · No card needed</p>
+              <p className="text-slate-400 text-sm mb-8">Forever free · No card needed</p>
               <ul className="space-y-3 mb-8">
                 {[
                   "Resume analysis + readiness score",
@@ -790,14 +790,14 @@ export default function LandingPage() {
                   "Rejection risk score",
                   "\"If you apply today\" assessment",
                 ].map((f) => (
-                  <li key={f} className="flex items-start gap-3 text-sm text-slate-600">
+                  <li key={f} className="flex items-start gap-3 text-sm text-slate-300">
                     <CheckCircle2 className="h-4 w-4 text-slate-400 shrink-0 mt-0.5" />
                     {f}
                   </li>
                 ))}
               </ul>
               <Link href="/sign-up">
-                <Button variant="outline" className="w-full h-12 text-base font-semibold rounded-xl">
+                <Button variant="outline" className="w-full h-12 text-base font-semibold rounded-xl border-white/20 bg-white/5 text-white hover:bg-white/10">
                   Get my readiness score — free
                 </Button>
               </Link>

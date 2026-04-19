@@ -41,26 +41,26 @@ export default function GitHubPage() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="bg-white rounded-2xl border border-slate-100 p-8 shadow-sm">
+      <div className="bg-[#1a1b23] rounded-2xl border border-white/10 p-8 shadow-sm">
         <div className="flex items-center gap-3 mb-3">
           <div className="h-12 w-12 rounded-2xl bg-slate-900 flex items-center justify-center shadow-lg">
             <GitFork className="h-6 w-6 text-white" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">GitHub Profile Optimizer</h1>
-            <p className="text-slate-500 text-sm mt-0.5">AI rewrites your README to impress product company recruiters</p>
+            <h1 className="text-2xl font-bold text-white">GitHub Profile Optimizer</h1>
+            <p className="text-slate-400 text-sm mt-0.5">AI rewrites your README to impress product company recruiters</p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
           {benefits.map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="flex items-start gap-3 bg-slate-50 rounded-xl p-4">
-              <div className="h-8 w-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm">
-                <Icon className="h-4 w-4 text-indigo-600" />
+            <div key={title} className="flex items-start gap-3 bg-white/5 rounded-xl p-4">
+              <div className="h-8 w-8 rounded-lg bg-white/10 border border-white/10 flex items-center justify-center shrink-0 shadow-sm">
+                <Icon className="h-4 w-4 text-indigo-400" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-slate-800">{title}</p>
-                <p className="text-sm text-slate-500 mt-0.5 leading-relaxed">{desc}</p>
+                <p className="text-sm font-semibold text-white">{title}</p>
+                <p className="text-sm text-slate-400 mt-0.5 leading-relaxed">{desc}</p>
               </div>
             </div>
           ))}
@@ -68,17 +68,17 @@ export default function GitHubPage() {
       </div>
 
       {/* Input */}
-      <div className="bg-white rounded-2xl border border-slate-100 p-8 shadow-sm">
-        <h2 className="text-lg font-bold text-slate-900 mb-1">Paste your current README</h2>
-        <p className="text-slate-500 text-base mb-6">Leave blank to generate a professional README from scratch based on your profile.</p>
+      <div className="bg-[#1a1b23] rounded-2xl border border-white/10 p-8 shadow-sm">
+        <h2 className="text-lg font-bold text-white mb-1">Paste your current README</h2>
+        <p className="text-slate-400 text-base mb-6">Leave blank to generate a professional README from scratch based on your profile.</p>
         <div className="space-y-2">
-          <Label className="text-sm font-semibold text-slate-700">README.md content</Label>
+          <Label className="text-sm font-semibold text-slate-300">README.md content</Label>
           <Textarea
             value={currentReadme}
             onChange={(e) => setCurrentReadme(e.target.value)}
             placeholder="# Hi, I'm Gaurav 👋&#10;&#10;Paste your current GitHub profile README here, or leave empty to generate from scratch..."
             rows={10}
-            className="font-mono text-sm bg-slate-50 border-slate-200 resize-none focus:bg-white transition-colors"
+            className="font-mono text-sm bg-white/5 border-white/10 resize-none focus:bg-white/8 transition-colors"
           />
         </div>
         <Button
@@ -102,11 +102,11 @@ export default function GitHubPage() {
 
       {/* Result */}
       {result && (
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-          <div className="flex items-center justify-between px-8 py-5 border-b border-slate-100">
+        <div className="bg-[#1a1b23] rounded-2xl border border-white/10 shadow-sm overflow-hidden">
+          <div className="flex items-center justify-between px-8 py-5 border-b border-white/8">
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-              <h2 className="text-base font-bold text-slate-900">Your optimized README is ready</h2>
+              <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+              <h2 className="text-base font-bold text-white">Your optimized README is ready</h2>
             </div>
             <div className="flex items-center gap-2">
               <Button
@@ -141,7 +141,7 @@ export default function GitHubPage() {
                 value={result}
                 onChange={(e) => setResult(e.target.value)}
                 rows={24}
-                className="font-mono text-sm bg-slate-50 border-slate-200 resize-none w-full"
+                className="font-mono text-sm bg-white/5 border-white/10 resize-none w-full"
               />
             )}
           </div>

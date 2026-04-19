@@ -110,13 +110,13 @@ export default function CoverLetterPage() {
       </div>
 
       {/* Input card */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+      <div className="bg-[#1a1b23] rounded-2xl border border-white/10 shadow-sm p-6 space-y-4">
         <div className="flex items-center gap-2 mb-1">
-          <div className="h-9 w-9 rounded-xl bg-indigo-100 flex items-center justify-center">
-            <FileEdit className="h-5 w-5 text-indigo-600" />
+          <div className="h-9 w-9 rounded-xl bg-indigo-500/10 flex items-center justify-center">
+            <FileEdit className="h-5 w-5 text-indigo-400" />
           </div>
           <div>
-            <p className="font-bold text-slate-900">Paste job description</p>
+            <p className="font-bold text-white">Paste job description</p>
             <p className="text-xs text-slate-400">
               The more detail you include, the more targeted your letter will be
             </p>
@@ -143,7 +143,7 @@ export default function CoverLetterPage() {
                 className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all ${
                   tone === value
                     ? "bg-indigo-500 text-white border-indigo-500 shadow-sm"
-                    : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:text-indigo-600"
+                    : "bg-white/5 text-slate-400 border-white/10 hover:border-indigo-500/30 hover:text-indigo-400"
                 }`}
               >
                 {label}
@@ -153,7 +153,7 @@ export default function CoverLetterPage() {
         </div>
 
         {error && (
-          <div className="flex items-center gap-2 text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl px-4 py-3">
+          <div className="flex items-center gap-2 text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
             <AlertTriangle className="h-4 w-4 shrink-0" />
             {error}
           </div>
@@ -187,14 +187,14 @@ export default function CoverLetterPage() {
 
       {/* Result */}
       {result && (
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-5">
+        <div className="bg-[#1a1b23] rounded-2xl border border-white/10 shadow-sm p-6 space-y-5">
           {/* Key highlights */}
-          <div className="bg-indigo-50 rounded-xl border border-indigo-100 p-4 space-y-2">
-            <p className="text-xs font-bold text-indigo-700 uppercase tracking-widest mb-3">
+          <div className="bg-indigo-500/10 rounded-xl border border-indigo-500/20 p-4 space-y-2">
+            <p className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-3">
               Key highlights
             </p>
             {result.highlights.map((highlight, i) => (
-              <div key={i} className="flex items-start gap-2 text-sm text-indigo-900">
+              <div key={i} className="flex items-start gap-2 text-sm text-indigo-300">
                 <CheckCircle2 className="h-4 w-4 text-indigo-500 shrink-0 mt-0.5" />
                 {highlight}
               </div>
@@ -203,11 +203,11 @@ export default function CoverLetterPage() {
 
           {/* Letter */}
           <div>
-            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">
               Your cover letter
             </p>
-            <div className="bg-slate-50 rounded-xl border border-slate-200 px-5 py-5">
-              <p className="text-base text-slate-800 leading-relaxed whitespace-pre-wrap">
+            <div className="bg-white/5 rounded-xl border border-white/10 px-5 py-5">
+              <p className="text-base text-slate-300 leading-relaxed whitespace-pre-wrap">
                 {result.coverLetter}
               </p>
             </div>

@@ -31,7 +31,9 @@
       "Bash(git commit *)",
       "Bash(git remote *)",
       "Bash(git branch *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(grep -v \"^$\")",
+      "Bash(awk '{print $1, $2}')"
     ]
   }
 }

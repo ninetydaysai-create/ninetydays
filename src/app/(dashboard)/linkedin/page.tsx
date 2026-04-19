@@ -57,25 +57,25 @@ export default function LinkedInPage() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="bg-white rounded-2xl border border-slate-100 p-8 shadow-sm">
+      <div className="bg-[#1a1b23] rounded-2xl border border-white/10 p-8 shadow-sm">
         <div className="flex items-center gap-3 mb-3">
           <div className="h-12 w-12 rounded-2xl bg-[#0077b5] flex items-center justify-center shadow-lg">
             <ExternalLink className="h-6 w-6 text-white" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">LinkedIn Optimizer</h1>
-            <p className="text-slate-500 text-sm mt-0.5">AI rewrites your headline and About section for product company hiring</p>
+            <h1 className="text-2xl font-bold text-white">LinkedIn Optimizer</h1>
+            <p className="text-slate-400 text-sm mt-0.5">AI rewrites your headline and About section for product company hiring</p>
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
           {benefits.map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="flex items-start gap-3 bg-slate-50 rounded-xl p-4">
-              <div className="h-8 w-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm">
+            <div key={title} className="flex items-start gap-3 bg-white/5 rounded-xl p-4">
+              <div className="h-8 w-8 rounded-lg bg-white/10 border border-white/10 flex items-center justify-center shrink-0 shadow-sm">
                 <Icon className="h-4 w-4 text-[#0077b5]" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-slate-800">{title}</p>
-                <p className="text-sm text-slate-500 mt-0.5 leading-relaxed">{desc}</p>
+                <p className="text-sm font-semibold text-white">{title}</p>
+                <p className="text-sm text-slate-400 mt-0.5 leading-relaxed">{desc}</p>
               </div>
             </div>
           ))}
@@ -83,28 +83,28 @@ export default function LinkedInPage() {
       </div>
 
       {/* Input */}
-      <div className="bg-white rounded-2xl border border-slate-100 p-8 shadow-sm">
-        <h2 className="text-lg font-bold text-slate-900 mb-1">Your current LinkedIn profile</h2>
-        <p className="text-slate-500 text-base mb-6">Paste what you currently have. The AI will improve it for product company recruiters.</p>
+      <div className="bg-[#1a1b23] rounded-2xl border border-white/10 p-8 shadow-sm">
+        <h2 className="text-lg font-bold text-white mb-1">Your current LinkedIn profile</h2>
+        <p className="text-slate-400 text-base mb-6">Paste what you currently have. The AI will improve it for product company recruiters.</p>
         <div className="space-y-5">
           <div className="space-y-2">
-            <Label className="text-sm font-semibold text-slate-700">Current headline <span className="text-red-400">*</span></Label>
+            <Label className="text-sm font-semibold text-slate-300">Current headline <span className="text-red-400">*</span></Label>
             <Textarea
               value={headline}
               onChange={(e) => setHeadline(e.target.value)}
               placeholder="e.g. Senior Software Engineer at TCS | Java | Spring Boot | 7 Years Experience"
               rows={2}
-              className="text-sm bg-slate-50 border-slate-200 focus:bg-white transition-colors resize-none"
+              className="text-sm bg-white/5 border-white/10 focus:bg-white/8 transition-colors resize-none"
             />
           </div>
           <div className="space-y-2">
-            <Label className="text-sm font-semibold text-slate-700">Current About section <span className="text-slate-400 font-normal">(optional)</span></Label>
+            <Label className="text-sm font-semibold text-slate-300">Current About section <span className="text-slate-400 font-normal">(optional)</span></Label>
             <Textarea
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
               placeholder="Paste your current LinkedIn summary / About section here..."
               rows={7}
-              className="text-sm bg-slate-50 border-slate-200 focus:bg-white transition-colors resize-none"
+              className="text-sm bg-white/5 border-white/10 focus:bg-white/8 transition-colors resize-none"
             />
           </div>
           <Button
@@ -136,21 +136,21 @@ export default function LinkedInPage() {
           </div>
 
           {/* Headline */}
-          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-              <h3 className="font-bold text-slate-900 text-sm uppercase tracking-wide">Optimized Headline</h3>
+          <div className="bg-[#1a1b23] rounded-2xl border border-white/10 shadow-sm overflow-hidden">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-white/8">
+              <h3 className="font-bold text-white text-sm uppercase tracking-wide">Optimized Headline</h3>
               <Button size="sm" variant="ghost" className="gap-1.5 text-xs" onClick={() => copy(result.outputHeadline, "Headline")}>
                 <Copy className="h-3 w-3" /> Copy
               </Button>
             </div>
             <div className="px-6 py-5">
-              <p className="text-base font-semibold text-slate-900">{result.outputHeadline}</p>
+              <p className="text-base font-semibold text-white">{result.outputHeadline}</p>
               {result.alternatives.length > 0 && (
                 <div className="mt-4 space-y-2">
-                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Alternatives</p>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Alternatives</p>
                   {result.alternatives.map((alt, i) => (
-                    <div key={i} className="flex items-center justify-between gap-3 bg-slate-50 rounded-lg px-4 py-3">
-                      <span className="text-sm text-slate-700">{alt}</span>
+                    <div key={i} className="flex items-center justify-between gap-3 bg-white/5 rounded-lg px-4 py-3">
+                      <span className="text-sm text-slate-300">{alt}</span>
                       <button className="shrink-0 text-slate-400 hover:text-slate-700 transition-colors" onClick={() => copy(alt, "Alternative")}>
                         <Copy className="h-3.5 w-3.5" />
                       </button>
@@ -162,25 +162,25 @@ export default function LinkedInPage() {
           </div>
 
           {/* Summary */}
-          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-              <h3 className="font-bold text-slate-900 text-sm uppercase tracking-wide">Optimized About Section</h3>
+          <div className="bg-[#1a1b23] rounded-2xl border border-white/10 shadow-sm overflow-hidden">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-white/8">
+              <h3 className="font-bold text-white text-sm uppercase tracking-wide">Optimized About Section</h3>
               <Button size="sm" variant="ghost" className="gap-1.5 text-xs" onClick={() => copy(result.outputSummary, "About section")}>
                 <Copy className="h-3 w-3" /> Copy
               </Button>
             </div>
             <div className="px-6 py-5">
-              <p className="text-base text-slate-700 whitespace-pre-wrap leading-relaxed">{result.outputSummary}</p>
+              <p className="text-base text-slate-300 whitespace-pre-wrap leading-relaxed">{result.outputSummary}</p>
             </div>
           </div>
 
           {/* Keywords */}
           {result.keywordsAdded.length > 0 && (
-            <div className="bg-emerald-50 rounded-2xl border border-emerald-100 px-6 py-5">
-              <p className="text-xs font-bold text-emerald-700 uppercase tracking-wide mb-3">Keywords added to improve visibility</p>
+            <div className="bg-emerald-500/10 rounded-2xl border border-emerald-500/20 px-6 py-5">
+              <p className="text-xs font-bold text-emerald-400 uppercase tracking-wide mb-3">Keywords added to improve visibility</p>
               <div className="flex flex-wrap gap-2">
                 {result.keywordsAdded.map((kw) => (
-                  <Badge key={kw} className="bg-emerald-100 text-emerald-800 hover:bg-emerald-200 border-0 text-xs">{kw}</Badge>
+                  <Badge key={kw} className="bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/20 border-0 text-xs">{kw}</Badge>
                 ))}
               </div>
             </div>
@@ -192,12 +192,12 @@ export default function LinkedInPage() {
       <div>
         {/* Section header */}
         <div className="flex items-center gap-3 mb-6">
-          <div className="h-10 w-10 rounded-xl bg-indigo-50 flex items-center justify-center shrink-0">
-            <PenLine className="h-5 w-5 text-indigo-600" />
+          <div className="h-10 w-10 rounded-xl bg-indigo-500/10 flex items-center justify-center shrink-0">
+            <PenLine className="h-5 w-5 text-indigo-400" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-slate-900">Post Generator</h2>
-            <p className="text-slate-500 text-sm">Turn your career wins into 3 ready-to-post LinkedIn updates</p>
+            <h2 className="text-xl font-bold text-white">Post Generator</h2>
+            <p className="text-slate-400 text-sm">Turn your career wins into 3 ready-to-post LinkedIn updates</p>
           </div>
         </div>
         <LinkedInPostGenerator />

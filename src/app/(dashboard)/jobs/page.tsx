@@ -28,13 +28,13 @@ interface Job {
 }
 
 const COLUMNS: { status: JobStatus; label: string; color: string }[] = [
-  { status: "saved", label: "Saved", color: "bg-slate-100 text-slate-700" },
-  { status: "applied", label: "Applied", color: "bg-blue-100 text-blue-700" },
-  { status: "recruiter_screen", label: "Recruiter", color: "bg-blue-100 text-blue-700" },
-  { status: "technical", label: "Technical", color: "bg-yellow-100 text-yellow-700" },
-  { status: "final_round", label: "Final Round", color: "bg-amber-100 text-amber-700" },
-  { status: "offer", label: "Offer", color: "bg-emerald-100 text-emerald-700" },
-  { status: "rejected", label: "Rejected", color: "bg-red-100 text-red-700" },
+  { status: "saved", label: "Saved", color: "bg-white/10 text-slate-300" },
+  { status: "applied", label: "Applied", color: "bg-blue-500/15 text-blue-400" },
+  { status: "recruiter_screen", label: "Recruiter", color: "bg-blue-500/15 text-blue-400" },
+  { status: "technical", label: "Technical", color: "bg-yellow-500/15 text-yellow-400" },
+  { status: "final_round", label: "Final Round", color: "bg-amber-500/15 text-amber-400" },
+  { status: "offer", label: "Offer", color: "bg-emerald-500/15 text-emerald-400" },
+  { status: "rejected", label: "Rejected", color: "bg-red-500/15 text-red-400" },
 ];
 
 function AddJobDialog({ onClose, onAdded }: { onClose: () => void; onAdded: (job: Job) => void }) {
@@ -284,9 +284,9 @@ export default function JobsPage() {
                         {/* Match score badge */}
                         {job.keywordMatchPct !== null && job.keywordMatchPct !== undefined && (
                           <span className={`inline-block text-xs font-bold px-2 py-0.5 rounded-full mt-1.5 ${
-                            job.keywordMatchPct >= 70 ? "bg-emerald-100 text-emerald-700" :
-                            job.keywordMatchPct >= 50 ? "bg-amber-100 text-amber-700" :
-                            "bg-red-100 text-red-600"
+                            job.keywordMatchPct >= 70 ? "bg-emerald-500/15 text-emerald-400" :
+                            job.keywordMatchPct >= 50 ? "bg-amber-500/15 text-amber-400" :
+                            "bg-red-500/15 text-red-400"
                           }`}>
                             {job.keywordMatchPct}% match
                           </span>

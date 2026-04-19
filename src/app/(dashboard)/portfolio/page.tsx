@@ -134,7 +134,7 @@ export default function PortfolioPage() {
       </div>
 
       {/* GitHub Import */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-7 shadow-sm">
+      <div className="bg-[#1a1b23] rounded-2xl border border-white/10 p-7 shadow-sm">
         <div className="flex items-center justify-between gap-3 mb-5">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-xl bg-slate-900 flex items-center justify-center">
@@ -178,7 +178,7 @@ export default function PortfolioPage() {
       {portfolio && (
         <>
           {/* Status + actions */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+          <div className="bg-[#1a1b23] rounded-2xl border border-white/10 p-6 shadow-sm">
             <div className="flex items-center justify-between gap-4 flex-wrap">
               <div className="flex items-center gap-3">
                 <div className={`h-2.5 w-2.5 rounded-full ${portfolio.isPublic ? "bg-emerald-500" : "bg-slate-400"}`} />
@@ -192,7 +192,7 @@ export default function PortfolioPage() {
               <div className="flex items-center gap-2 flex-wrap">
                 {portfolio.isPublic && (
                   <>
-                    <div className="flex items-center gap-1.5 text-sm text-muted-foreground bg-slate-50 px-3 py-1.5 rounded-lg">
+                    <div className="flex items-center gap-1.5 text-sm text-slate-400 bg-white/5 px-3 py-1.5 rounded-lg">
                       <Eye className="h-3.5 w-3.5" />{portfolio.views} views
                     </div>
                     <Button size="sm" variant="outline" className="gap-1.5" onClick={() => { navigator.clipboard.writeText(publicUrl!); toast.success("Link copied!"); }}>
@@ -219,7 +219,7 @@ export default function PortfolioPage() {
           </div>
 
           {/* Bio */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+          <div className="bg-[#1a1b23] rounded-2xl border border-white/10 p-6 shadow-sm">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-base font-bold">Bio</h2>
               <Button size="sm" variant="outline" onClick={handleGenerateBio} disabled={generatingBio} className="gap-1.5 text-xs">
@@ -237,7 +237,7 @@ export default function PortfolioPage() {
               <h2 className="text-xl font-bold">Projects ({portfolio.projects.length})</h2>
             </div>
             {portfolio.projects.length === 0 ? (
-              <div className="bg-white rounded-2xl border border-slate-200 p-10 text-center shadow-sm">
+              <div className="bg-[#1a1b23] rounded-2xl border border-white/10 p-10 text-center shadow-sm">
                 <GitFork className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
                 <p className="font-semibold">No projects yet</p>
                 <p className="text-base text-muted-foreground mt-1">Enter your GitHub username above to import your repositories.</p>
@@ -245,7 +245,7 @@ export default function PortfolioPage() {
             ) : (
               <div className="space-y-3">
                 {portfolio.projects.map((p) => (
-                  <div key={p.id} className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                  <div key={p.id} className="bg-[#1a1b23] rounded-2xl border border-white/10 p-5 shadow-sm">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
@@ -277,7 +277,7 @@ export default function PortfolioPage() {
       )}
 
       {!portfolio && (
-        <div className="bg-white rounded-2xl border border-slate-200 p-10 text-center shadow-sm">
+        <div className="bg-[#1a1b23] rounded-2xl border border-white/10 p-10 text-center shadow-sm">
           <Globe className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
           <p className="font-semibold text-lg">No portfolio yet</p>
           <p className="text-base text-muted-foreground mt-1">Enter your GitHub username above to create your portfolio automatically.</p>

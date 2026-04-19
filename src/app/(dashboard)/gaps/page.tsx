@@ -137,12 +137,12 @@ export default async function GapsPage() {
         </CardContent>
       </Card>
       {latestAnalysis && report && new Date(latestAnalysis.createdAt) > new Date(report.createdAt) && (
-        <div className="flex items-center justify-between gap-4 bg-amber-50 border border-amber-200 rounded-2xl px-5 py-4">
+        <div className="flex items-center justify-between gap-4 bg-amber-500/10 border border-amber-500/20 rounded-2xl px-5 py-4">
           <div className="flex items-start gap-3">
-            <RefreshCw className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
+            <RefreshCw className="h-5 w-5 text-amber-400 shrink-0 mt-0.5" />
             <div>
-              <p className="font-bold text-amber-900 text-sm">New resume detected</p>
-              <p className="text-amber-700 text-sm">You uploaded a new resume after your last gap analysis. Re-run to get updated gaps.</p>
+              <p className="font-bold text-amber-300 text-sm">New resume detected</p>
+              <p className="text-amber-400 text-sm">You uploaded a new resume after your last gap analysis. Re-run to get updated gaps.</p>
             </div>
           </div>
           <RegenerateGapButton analysisId={latestAnalysis.id} />

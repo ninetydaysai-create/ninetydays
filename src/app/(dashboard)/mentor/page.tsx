@@ -119,14 +119,14 @@ export default function MentorPage() {
   return (
     <div className="flex flex-col h-[calc(100vh-4rem)] max-h-[calc(100vh-4rem)]">
       {/* Header */}
-      <div className="px-6 py-5 border-b bg-white shrink-0 flex items-center justify-between">
+      <div className="px-6 py-5 border-b border-white/8 bg-[#1a1b23] shrink-0 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center shadow-md shadow-indigo-500/25">
             <Bot className="h-5 w-5 text-white" />
           </div>
           <div>
-            <h1 className="text-lg font-bold text-slate-900">AI Mentor</h1>
-            <p className="text-xs text-slate-500">Knows your resume, gaps, and roadmap · Guides you daily</p>
+            <h1 className="text-lg font-bold text-white">AI Mentor</h1>
+            <p className="text-xs text-slate-400">Knows your resume, gaps, and roadmap · Guides you daily</p>
           </div>
         </div>
         {messages.length > 0 && (
@@ -156,8 +156,8 @@ export default function MentorPage() {
               <Sparkles className="h-8 w-8 text-white" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-slate-900 mb-2">Your personal career mentor</h2>
-              <p className="text-slate-500 text-base max-w-sm mx-auto leading-relaxed">
+              <h2 className="text-xl font-bold text-white mb-2">Your personal career mentor</h2>
+              <p className="text-slate-400 text-base max-w-sm mx-auto leading-relaxed">
                 I know your resume, your gaps, and where you are in your roadmap. Ask me anything — or start with one of these:
               </p>
             </div>
@@ -166,7 +166,7 @@ export default function MentorPage() {
                 <button
                   key={s}
                   onClick={() => sendMessage(s)}
-                  className="bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-200 rounded-xl px-4 py-2 text-sm text-slate-600 hover:text-indigo-700 font-medium transition-all"
+                  className="bg-white/5 hover:bg-indigo-500/10 border border-white/10 hover:border-indigo-500/30 rounded-xl px-4 py-2 text-sm text-slate-400 hover:text-indigo-400 font-medium transition-all"
                 >
                   {s}
                 </button>
@@ -197,7 +197,7 @@ export default function MentorPage() {
             <div className={cn(
               "rounded-2xl px-4 py-3 max-w-[75%] text-sm leading-relaxed",
               msg.role === "assistant"
-                ? "bg-white border border-slate-200 text-slate-800 shadow-sm"
+                ? "bg-[#1a1b23] border border-white/10 text-slate-300 shadow-sm"
                 : "bg-indigo-600 text-white"
             )}>
               {msg.content || (
@@ -214,7 +214,7 @@ export default function MentorPage() {
       </div>
 
       {/* Input */}
-      <div className="shrink-0 px-4 pb-5 pt-3 border-t bg-white">
+      <div className="shrink-0 px-4 pb-5 pt-3 border-t border-white/8 bg-[#1a1b23]">
         <div className="max-w-3xl mx-auto flex gap-3 items-end">
           <Textarea
             ref={textareaRef}

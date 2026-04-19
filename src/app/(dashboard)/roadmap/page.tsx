@@ -63,27 +63,27 @@ const PHASES = [
 
 const PHASE_COLORS = {
   blue: {
-    header: "bg-blue-50 border-blue-200",
-    badge: "bg-blue-100 text-blue-700",
+    header: "bg-blue-500/10 border-blue-500/20",
+    badge: "bg-blue-500/15 text-blue-400",
     dot: "bg-blue-500",
-    ring: "ring-blue-200",
-    current: "border-blue-400 shadow-blue-100",
+    ring: "ring-blue-500/20",
+    current: "border-blue-400 shadow-blue-500/10",
     bar: "bg-blue-500",
   },
   indigo: {
-    header: "bg-indigo-50 border-indigo-200",
-    badge: "bg-indigo-100 text-indigo-700",
+    header: "bg-indigo-500/10 border-indigo-500/20",
+    badge: "bg-indigo-500/15 text-indigo-400",
     dot: "bg-indigo-500",
-    ring: "ring-indigo-200",
-    current: "border-indigo-400 shadow-indigo-100",
+    ring: "ring-indigo-500/20",
+    current: "border-indigo-400 shadow-indigo-500/10",
     bar: "bg-indigo-500",
   },
   emerald: {
-    header: "bg-emerald-50 border-emerald-200",
-    badge: "bg-emerald-100 text-emerald-700",
+    header: "bg-emerald-500/10 border-emerald-500/20",
+    badge: "bg-emerald-500/15 text-emerald-400",
     dot: "bg-emerald-500",
-    ring: "ring-emerald-200",
-    current: "border-emerald-400 shadow-emerald-100",
+    ring: "ring-emerald-500/20",
+    current: "border-emerald-400 shadow-emerald-500/10",
     bar: "bg-emerald-500",
   },
 };
@@ -253,16 +253,16 @@ export default function RoadmapPage() {
           <h1 className="text-3xl font-bold">90-Day Roadmap</h1>
           <p className="text-muted-foreground mt-2 text-base">Your personalized week-by-week plan to get hired in AI.</p>
         </div>
-        <div className="rounded-2xl border bg-white text-center py-16 px-8">
+        <div className="rounded-2xl border border-white/10 bg-[#1a1b23] text-center py-16 px-8">
           <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center mx-auto mb-6 shadow-lg shadow-indigo-500/25">
             <Sparkles className="h-8 w-8 text-white" />
           </div>
-          <p className="text-xl font-bold text-slate-900">Your roadmap hasn&apos;t been generated yet</p>
-          <p className="text-slate-500 mt-2 max-w-sm mx-auto text-base leading-relaxed">
+          <p className="text-xl font-bold text-white">Your roadmap hasn&apos;t been generated yet</p>
+          <p className="text-slate-400 mt-2 max-w-sm mx-auto text-base leading-relaxed">
             We&apos;ll build a 12-week plan from your gap report — every task mapped to a specific gap in your profile.
           </p>
           {generating && (
-            <div className="bg-indigo-50 border border-indigo-100 rounded-xl px-5 py-4 text-sm text-indigo-700 flex items-center gap-3 max-w-sm mx-auto mt-6">
+            <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-xl px-5 py-4 text-sm text-indigo-400 flex items-center gap-3 max-w-sm mx-auto mt-6">
               <Loader2 className="h-4 w-4 animate-spin shrink-0" />
               <span>Building your personalized plan — Claude is analyzing your gaps (~30s)...</span>
             </div>
@@ -302,22 +302,22 @@ export default function RoadmapPage() {
       <div>
         <div className="flex items-start justify-between gap-4 mb-4">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">90-Day Roadmap</h1>
-            <p className="text-slate-500 mt-1 text-base">Generated from your resume · every task targets a gap in your profile</p>
+            <h1 className="text-3xl font-bold text-white">90-Day Roadmap</h1>
+            <p className="text-slate-400 mt-1 text-base">Generated from your resume · every task targets a gap in your profile</p>
           </div>
-          <Badge variant="outline" className="shrink-0 text-sm px-3 py-1.5 font-semibold border-slate-300">
+          <Badge variant="outline" className="shrink-0 text-sm px-3 py-1.5 font-semibold border-white/15 text-slate-300">
             Week {currentWeek} / 12
           </Badge>
         </div>
 
         {/* Overall progress */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+        <div className="bg-[#1a1b23] rounded-2xl border border-white/10 p-5 shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <div>
-              <span className="text-2xl font-black text-slate-900">{pct}%</span>
+              <span className="text-2xl font-black text-white">{pct}%</span>
               <span className="text-slate-400 text-base ml-2">complete</span>
             </div>
-            <span className="text-base text-slate-500">{doneTasks} / {allTasks.length} tasks done</span>
+            <span className="text-base text-slate-400">{doneTasks} / {allTasks.length} tasks done</span>
           </div>
           <Progress value={pct} className="h-3 rounded-full" />
           <div className="flex gap-4 mt-4">
@@ -330,10 +330,10 @@ export default function RoadmapPage() {
               return (
                 <div key={phase.label} className="flex-1">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-semibold text-slate-500">{phase.label}</span>
-                    <span className="text-sm font-bold text-slate-700">{phasePct}%</span>
+                    <span className="text-sm font-semibold text-slate-400">{phase.label}</span>
+                    <span className="text-sm font-bold text-slate-300">{phasePct}%</span>
                   </div>
-                  <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                  <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
                     <div className={`h-full rounded-full ${colors.bar} transition-all`} style={{ width: `${phasePct}%` }} />
                   </div>
                 </div>
@@ -355,8 +355,8 @@ export default function RoadmapPage() {
             <div className={`flex items-center gap-3 rounded-xl border px-4 py-3 ${colors.header}`}>
               <div className={`h-2.5 w-2.5 rounded-full shrink-0 ${colors.dot}`} />
               <div className="flex-1 min-w-0">
-                <span className="font-bold text-slate-900 text-base">{phase.label} — {phase.name}</span>
-                <span className="text-slate-500 text-sm ml-2">Week {phase.weeks[0]}–{phase.weeks[phase.weeks.length - 1]}</span>
+                <span className="font-bold text-white text-base">{phase.label} — {phase.name}</span>
+                <span className="text-slate-400 text-sm ml-2">Week {phase.weeks[0]}–{phase.weeks[phase.weeks.length - 1]}</span>
               </div>
               <Badge className={`text-sm font-semibold ${colors.badge} border-0 px-3 py-1`}>
                 {phaseWeeks.filter((w) => w.deliverableDone).length}/{phaseWeeks.length} weeks done
@@ -375,12 +375,12 @@ export default function RoadmapPage() {
               return (
                 <div
                   key={week.id}
-                  className={`bg-white rounded-2xl border transition-all ${
+                  className={`bg-[#1a1b23] rounded-2xl border transition-all ${
                     isCurrent
                       ? `border-2 ${colors.current} shadow-md`
                       : allWeekDone
-                      ? "border-slate-200 opacity-75"
-                      : "border-slate-200 shadow-sm"
+                      ? "border-white/8 opacity-75"
+                      : "border-white/10 shadow-sm"
                   }`}
                 >
                   {/* Week header — always visible, clickable */}
@@ -392,10 +392,10 @@ export default function RoadmapPage() {
                     {/* Week number circle */}
                     <div className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 font-black text-sm ${
                       allWeekDone
-                        ? "bg-emerald-100 text-emerald-700"
+                        ? "bg-emerald-500/15 text-emerald-400"
                         : isCurrent
                         ? `bg-gradient-to-br ${phase.gradient} text-white shadow-sm`
-                        : "bg-slate-100 text-slate-500"
+                        : "bg-white/5 text-slate-400"
                     }`}>
                       {allWeekDone ? <CheckCircle2 className="h-5 w-5" /> : week.weekNumber}
                     </div>
@@ -408,20 +408,20 @@ export default function RoadmapPage() {
                           </span>
                         )}
                         {allWeekDone && (
-                          <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">
+                          <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400">
                             Complete
                           </span>
                         )}
                       </div>
-                      <p className="font-bold text-slate-900 text-base leading-tight">{week.theme}</p>
+                      <p className="font-bold text-white text-base leading-tight">{week.theme}</p>
                       <div className="flex items-center gap-3 mt-2">
-                        <div className="flex-1 max-w-[140px] h-2 bg-slate-100 rounded-full overflow-hidden">
+                        <div className="flex-1 max-w-[140px] h-2 bg-white/10 rounded-full overflow-hidden">
                           <div
                             className={`h-full rounded-full ${colors.bar} transition-all`}
                             style={{ width: `${weekPct}%` }}
                           />
                         </div>
-                        <span className="text-sm text-slate-500">{weekDoneTasks}/{week.tasks.length} tasks · {week.estimatedHours}h</span>
+                        <span className="text-sm text-slate-400">{weekDoneTasks}/{week.tasks.length} tasks · {week.estimatedHours}h</span>
                       </div>
                     </div>
 
@@ -438,14 +438,14 @@ export default function RoadmapPage() {
 
                   {/* Expanded content */}
                   {!isLocked && isExpanded && (
-                    <div className="px-5 pb-5 space-y-3 border-t border-slate-100 pt-4">
+                    <div className="px-5 pb-5 space-y-3 border-t border-white/8 pt-4">
                       {week.tasks.map((task) => (
                         <div
                           key={task.id}
                           className={`rounded-xl border cursor-pointer transition-all group ${
                             task.completed
-                              ? "bg-slate-50 border-slate-100"
-                              : "bg-white border-slate-200 hover:border-indigo-300 hover:shadow-sm"
+                              ? "bg-white/5 border-white/8"
+                              : "bg-[#1e1f28] border-white/10 hover:border-indigo-500/40 hover:shadow-sm"
                           }`}
                           onClick={() => !toggling && toggleTask(task.id, task.completed, task.label, task.impactScore)}
                         >
@@ -466,13 +466,13 @@ export default function RoadmapPage() {
                                 {/* Title row */}
                                 <div className="flex items-start justify-between gap-2">
                                   <p className={`text-base font-bold leading-snug ${
-                                    task.completed ? "line-through text-slate-400" : "text-slate-900"
+                                    task.completed ? "line-through text-slate-500" : "text-white"
                                   }`}>
                                     {task.label}
                                   </p>
                                   {/* Impact badge */}
                                   {!task.completed && task.impactScore >= 7 && (
-                                    <span className="shrink-0 text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 flex items-center gap-1 whitespace-nowrap">
+                                    <span className="shrink-0 text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-400 flex items-center gap-1 whitespace-nowrap">
                                       <TrendingUp className="h-3 w-3" />
                                       +{Math.round(task.impactScore / 2)}% readiness
                                     </span>
@@ -481,15 +481,15 @@ export default function RoadmapPage() {
 
                                 {!task.completed && (
                                   <>
-                                    <p className="text-base text-slate-500 mt-2 leading-relaxed">
+                                    <p className="text-base text-slate-400 mt-2 leading-relaxed">
                                       {task.description}
                                     </p>
 
                                     {/* Why it matters */}
                                     {task.whyItMatters && (
-                                      <div className="flex items-start gap-2 mt-2.5 bg-indigo-50 rounded-lg px-3 py-2.5">
-                                        <Zap className="h-4 w-4 text-indigo-500 shrink-0 mt-0.5" />
-                                        <p className="text-sm text-indigo-700 font-medium leading-snug">
+                                      <div className="flex items-start gap-2 mt-2.5 bg-indigo-500/10 rounded-lg px-3 py-2.5">
+                                        <Zap className="h-4 w-4 text-indigo-400 shrink-0 mt-0.5" />
+                                        <p className="text-sm text-indigo-300 font-medium leading-snug">
                                           {task.whyItMatters}
                                         </p>
                                       </div>
@@ -520,7 +520,7 @@ export default function RoadmapPage() {
                                             target="_blank"
                                             rel="noreferrer"
                                             onClick={(e) => e.stopPropagation()}
-                                            className="inline-flex items-center gap-1.5 text-sm font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition-colors"
+                                            className="inline-flex items-center gap-1.5 text-sm font-medium text-indigo-400 bg-indigo-500/10 hover:bg-indigo-500/15 px-3 py-1.5 rounded-lg transition-colors"
                                           >
                                             {getDomainLabel(url)}
                                             <ExternalLink className="h-3 w-3" />
@@ -539,20 +539,20 @@ export default function RoadmapPage() {
                       {/* Deliverable */}
                       <div className={`rounded-xl border-2 border-dashed p-4 mt-2 ${
                         week.deliverableDone
-                          ? "border-emerald-200 bg-emerald-50"
-                          : "border-slate-200 bg-slate-50"
+                          ? "border-emerald-500/30 bg-emerald-500/10"
+                          : "border-white/15 bg-white/5"
                       }`}>
                         <div className="flex items-start gap-2">
                           {week.deliverableDone ? (
-                            <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                            <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
                           ) : (
                             <Target className="h-4 w-4 text-slate-400 shrink-0 mt-0.5" />
                           )}
                           <div>
-                            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5">
+                            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5">
                               Week Deliverable
                             </p>
-                            <p className={`text-base font-medium leading-snug ${week.deliverableDone ? "text-emerald-700" : "text-slate-700"}`}>
+                            <p className={`text-base font-medium leading-snug ${week.deliverableDone ? "text-emerald-400" : "text-slate-300"}`}>
                               {week.deliverable}
                             </p>
                           </div>
@@ -565,7 +565,7 @@ export default function RoadmapPage() {
                   {isLocked && (
                     <div className="px-5 pb-4 pt-1">
                       <Link href="/settings">
-                        <Button size="sm" variant="outline" className="gap-2 text-xs h-8 border-slate-200 text-slate-500 hover:border-indigo-300 hover:text-indigo-600">
+                        <Button size="sm" variant="outline" className="gap-2 text-xs h-8 border-white/15 text-slate-400 hover:border-indigo-500/40 hover:text-indigo-400">
                           <Lock className="h-3 w-3" />
                           Upgrade to unlock weeks {week.weekNumber}–12
                         </Button>
