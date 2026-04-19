@@ -57,7 +57,7 @@ export default async function SettingsPage() {
     <div className="max-w-2xl mx-auto space-y-8">
       <div>
         <h1 className="text-4xl font-bold">Settings</h1>
-        <p className="text-muted-foreground mt-2 text-base">Manage your account and subscription.</p>
+        <p className="text-slate-400 mt-2 text-base">Manage your account and subscription.</p>
       </div>
 
       {/* Account */}
@@ -74,13 +74,13 @@ export default async function SettingsPage() {
             { label: "Experience", value: user.yearsExperience ? `${user.yearsExperience} years` : "—" },
           ].map(({ label, value }) => (
             <div key={label} className="flex justify-between items-center py-1">
-              <span className="text-muted-foreground">{label}</span>
+              <span className="text-slate-400">{label}</span>
               <span className="font-medium">{value}</span>
             </div>
           ))}
           <Separator />
           <div className="flex justify-between items-center py-1">
-            <span className="text-muted-foreground">Plan</span>
+            <span className="text-slate-400">Plan</span>
             <Badge
               variant={isPro ? "default" : "secondary"}
               className="gap-1.5 px-3 py-1"
@@ -91,7 +91,7 @@ export default async function SettingsPage() {
           </div>
           {isPro && user.stripeCurrentPeriodEnd && (
             <div className="flex justify-between items-center py-1">
-              <span className="text-muted-foreground">Renews</span>
+              <span className="text-slate-400">Renews</span>
               <span className="font-medium">{format(user.stripeCurrentPeriodEnd, "MMM d, yyyy")}</span>
             </div>
           )}
@@ -132,7 +132,7 @@ export default async function SettingsPage() {
                   <div className="mt-1">
                     <span className="text-2xl font-bold">{sprint.display}</span>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">{sprint.note}</p>
+                  <p className="text-xs text-slate-400 mt-1">{sprint.note}</p>
                 </div>
                 <form action="/api/checkout" method="POST">
                   <input type="hidden" name="plan" value="sprint" />
@@ -145,11 +145,11 @@ export default async function SettingsPage() {
               {/* Monthly */}
               <div className="rounded-xl border border-border p-5 space-y-3">
                 <div>
-                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Monthly</p>
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wide">Monthly</p>
                   <div className="mt-1">
                     <span className="text-2xl font-bold">{monthly.display}</span>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">{monthly.note}</p>
+                  <p className="text-xs text-slate-400 mt-1">{monthly.note}</p>
                 </div>
                 <form action="/api/checkout" method="POST">
                   <input type="hidden" name="plan" value="monthly" />
@@ -167,11 +167,11 @@ export default async function SettingsPage() {
                   </span>
                 )}
                 <div>
-                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Annual</p>
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wide">Annual</p>
                   <div className="mt-1 flex items-end gap-1.5">
                     <span className="text-2xl font-bold">{annual.subDisplay ?? annual.display}</span>
                     {annual.subDisplay && (
-                      <span className="text-muted-foreground text-xs mb-0.5">/mo</span>
+                      <span className="text-slate-400 text-xs mb-0.5">/mo</span>
                     )}
                   </div>
                   <p className="text-xs text-emerald-400 font-medium mt-1">{annual.display} · {annual.note}</p>
@@ -192,7 +192,7 @@ export default async function SettingsPage() {
               </svg>
               <div>
                 <p className="text-sm font-semibold text-emerald-400">30-day money-back guarantee</p>
-                <p className="text-xs text-muted-foreground mt-0.5">
+                <p className="text-xs text-slate-400 mt-0.5">
                   Complete your profile and generate your roadmap. If you don&apos;t find value within 30 days, email us for a full refund — no questions asked.
                 </p>
               </div>
@@ -205,7 +205,7 @@ export default async function SettingsPage() {
                   <Users className="h-4 w-4 text-indigo-500" />
                   <p className="font-semibold text-sm">Team plan — coming soon</p>
                 </div>
-                <p className="text-xs text-muted-foreground">5 seats · $29/mo · Perfect for bootcamps, college placement cells, and study groups</p>
+                <p className="text-xs text-slate-400">5 seats · $29/mo · Perfect for bootcamps, college placement cells, and study groups</p>
               </div>
               <a href="mailto:team@ninetydays.ai?subject=Team Plan Interest" target="_blank" rel="noopener noreferrer">
                 <Button variant="outline" size="sm" className="shrink-0">Join waitlist</Button>
@@ -232,7 +232,7 @@ export default async function SettingsPage() {
             {isSprint ? (
               // Sprint users: offer to convert to subscription before expiry
               <div className="space-y-3">
-                <p className="text-base text-muted-foreground">
+                <p className="text-base text-slate-400">
                   Continue your progress with a full subscription when your sprint ends.
                 </p>
                 <div className="grid grid-cols-2 gap-3">

@@ -189,7 +189,7 @@ export default function MentorPage() {
             )}>
               {msg.role === "assistant"
                 ? <Bot className="h-4 w-4 text-white" />
-                : <User className="h-4 w-4 text-slate-500" />
+                : <User className="h-4 w-4 text-slate-400" />
               }
             </div>
 

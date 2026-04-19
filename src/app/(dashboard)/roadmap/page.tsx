@@ -226,7 +226,7 @@ export default function RoadmapPage() {
   if (loading) {
     return (
       <div className="max-w-3xl mx-auto flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
       </div>
     );
   }
@@ -251,7 +251,7 @@ export default function RoadmapPage() {
       <div className="max-w-3xl mx-auto space-y-6">
         <div>
           <h1 className="text-3xl font-bold">90-Day Roadmap</h1>
-          <p className="text-muted-foreground mt-2 text-base">Your personalized week-by-week plan to get hired in AI.</p>
+          <p className="text-slate-400 mt-2 text-base">Your personalized week-by-week plan to get hired in AI.</p>
         </div>
         <div className="rounded-2xl border border-white/10 bg-[#1a1b23] text-center py-16 px-8">
           <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center mx-auto mb-6 shadow-lg shadow-indigo-500/25">
@@ -466,7 +466,7 @@ export default function RoadmapPage() {
                                 {/* Title row */}
                                 <div className="flex items-start justify-between gap-2">
                                   <p className={`text-base font-bold leading-snug ${
-                                    task.completed ? "line-through text-slate-500" : "text-white"
+                                    task.completed ? "line-through text-slate-400" : "text-white"
                                   }`}>
                                     {task.label}
                                   </p>

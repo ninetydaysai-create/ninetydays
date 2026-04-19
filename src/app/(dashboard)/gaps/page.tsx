@@ -31,9 +31,9 @@ function GapSection({ title, gaps, icon: Icon }: { title: string; gaps: GapItem[
     <div>
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold flex items-center gap-2">
-          <Icon className="h-5 w-5 text-muted-foreground" />{title}
+          <Icon className="h-5 w-5 text-slate-400" />{title}
         </h2>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        <div className="flex items-center gap-2 text-sm text-slate-400">
           <Clock className="h-3.5 w-3.5" />~{totalHours}h to close
         </div>
       </div>
@@ -47,9 +47,9 @@ function GapSection({ title, gaps, icon: Icon }: { title: string; gaps: GapItem[
                 <div className="flex items-center gap-2 flex-wrap mb-1">
                   <span className="font-semibold">{gap.label}</span>
                   <Badge variant={severityVariant(gap.severity)} className="text-xs capitalize">{gap.severity}</Badge>
-                  <span className="text-xs text-muted-foreground flex items-center gap-1"><Clock className="h-3 w-3" /> ~{gap.estimatedHours}h</span>
+                  <span className="text-xs text-slate-400 flex items-center gap-1"><Clock className="h-3 w-3" /> ~{gap.estimatedHours}h</span>
                 </div>
-                <p className="text-base text-muted-foreground leading-relaxed">{gap.description}</p>
+                <p className="text-base text-slate-400 leading-relaxed">{gap.description}</p>
               </div>
             </CardContent>
           </Card>
@@ -73,18 +73,18 @@ export default async function GapsPage() {
       <div className="max-w-3xl mx-auto space-y-6">
         <div>
           <h1 className="text-4xl font-bold">Gap Engine</h1>
-          <p className="text-muted-foreground mt-2 text-base">AI identifies every skill, project, and story gap between you and your target role.</p>
+          <p className="text-slate-400 mt-2 text-base">AI identifies every skill, project, and story gap between you and your target role.</p>
         </div>
         <Card className="text-center py-20">
           <CardContent className="space-y-5">
             <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center mx-auto">
-              <Target className="h-8 w-8 text-muted-foreground" />
+              <Target className="h-8 w-8 text-slate-400" />
             </div>
             {latestAnalysis ? (
               <>
                 <div>
                   <p className="text-lg font-semibold">Resume analyzed — generate your gap report</p>
-                  <p className="text-muted-foreground mt-1">Your resume analysis is ready. Click below to generate your personalized gap report.</p>
+                  <p className="text-slate-400 mt-1">Your resume analysis is ready. Click below to generate your personalized gap report.</p>
                 </div>
                 <GapGenerateButton analysisId={latestAnalysis.id} />
               </>
@@ -92,7 +92,7 @@ export default async function GapsPage() {
               <>
                 <div>
                   <p className="text-lg font-semibold">No gap report yet</p>
-                  <p className="text-muted-foreground mt-1">Upload and analyze your resume first — your gap report is generated automatically.</p>
+                  <p className="text-slate-400 mt-1">Upload and analyze your resume first — your gap report is generated automatically.</p>
                 </div>
                 <Link href="/resume">
                   <Button className="gap-2 h-11">
@@ -120,18 +120,18 @@ export default async function GapsPage() {
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-4xl font-bold">Gap Engine</h1>
-          <p className="text-muted-foreground mt-2 text-base">{totalOpen} gaps remaining · ~{totalHours}h of work to close them</p>
+          <p className="text-slate-400 mt-2 text-base">{totalOpen} gaps remaining · ~{totalHours}h of work to close them</p>
         </div>
         <div className="text-center shrink-0">
           <div className="text-4xl md:text-6xl font-bold text-primary">{report.totalGapScore}</div>
-          <div className="text-base text-muted-foreground font-medium">readiness score</div>
+          <div className="text-base text-slate-400 font-medium">readiness score</div>
         </div>
       </div>
       <Card>
         <CardContent className="pt-5 pb-5">
           <div className="flex items-center justify-between mb-2 text-sm">
             <span className="font-medium">Gaps closed</span>
-            <span className="text-muted-foreground">{totalResolved} / {allGaps.length}</span>
+            <span className="text-slate-400">{totalResolved} / {allGaps.length}</span>
           </div>
           <Progress value={allGaps.length ? (totalResolved / allGaps.length) * 100 : 0} className="h-2.5" />
         </CardContent>

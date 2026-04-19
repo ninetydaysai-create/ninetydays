@@ -208,7 +208,7 @@ export default function JobsPage() {
   if (loading) {
     return (
       <div className="max-w-5xl mx-auto flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
       </div>
     );
   }
@@ -225,7 +225,7 @@ export default function JobsPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Job Tracker</h1>
-          <p className="text-muted-foreground mt-1.5 text-base leading-relaxed">
+          <p className="text-slate-400 mt-1.5 text-base leading-relaxed">
             {jobs.length} application{jobs.length !== 1 ? "s" : ""} tracked
           </p>
         </div>
@@ -239,11 +239,11 @@ export default function JobsPage() {
         <Card className="text-center py-20">
           <CardContent className="space-y-4">
             <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center mx-auto">
-              <Kanban className="h-8 w-8 text-muted-foreground" />
+              <Kanban className="h-8 w-8 text-slate-400" />
             </div>
             <div>
               <p className="text-lg font-semibold">No applications tracked yet</p>
-              <p className="text-muted-foreground mt-1 text-base">
+              <p className="text-slate-400 mt-1 text-base">
                 Add jobs you&apos;re interested in and track them through each stage.
               </p>
             </div>
@@ -262,22 +262,22 @@ export default function JobsPage() {
                   <span className={`text-xs font-semibold px-2 py-1 rounded-full ${col.color}`}>
                     {col.label}
                   </span>
-                  <span className="text-xs text-muted-foreground">{col.jobs.length}</span>
+                  <span className="text-xs text-slate-400">{col.jobs.length}</span>
                 </div>
                 <div className="space-y-2">
                   {col.jobs.map((job) => (
                     <Card key={job.id} className="hover:shadow-md transition-shadow">
                       <CardContent className="pt-3 pb-3 px-3">
                         <p className="font-semibold text-sm leading-tight">{job.company}</p>
-                        <p className="text-xs text-muted-foreground mt-0.5 leading-tight">{job.roleTitle}</p>
+                        <p className="text-xs text-slate-400 mt-0.5 leading-tight">{job.roleTitle}</p>
                         {job.location && (
-                          <p className="text-xs text-muted-foreground mt-1">{job.location}</p>
+                          <p className="text-xs text-slate-400 mt-1">{job.location}</p>
                         )}
                         {job.salary && (
                           <p className="text-xs font-medium text-primary mt-1">{job.salary}</p>
                         )}
                         {job.appliedAt && (
-                          <p className="text-xs text-muted-foreground mt-1">
+                          <p className="text-xs text-slate-400 mt-1">
                             Applied {format(new Date(job.appliedAt), "MMM d")}
                           </p>
                         )}
@@ -323,7 +323,7 @@ export default function JobsPage() {
                   ))}
                   {col.jobs.length === 0 && (
                     <div className="border-2 border-dashed rounded-lg h-20 flex items-center justify-center">
-                      <p className="text-xs text-muted-foreground">Empty</p>
+                      <p className="text-xs text-slate-400">Empty</p>
                     </div>
                   )}
                 </div>

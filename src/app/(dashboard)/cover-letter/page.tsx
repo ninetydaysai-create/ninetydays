@@ -104,7 +104,7 @@ export default function CoverLetterPage() {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-slate-900">Cover Letter Generator</h1>
-        <p className="text-slate-500 mt-1 text-base">
+        <p className="text-slate-400 mt-1 text-base">
           Paste a job description and get a tailored, non-generic cover letter in seconds.
         </p>
       </div>
@@ -133,7 +133,7 @@ export default function CoverLetterPage() {
 
         {/* Tone selector */}
         <div className="space-y-2">
-          <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest">Tone</p>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Tone</p>
           <div className="flex gap-2 flex-wrap">
             {TONE_OPTIONS.map(({ value, label }) => (
               <button
@@ -219,7 +219,7 @@ export default function CoverLetterPage() {
             <Button
               variant="ghost"
               size="sm"
-              className="gap-1.5 h-9 text-sm text-slate-500"
+              className="gap-1.5 h-9 text-sm text-slate-400"
               onClick={regenerate}
               disabled={generating}
             >

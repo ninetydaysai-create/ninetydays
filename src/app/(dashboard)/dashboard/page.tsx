@@ -414,7 +414,7 @@ export default async function DashboardPage() {
                   <div className="h-10 w-10 rounded-xl bg-indigo-500/10 flex items-center justify-center group-hover:bg-indigo-500/20 transition-colors">
                     <action.icon className="h-5 w-5 text-indigo-400" />
                   </div>
-                  <span className="text-slate-500 group-hover:text-indigo-400 transition-colors text-lg leading-none">→</span>
+                  <span className="text-slate-400 group-hover:text-indigo-400 transition-colors text-lg leading-none">→</span>
                 </div>
                 <p className="font-bold text-white">{action.label}</p>
                 <p className="text-base text-slate-400 mt-1 leading-relaxed">{action.desc}</p>

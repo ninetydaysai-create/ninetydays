@@ -116,7 +116,7 @@ export default function OutreachPage() {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-slate-900">Cold Outreach Generator</h1>
-        <p className="text-slate-500 mt-1 text-base">
+        <p className="text-slate-400 mt-1 text-base">
           Paste a JD &rarr; get a personalized recruiter email in seconds
         </p>
       </div>
@@ -161,7 +161,7 @@ export default function OutreachPage() {
 
         {/* Tone selector */}
         <div className="space-y-2">
-          <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest">Tone</p>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Tone</p>
           <div className="flex gap-2">
             {TONE_OPTIONS.map(({ value, label }) => (
               <button

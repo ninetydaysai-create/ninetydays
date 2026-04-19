@@ -72,7 +72,7 @@ function MatchCard({ match, defaultOpen = false }: { match: JobMatch; defaultOpe
             {match.roleTitle}{match.companyName ? ` · ${match.companyName}` : ""}
           </p>
           <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-            <span className="text-sm text-slate-500">
+            <span className="text-sm text-slate-400">
               {match.blockingGaps.filter(g => g.severity === "critical").length} critical gap{match.blockingGaps.filter(g => g.severity === "critical").length !== 1 ? "s" : ""} · {match.blockingGaps.reduce((a, g) => a + g.hoursToFix, 0)}h to close
             </span>
             {match.redFlags && match.redFlags.length > 0 && (
@@ -232,7 +232,7 @@ export default function JobMatchPage() {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-slate-900">Job Match Score</h1>
-        <p className="text-slate-500 mt-1 text-base">
+        <p className="text-slate-400 mt-1 text-base">
           Paste any job description — see exactly how well you match and what&apos;s blocking you.
         </p>
       </div>
@@ -287,7 +287,7 @@ export default function JobMatchPage() {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <h2 className="font-bold text-white text-lg">Your match result</h2>
-            <Button variant="ghost" size="sm" className="gap-1.5 text-slate-500" onClick={() => setResult(null)}>
+            <Button variant="ghost" size="sm" className="gap-1.5 text-slate-400" onClick={() => setResult(null)}>
               <RotateCcw className="h-3.5 w-3.5" /> Analyze another
             </Button>
           </div>
@@ -334,7 +334,7 @@ export default function JobMatchPage() {
       {!loadingHistory && history.length === 0 && !result && (
         <div className="text-center py-12 text-slate-400">
           <Target className="h-10 w-10 mx-auto mb-3 text-slate-200" />
-          <p className="font-medium text-slate-500">No analyses yet</p>
+          <p className="font-medium text-slate-400">No analyses yet</p>
           <p className="text-base mt-1">Paste a job description above to see how well you match</p>
         </div>
       )}

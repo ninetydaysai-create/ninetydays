@@ -151,7 +151,7 @@ export default function InterviewPage() {
     <div className="max-w-4xl mx-auto space-y-8">
       <div>
         <h1 className="text-3xl font-bold">Interview Prep</h1>
-        <p className="text-muted-foreground mt-2 text-base leading-relaxed">
+        <p className="text-slate-400 mt-2 text-base leading-relaxed">
           AI mock interviews. Get scored with detailed feedback after each session.
         </p>
       </div>
@@ -162,7 +162,7 @@ export default function InterviewPage() {
           <Card>
             <CardContent className="pt-6 text-center">
               <div className="text-3xl font-bold">{sessions.length}</div>
-              <div className="text-sm text-muted-foreground mt-1">Sessions done</div>
+              <div className="text-sm text-slate-400 mt-1">Sessions done</div>
             </CardContent>
           </Card>
           <Card>
@@ -171,7 +171,7 @@ export default function InterviewPage() {
                 <Trophy className="h-5 w-5 text-yellow-500" />
                 <div className="text-3xl font-bold">{avg ?? "—"}</div>
               </div>
-              <div className="text-sm text-muted-foreground mt-1">Avg score</div>
+              <div className="text-sm text-slate-400 mt-1">Avg score</div>
             </CardContent>
           </Card>
           <Card>
@@ -179,7 +179,7 @@ export default function InterviewPage() {
               <div className="text-3xl font-bold">
                 {scores.length ? Math.max(...scores) : "—"}
               </div>
-              <div className="text-sm text-muted-foreground mt-1">Best score</div>
+              <div className="text-sm text-slate-400 mt-1">Best score</div>
             </CardContent>
           </Card>
         </div>
@@ -192,9 +192,9 @@ export default function InterviewPage() {
         {/* Company selector */}
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <Building2 className="h-4 w-4 text-muted-foreground" />
+            <Building2 className="h-4 w-4 text-slate-400" />
             <span className="text-sm font-medium text-slate-300">Optimize for a company</span>
-            <span className="text-xs text-muted-foreground">(optional)</span>
+            <span className="text-xs text-slate-400">(optional)</span>
           </div>
           <div className="flex flex-wrap gap-2">
             <button
@@ -226,7 +226,7 @@ export default function InterviewPage() {
               <span className="inline-flex items-center gap-1.5 bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-semibold">
                 Optimized for {COMPANIES.find(c => c.id === selectedCompany)?.name}
               </span>
-              <span className="text-slate-500 text-xs font-normal">— questions and evaluation will reflect their actual interview bar</span>
+              <span className="text-slate-400 text-xs font-normal">— questions and evaluation will reflect their actual interview bar</span>
             </div>
           )}
         </div>
@@ -248,12 +248,12 @@ export default function InterviewPage() {
                       <div className={`h-10 w-10 rounded-lg bg-muted flex items-center justify-center mb-2`}>
                         <Icon className={`h-5 w-5 ${config.color}`} />
                       </div>
-                      <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors mt-1" />
+                      <ArrowRight className="h-4 w-4 text-slate-400 group-hover:text-primary transition-colors mt-1" />
                     </div>
                     <CardTitle className="text-base">{config.label}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-base text-muted-foreground mb-4">{config.description}</p>
+                    <p className="text-base text-slate-400 mb-4">{config.description}</p>
                     <Button
                       size="sm"
                       className="w-full gap-2"
@@ -313,7 +313,7 @@ export default function InterviewPage() {
                           </span>
                         )}
                       </div>
-                      <p className="text-sm text-slate-500">{format(new Date(session.startedAt), "MMM d, yyyy")}</p>
+                      <p className="text-sm text-slate-400">{format(new Date(session.startedAt), "MMM d, yyyy")}</p>
                     </div>
                     {session.overallScore !== null && (
                       <div className={`text-2xl font-black shrink-0 ${scoreColor}`}>
@@ -359,7 +359,7 @@ export default function InterviewPage() {
                 <CardContent className="pt-4 pb-4 flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <div className="h-10 w-10 rounded-lg bg-muted flex items-center justify-center">
-                      <MessageSquare className="h-5 w-5 text-muted-foreground" />
+                      <MessageSquare className="h-5 w-5 text-slate-400" />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
@@ -370,14 +370,14 @@ export default function InterviewPage() {
                           </span>
                         )}
                       </div>
-                      <div className="text-sm text-muted-foreground">
+                      <div className="text-sm text-slate-400">
                         {format(new Date(s.startedAt), "MMM d, yyyy")}
                       </div>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
                     <Badge variant="outline">In progress</Badge>
-                    <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                    <ArrowRight className="h-4 w-4 text-slate-400" />
                   </div>
                 </CardContent>
               </Card>

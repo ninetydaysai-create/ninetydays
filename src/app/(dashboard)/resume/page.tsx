@@ -154,7 +154,7 @@ export default function ResumePage() {
   if (loading) {
     return (
       <div className="max-w-3xl mx-auto flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
       </div>
     );
   }
@@ -163,7 +163,7 @@ export default function ResumePage() {
     <div className="max-w-3xl mx-auto space-y-8">
       <div>
         <h1 className="text-4xl font-bold">Resume Analyzer</h1>
-        <p className="text-muted-foreground mt-2 text-base">Upload your resume and get an honest AI score against your target role.</p>
+        <p className="text-slate-400 mt-2 text-base">Upload your resume and get an honest AI score against your target role.</p>
       </div>
 
       {/* Tab switcher */}
@@ -308,12 +308,12 @@ export default function ResumePage() {
       ) : (
         <div className="bg-[#1a1b23] rounded-2xl border border-white/10 p-7 shadow-sm">
           <h2 className="text-lg font-bold mb-1">Upload a new resume</h2>
-          <p className="text-sm text-muted-foreground mb-5">PDF only · max 10MB · we extract the text and analyze it</p>
+          <p className="text-sm text-slate-400 mb-5">PDF only · max 10MB · we extract the text and analyze it</p>
           <label className={`flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-8 cursor-pointer transition-all mb-5 ${file ? "border-primary bg-primary/5" : "border-slate-200 hover:border-primary/50"} ${busy ? "pointer-events-none opacity-60" : ""}`} htmlFor="resume-file">
             {file ? (
-              <><FileText className="h-9 w-9 text-primary mb-2" /><span className="font-semibold">{file.name}</span><span className="text-sm text-muted-foreground mt-1">{(file.size / 1024).toFixed(0)} KB · click to change</span></>
+              <><FileText className="h-9 w-9 text-primary mb-2" /><span className="font-semibold">{file.name}</span><span className="text-sm text-slate-400 mt-1">{(file.size / 1024).toFixed(0)} KB · click to change</span></>
             ) : (
-              <><Upload className="h-9 w-9 text-muted-foreground mb-2" /><span className="font-semibold">Click to upload your resume</span><span className="text-sm text-muted-foreground mt-1">PDF · max 10MB</span></>
+              <><Upload className="h-9 w-9 text-slate-400 mb-2" /><span className="font-semibold">Click to upload your resume</span><span className="text-sm text-slate-400 mt-1">PDF · max 10MB</span></>
             )}
             <input id="resume-file" type="file" accept="application/pdf" className="hidden" onChange={handleFileChange} disabled={busy} />
           </label>
@@ -332,14 +332,14 @@ export default function ResumePage() {
       {/* Unanalyzed resumes */}
       {unanalyzed.length > 0 && (
         <div className="space-y-3">
-          <h2 className="text-base font-semibold text-muted-foreground">Uploaded but not analyzed</h2>
+          <h2 className="text-base font-semibold text-slate-400">Uploaded but not analyzed</h2>
           {unanalyzed.map((r) => (
             <div key={r.id} className="bg-[#1a1b23] rounded-xl border border-white/10 p-4 flex items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <FileText className="h-5 w-5 text-muted-foreground" />
+                <FileText className="h-5 w-5 text-slate-400" />
                 <div>
                   <p className="font-medium text-sm">{r.fileName}</p>
-                  <p className="text-xs text-muted-foreground">{(r.fileSize / 1024).toFixed(0)} KB</p>
+                  <p className="text-xs text-slate-400">{(r.fileSize / 1024).toFixed(0)} KB</p>
                 </div>
               </div>
               <Button size="sm" onClick={() => handleAnalyze(r.id)} disabled={analyzingId === r.id} className="gap-1.5 shrink-0">
@@ -354,10 +354,10 @@ export default function ResumePage() {
       {analyses.length === 0 && unanalyzed.length === 0 ? (
         <Card className="text-center py-16">
           <CardContent className="space-y-4">
-            <Upload className="h-12 w-12 mx-auto text-muted-foreground" />
+            <Upload className="h-12 w-12 mx-auto text-slate-400" />
             <div>
               <p className="font-semibold text-lg">No resume uploaded yet</p>
-              <p className="text-sm text-muted-foreground mt-1">Upload your PDF above to see how you score against your target role.</p>
+              <p className="text-sm text-slate-400 mt-1">Upload your PDF above to see how you score against your target role.</p>
             </div>
           </CardContent>
         </Card>
@@ -375,7 +375,7 @@ export default function ResumePage() {
                     <div className={`text-4xl font-black ${analysis.overallScore >= 70 ? "text-emerald-600" : analysis.overallScore >= 50 ? "text-amber-500" : "text-red-500"}`}>
                       {analysis.overallScore}
                     </div>
-                    <div className="text-xs text-muted-foreground font-medium">/ 100</div>
+                    <div className="text-xs text-slate-400 font-medium">/ 100</div>
                   </div>
                 </div>
               </CardHeader>
@@ -390,7 +390,7 @@ export default function ResumePage() {
                   ].map((s) => (
                     <div key={s.label} className="rounded-xl bg-white/5 border border-white/8 py-4">
                       <div className="text-2xl font-bold text-white">{s.value}</div>
-                      <div className="text-xs text-muted-foreground font-medium mt-1">{s.label}</div>
+                      <div className="text-xs text-slate-400 font-medium mt-1">{s.label}</div>
                     </div>
                   ))}
                 </div>
@@ -408,9 +408,9 @@ export default function ResumePage() {
                     <div className="space-y-3">
                       {(analysis.weakBullets as WeakBullet[]).slice(0, 3).map((b, i) => (
                         <div key={i} className="rounded-xl border border-white/10 p-4 text-sm space-y-2 bg-white/5">
-                          <div className="text-slate-500 line-through">{b.original}</div>
+                          <div className="text-slate-400 line-through">{b.original}</div>
                           <div className="text-emerald-400 font-medium">{b.rewrite}</div>
-                          <div className="text-xs text-muted-foreground">Why: {b.reason}</div>
+                          <div className="text-xs text-slate-400">Why: {b.reason}</div>
                         </div>
                       ))}
                     </div>
