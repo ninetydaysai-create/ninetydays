@@ -10,15 +10,17 @@ import { assertPlanAllows } from "@/lib/plan-guard";
 import { buildResumeAnalysisPrompt } from "@/prompts/resume-analysis";
 import { parseTimelineYears, mergeTimelineWithModel } from "@/lib/timeline-parser";
 
+// z.record() generates `propertyNames` in JSON Schema which Anthropic rejects.
+// Use arrays of objects instead, then convert to records after generation.
 const ResumeAnalysisSchema = z.object({
   overallScore: z.number(),
   skillsFound: z.array(z.string()),
-  techYears: z.record(z.string(), z.number()),
+  techYears: z.array(z.object({ skill: z.string(), years: z.number() })),
   starStoriesCount: z.number(),
   impactScore: z.number(),
   projectComplexity: z.number(),
   signalDepthScore: z.number(),
-  signalDepthMap: z.record(z.string(), z.enum(["STRONG", "MODERATE", "WEAK"])),
+  signalDepthMap: z.array(z.object({ skill: z.string(), depth: z.enum(["STRONG", "MODERATE", "WEAK"]) })),
   weakBullets: z.array(z.object({
     original: z.string(),
     rewrite: z.string(),
@@ -65,10 +67,17 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: `AI analysis failed: ${msg}` }, { status: 500 });
   }
 
+  // Convert arrays → records (Anthropic doesn't support z.record/propertyNames)
+  const techYearsRecord: Record<string, number> = Object.fromEntries(
+    object.techYears.map(({ skill, years }) => [skill, years])
+  );
+  const signalDepthRecord: Record<string, string> = Object.fromEntries(
+    object.signalDepthMap.map(({ skill, depth }) => [skill, depth])
+  );
+
   // Merge deterministic timeline-parsed years with model-inferred years
-  // Timeline evidence takes precedence over model inference
   const parsedYears = parseTimelineYears(resume.rawText);
-  const finalTechYears = mergeTimelineWithModel(parsedYears, object.techYears);
+  const finalTechYears = mergeTimelineWithModel(parsedYears, techYearsRecord);
 
   const analysis = await db.resumeAnalysis.create({
     data: {
@@ -83,7 +92,7 @@ export async function POST(req: Request) {
       keywordDensityScore: object.signalDepthScore, // repurposed DB column
       weakBullets: object.weakBullets,
       roleMatchScores: object.roleMatchScores,
-      rawAnalysis: { ...object, techYears: finalTechYears }, // timeline-merged techYears
+      rawAnalysis: { ...object, techYears: finalTechYears, signalDepthMap: signalDepthRecord },
     },
   });
 
