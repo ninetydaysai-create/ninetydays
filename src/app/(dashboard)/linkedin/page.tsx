@@ -57,7 +57,7 @@ export default function LinkedInPage() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="bg-[#1a1b23] rounded-2xl border border-white/10 p-8 shadow-sm">
+      <div className="bg-[#161820] rounded-2xl border border-white/10 p-8 shadow-sm">
         <div className="flex items-center gap-3 mb-3">
           <div className="h-12 w-12 rounded-2xl bg-[#0077b5] flex items-center justify-center shadow-lg">
             <ExternalLink className="h-6 w-6 text-white" />
@@ -83,7 +83,7 @@ export default function LinkedInPage() {
       </div>
 
       {/* Input */}
-      <div className="bg-[#1a1b23] rounded-2xl border border-white/10 p-8 shadow-sm">
+      <div className="bg-[#161820] rounded-2xl border border-white/10 p-8 shadow-sm">
         <h2 className="text-lg font-bold text-white mb-1">Your current LinkedIn profile</h2>
         <p className="text-slate-400 text-base mb-6">Paste what you currently have. The AI will improve it for product company recruiters.</p>
         <div className="space-y-5">
@@ -136,22 +136,22 @@ export default function LinkedInPage() {
           </div>
 
           {/* Headline */}
-          <div className="bg-[#1a1b23] rounded-2xl border border-white/10 shadow-sm overflow-hidden">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-white/8">
-              <h3 className="font-bold text-white text-sm uppercase tracking-wide">Optimized Headline</h3>
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+              <h3 className="font-bold text-slate-900 text-sm uppercase tracking-wide">Optimized Headline</h3>
               <Button size="sm" variant="ghost" className="gap-1.5 text-xs" onClick={() => copy(result.outputHeadline, "Headline")}>
                 <Copy className="h-3 w-3" /> Copy
               </Button>
             </div>
             <div className="px-6 py-5">
-              <p className="text-base font-semibold text-white">{result.outputHeadline}</p>
+              <p className="text-base font-semibold text-slate-900">{result.outputHeadline}</p>
               {result.alternatives.length > 0 && (
                 <div className="mt-4 space-y-2">
-                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Alternatives</p>
+                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Alternatives</p>
                   {result.alternatives.map((alt, i) => (
-                    <div key={i} className="flex items-center justify-between gap-3 bg-white/5 rounded-lg px-4 py-3">
-                      <span className="text-sm text-slate-300">{alt}</span>
-                      <button className="shrink-0 text-slate-400 hover:text-slate-700 transition-colors" onClick={() => copy(alt, "Alternative")}>
+                    <div key={i} className="flex items-center justify-between gap-3 bg-slate-50 border border-slate-200 rounded-lg px-4 py-3">
+                      <span className="text-sm text-slate-700">{alt}</span>
+                      <button className="shrink-0 text-slate-500 hover:text-slate-700 transition-colors" onClick={() => copy(alt, "Alternative")}>
                         <Copy className="h-3.5 w-3.5" />
                       </button>
                     </div>
@@ -162,25 +162,25 @@ export default function LinkedInPage() {
           </div>
 
           {/* Summary */}
-          <div className="bg-[#1a1b23] rounded-2xl border border-white/10 shadow-sm overflow-hidden">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-white/8">
-              <h3 className="font-bold text-white text-sm uppercase tracking-wide">Optimized About Section</h3>
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+              <h3 className="font-bold text-slate-900 text-sm uppercase tracking-wide">Optimized About Section</h3>
               <Button size="sm" variant="ghost" className="gap-1.5 text-xs" onClick={() => copy(result.outputSummary, "About section")}>
                 <Copy className="h-3 w-3" /> Copy
               </Button>
             </div>
             <div className="px-6 py-5">
-              <p className="text-base text-slate-300 whitespace-pre-wrap leading-relaxed">{result.outputSummary}</p>
+              <p className="text-base text-slate-700 whitespace-pre-wrap leading-relaxed">{result.outputSummary}</p>
             </div>
           </div>
 
           {/* Keywords */}
           {result.keywordsAdded.length > 0 && (
-            <div className="bg-emerald-500/10 rounded-2xl border border-emerald-500/20 px-6 py-5">
-              <p className="text-xs font-bold text-emerald-400 uppercase tracking-wide mb-3">Keywords added to improve visibility</p>
+            <div className="bg-emerald-50 rounded-2xl border border-emerald-100 px-6 py-5">
+              <p className="text-xs font-bold text-emerald-700 uppercase tracking-wide mb-3">Keywords added to improve visibility</p>
               <div className="flex flex-wrap gap-2">
                 {result.keywordsAdded.map((kw) => (
-                  <Badge key={kw} className="bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/20 border-0 text-xs">{kw}</Badge>
+                  <Badge key={kw} className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 border-0 text-xs">{kw}</Badge>
                 ))}
               </div>
             </div>

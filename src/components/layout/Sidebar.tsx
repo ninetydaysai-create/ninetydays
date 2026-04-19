@@ -46,7 +46,7 @@ export function Sidebar() {
   const { openUserProfile, signOut } = useClerk();
 
   return (
-    <aside className="hidden md:flex flex-col w-[260px] h-screen sticky top-0 shrink-0 bg-[#0f1117] text-white overflow-y-auto">
+    <aside className="hidden md:flex flex-col w-[260px] h-screen sticky top-0 shrink-0 bg-[#0b0e14] text-white overflow-y-auto">
       {/* Logo */}
       <div className="px-5 pt-7 pb-6">
         <Link href="/dashboard" className="flex items-center gap-3 group">

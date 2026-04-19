@@ -41,7 +41,7 @@ export function ShareProgressCard({ readinessScore, weeksOnPlatform, roleLabel, 
   return (
     <div className="mt-4 space-y-4">
       {/* Card preview */}
-      <div className="rounded-2xl bg-[#0a0b0f] p-6 shadow-xl max-w-md">
+      <div className="rounded-2xl bg-[#0b0e14] p-6 shadow-xl max-w-md">
         {/* Logo */}
         <div className="flex items-center gap-2 mb-5">
           <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">
@@ -78,7 +78,7 @@ export function ShareProgressCard({ readinessScore, weeksOnPlatform, roleLabel, 
       </div>
 
       {/* Share text preview */}
-      <div className="bg-[#1e1f28] rounded-xl border border-white/10 p-4">
+      <div className="bg-[#1a1b23] rounded-xl border border-white/10 p-4">
         <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">LinkedIn / Twitter caption</p>
         <p className="text-sm text-slate-300 whitespace-pre-line leading-relaxed">{shareText}</p>
       </div>

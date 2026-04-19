@@ -253,7 +253,7 @@ export default function RoadmapPage() {
           <h1 className="text-3xl font-bold">90-Day Roadmap</h1>
           <p className="text-slate-400 mt-2 text-base">Your personalized week-by-week plan to get hired in AI.</p>
         </div>
-        <div className="rounded-2xl border border-white/10 bg-[#1a1b23] text-center py-16 px-8">
+        <div className="rounded-2xl border border-white/10 bg-[#161820] text-center py-16 px-8">
           <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center mx-auto mb-6 shadow-lg shadow-indigo-500/25">
             <Sparkles className="h-8 w-8 text-white" />
           </div>
@@ -311,7 +311,7 @@ export default function RoadmapPage() {
         </div>
 
         {/* Overall progress */}
-        <div className="bg-[#1a1b23] rounded-2xl border border-white/10 p-5 shadow-sm">
+        <div className="bg-[#161820] rounded-2xl border border-white/10 p-5 shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <div>
               <span className="text-2xl font-black text-white">{pct}%</span>
@@ -375,7 +375,7 @@ export default function RoadmapPage() {
               return (
                 <div
                   key={week.id}
-                  className={`bg-[#1a1b23] rounded-2xl border transition-all ${
+                  className={`bg-[#161820] rounded-2xl border transition-all ${
                     isCurrent
                       ? `border-2 ${colors.current} shadow-md`
                       : allWeekDone
@@ -444,8 +444,8 @@ export default function RoadmapPage() {
                           key={task.id}
                           className={`rounded-xl border cursor-pointer transition-all group ${
                             task.completed
-                              ? "bg-white/5 border-white/8"
-                              : "bg-[#1e1f28] border-white/10 hover:border-indigo-500/40 hover:shadow-sm"
+                              ? "bg-slate-50 border-slate-200 opacity-70"
+                              : "bg-white border-slate-200 hover:border-indigo-400 hover:shadow-sm"
                           }`}
                           onClick={() => !toggling && toggleTask(task.id, task.completed, task.label, task.impactScore)}
                         >
@@ -456,9 +456,9 @@ export default function RoadmapPage() {
                                 {toggling === task.id ? (
                                   <Loader2 className="h-5 w-5 animate-spin text-slate-400" />
                                 ) : task.completed ? (
-                                  <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                                  <CheckCircle2 className="h-5 w-5 text-emerald-600" />
                                 ) : (
-                                  <Circle className="h-5 w-5 text-slate-300 group-hover:text-indigo-500 transition-colors" />
+                                  <Circle className="h-5 w-5 text-slate-400 group-hover:text-indigo-500 transition-colors" />
                                 )}
                               </div>
 
@@ -466,13 +466,13 @@ export default function RoadmapPage() {
                                 {/* Title row */}
                                 <div className="flex items-start justify-between gap-2">
                                   <p className={`text-base font-bold leading-snug ${
-                                    task.completed ? "line-through text-slate-400" : "text-white"
+                                    task.completed ? "line-through text-slate-500" : "text-slate-900"
                                   }`}>
                                     {task.label}
                                   </p>
                                   {/* Impact badge */}
                                   {!task.completed && task.impactScore >= 7 && (
-                                    <span className="shrink-0 text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-400 flex items-center gap-1 whitespace-nowrap">
+                                    <span className="shrink-0 text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center gap-1 whitespace-nowrap">
                                       <TrendingUp className="h-3 w-3" />
                                       +{Math.round(task.impactScore / 2)}% readiness
                                     </span>
@@ -481,15 +481,15 @@ export default function RoadmapPage() {
 
                                 {!task.completed && (
                                   <>
-                                    <p className="text-base text-slate-400 mt-2 leading-relaxed">
+                                    <p className="text-base text-slate-700 mt-2 leading-relaxed">
                                       {task.description}
                                     </p>
 
                                     {/* Why it matters */}
                                     {task.whyItMatters && (
-                                      <div className="flex items-start gap-2 mt-2.5 bg-indigo-500/10 rounded-lg px-3 py-2.5">
-                                        <Zap className="h-4 w-4 text-indigo-400 shrink-0 mt-0.5" />
-                                        <p className="text-sm text-indigo-300 font-medium leading-snug">
+                                      <div className="flex items-start gap-2 mt-2.5 bg-indigo-50 border border-indigo-100 rounded-lg px-3 py-2.5">
+                                        <Zap className="h-4 w-4 text-indigo-500 shrink-0 mt-0.5" />
+                                        <p className="text-sm text-indigo-700 font-medium leading-snug">
                                           {task.whyItMatters}
                                         </p>
                                       </div>
@@ -497,12 +497,12 @@ export default function RoadmapPage() {
 
                                     {/* Meta row */}
                                     <div className="flex items-center gap-4 mt-3 flex-wrap">
-                                      <span className="inline-flex items-center gap-1.5 text-sm text-slate-400">
+                                      <span className="inline-flex items-center gap-1.5 text-sm text-slate-500">
                                         <Clock className="h-3.5 w-3.5" />
                                         {task.hours}h estimated
                                       </span>
                                       {task.impactScore > 0 && (
-                                        <span className="inline-flex items-center gap-1.5 text-sm text-slate-400">
+                                        <span className="inline-flex items-center gap-1.5 text-sm text-slate-500">
                                           <Target className="h-3.5 w-3.5" />
                                           Impact: {task.impactScore}/10
                                         </span>
@@ -512,7 +512,7 @@ export default function RoadmapPage() {
                                     {/* Resources */}
                                     {task.resourceUrls?.length > 0 && (
                                       <div className="flex items-center gap-2 mt-3 flex-wrap">
-                                        <BookOpen className="h-4 w-4 text-slate-400 shrink-0" />
+                                        <BookOpen className="h-4 w-4 text-slate-500 shrink-0" />
                                         {task.resourceUrls.slice(0, 3).map((url, i) => (
                                           <a
                                             key={i}
@@ -520,7 +520,7 @@ export default function RoadmapPage() {
                                             target="_blank"
                                             rel="noreferrer"
                                             onClick={(e) => e.stopPropagation()}
-                                            className="inline-flex items-center gap-1.5 text-sm font-medium text-indigo-400 bg-indigo-500/10 hover:bg-indigo-500/15 px-3 py-1.5 rounded-lg transition-colors"
+                                            className="inline-flex items-center gap-1.5 text-sm font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 px-3 py-1.5 rounded-lg transition-colors"
                                           >
                                             {getDomainLabel(url)}
                                             <ExternalLink className="h-3 w-3" />

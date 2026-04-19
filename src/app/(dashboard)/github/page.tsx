@@ -41,7 +41,7 @@ export default function GitHubPage() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="bg-[#1a1b23] rounded-2xl border border-white/10 p-8 shadow-sm">
+      <div className="bg-[#161820] rounded-2xl border border-white/10 p-8 shadow-sm">
         <div className="flex items-center gap-3 mb-3">
           <div className="h-12 w-12 rounded-2xl bg-slate-900 flex items-center justify-center shadow-lg">
             <GitFork className="h-6 w-6 text-white" />
@@ -68,7 +68,7 @@ export default function GitHubPage() {
       </div>
 
       {/* Input */}
-      <div className="bg-[#1a1b23] rounded-2xl border border-white/10 p-8 shadow-sm">
+      <div className="bg-[#161820] rounded-2xl border border-white/10 p-8 shadow-sm">
         <h2 className="text-lg font-bold text-white mb-1">Paste your current README</h2>
         <p className="text-slate-400 text-base mb-6">Leave blank to generate a professional README from scratch based on your profile.</p>
         <div className="space-y-2">
@@ -102,11 +102,11 @@ export default function GitHubPage() {
 
       {/* Result */}
       {result && (
-        <div className="bg-[#1a1b23] rounded-2xl border border-white/10 shadow-sm overflow-hidden">
-          <div className="flex items-center justify-between px-8 py-5 border-b border-white/8">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="flex items-center justify-between px-8 py-5 border-b border-slate-200">
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5 text-emerald-400" />
-              <h2 className="text-base font-bold text-white">Your optimized README is ready</h2>
+              <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+              <h2 className="text-base font-bold text-slate-900">Your optimized README is ready</h2>
             </div>
             <div className="flex items-center gap-2">
               <Button
@@ -141,7 +141,7 @@ export default function GitHubPage() {
                 value={result}
                 onChange={(e) => setResult(e.target.value)}
                 rows={24}
-                className="font-mono text-sm bg-white/5 border-white/10 resize-none w-full"
+                className="font-mono text-sm bg-slate-50 border-slate-200 resize-none w-full text-slate-700"
               />
             )}
           </div>

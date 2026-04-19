@@ -29,9 +29,9 @@ interface JobMatch {
 }
 
 const SEVERITY_STYLE = {
-  critical: "bg-red-500/15 text-red-400 border-red-500/20",
-  major: "bg-amber-500/15 text-amber-400 border-amber-500/20",
-  minor: "bg-yellow-500/15 text-yellow-400 border-yellow-500/20",
+  critical: "bg-red-50 text-red-600 border-red-200",
+  major: "bg-amber-50 text-amber-600 border-amber-200",
+  minor: "bg-yellow-50 text-yellow-700 border-yellow-200",
 };
 
 const SEVERITY_DOT = {
@@ -61,18 +61,18 @@ function MatchCard({ match, defaultOpen = false }: { match: JobMatch; defaultOpe
   const scoreBg = match.matchScore >= 70 ? "bg-emerald-500/10 border-emerald-500/20" : match.matchScore >= 50 ? "bg-amber-500/10 border-amber-500/20" : "bg-red-500/10 border-red-500/20";
 
   return (
-    <div className="bg-[#1a1b23] rounded-2xl border border-white/10 shadow-sm overflow-hidden">
+    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
       <button className="w-full text-left px-6 py-4 flex items-center gap-4" onClick={() => setOpen(!open)}>
         <div className={`h-14 w-14 rounded-xl border flex flex-col items-center justify-center shrink-0 ${scoreBg}`}>
           <span className={`text-xl font-black ${scoreColor}`}>{match.matchScore}</span>
-          <span className="text-slate-400 text-xs">%</span>
+          <span className="text-slate-500 text-xs">%</span>
         </div>
         <div className="flex-1 min-w-0">
-          <p className="font-bold text-white text-base">
+          <p className="font-bold text-slate-900 text-base">
             {match.roleTitle}{match.companyName ? ` · ${match.companyName}` : ""}
           </p>
           <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-            <span className="text-sm text-slate-400">
+            <span className="text-sm text-slate-500">
               {match.blockingGaps.filter(g => g.severity === "critical").length} critical gap{match.blockingGaps.filter(g => g.severity === "critical").length !== 1 ? "s" : ""} · {match.blockingGaps.reduce((a, g) => a + g.hoursToFix, 0)}h to close
             </span>
             {match.redFlags && match.redFlags.length > 0 && (
@@ -82,29 +82,29 @@ function MatchCard({ match, defaultOpen = false }: { match: JobMatch; defaultOpe
             )}
           </div>
         </div>
-        {open ? <ChevronUp className="h-5 w-5 text-slate-400 shrink-0" /> : <ChevronDown className="h-5 w-5 text-slate-400 shrink-0" />}
+        {open ? <ChevronUp className="h-5 w-5 text-slate-500 shrink-0" /> : <ChevronDown className="h-5 w-5 text-slate-500 shrink-0" />}
       </button>
 
       {open && (
-        <div className="px-6 pb-6 border-t border-slate-100 pt-5 space-y-6">
+        <div className="px-6 pb-6 border-t border-slate-200 pt-5 space-y-6 bg-white rounded-b-2xl">
 
           {/* Score + summary row */}
           <div className="flex flex-col sm:flex-row gap-6 items-start">
             <ScoreRing score={match.matchScore} />
             <div className="flex-1 space-y-4">
               {match.improvementPlan && (
-                <div className="bg-indigo-500/10 rounded-xl p-4 border border-indigo-500/20">
-                  <p className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-2">To reach 75%+</p>
-                  <p className="text-sm text-indigo-300 leading-relaxed">{match.improvementPlan}</p>
+                <div className="bg-indigo-50 rounded-xl p-4 border border-indigo-100">
+                  <p className="text-xs font-bold text-indigo-600 uppercase tracking-widest mb-2">To reach 75%+</p>
+                  <p className="text-sm text-indigo-700 leading-relaxed">{match.improvementPlan}</p>
                 </div>
               )}
               {/* Strengths */}
               <div>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2.5">Evidence of match</p>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2.5">Evidence of match</p>
                 <div className="space-y-2">
                   {match.strengths.map((s, i) => (
-                    <div key={i} className="flex items-start gap-2 text-sm text-slate-300 bg-emerald-500/10 rounded-lg px-3 py-2 border border-emerald-500/20">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                    <div key={i} className="flex items-start gap-2 text-sm text-slate-700 bg-emerald-50 rounded-lg px-3 py-2 border border-emerald-100">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
                       {s}
                     </div>
                   ))}
@@ -115,20 +115,20 @@ function MatchCard({ match, defaultOpen = false }: { match: JobMatch; defaultOpe
 
           {/* Red flags — shown prominently if present */}
           {match.redFlags && match.redFlags.length > 0 && (
-            <div className="rounded-xl border-2 border-red-500/20 bg-red-500/10 p-4">
+            <div className="rounded-xl border-2 border-red-200 bg-red-50 p-4">
               <div className="flex items-center gap-2 mb-3">
-                <ShieldAlert className="h-4 w-4 text-red-400 shrink-0" />
-                <p className="text-sm font-bold text-red-400 uppercase tracking-widest">Red flags detected</p>
+                <ShieldAlert className="h-4 w-4 text-red-600 shrink-0" />
+                <p className="text-sm font-bold text-red-600 uppercase tracking-widest">Red flags detected</p>
               </div>
               <div className="space-y-2">
                 {match.redFlags.map((flag, i) => (
-                  <div key={i} className="flex items-start gap-2 text-sm text-red-400">
+                  <div key={i} className="flex items-start gap-2 text-sm text-red-700">
                     <span className="font-bold mt-0.5 shrink-0">✕</span>
                     {flag}
                   </div>
                 ))}
               </div>
-              <p className="text-xs text-red-400 mt-3 font-medium">
+              <p className="text-xs text-red-600 mt-3 font-medium">
                 Recruiters at product companies specifically filter for these patterns. Address them before applying.
               </p>
             </div>
@@ -136,35 +136,35 @@ function MatchCard({ match, defaultOpen = false }: { match: JobMatch; defaultOpe
 
           {/* Blocking gaps */}
           <div>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Blocking gaps — what&apos;s actually missing</p>
+            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Blocking gaps — what&apos;s actually missing</p>
             <div className="space-y-3">
               {match.blockingGaps.map((gap, i) => (
-                <div key={i} className={`rounded-xl border p-4 ${gap.severity === "critical" ? "border-red-500/20 bg-red-500/10" : gap.severity === "major" ? "border-amber-500/20 bg-amber-500/10" : "border-white/10"}`}>
+                <div key={i} className={`rounded-xl border p-4 ${gap.severity === "critical" ? "border-red-200 bg-red-50" : gap.severity === "major" ? "border-amber-200 bg-amber-50" : "border-slate-200 bg-slate-50"}`}>
                   <div className="flex items-start gap-3">
                     <div className={`h-2.5 w-2.5 rounded-full shrink-0 mt-1.5 ${SEVERITY_DOT[gap.severity]}`} />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                        <span className="font-bold text-white text-sm">{gap.label}</span>
+                        <span className="font-bold text-slate-900 text-sm">{gap.label}</span>
                         <span className={`text-xs font-bold px-2 py-0.5 rounded-full border ${SEVERITY_STYLE[gap.severity]}`}>
                           {gap.severity}
                         </span>
-                        <span className="text-xs text-slate-400 flex items-center gap-1">
+                        <span className="text-xs text-slate-500 flex items-center gap-1">
                           <Clock className="h-3 w-3" /> {gap.hoursToFix}h to fix
                         </span>
                       </div>
 
                       {/* What the resume actually had (or didn't) */}
                       {gap.signalFound && (
-                        <div className="flex items-start gap-1.5 bg-white/5 rounded-lg px-3 py-1.5 mb-2">
-                          <Search className="h-3 w-3 text-slate-400 shrink-0 mt-0.5" />
-                          <p className="text-xs text-slate-400 italic">Found in resume: {gap.signalFound}</p>
+                        <div className="flex items-start gap-1.5 bg-white border border-slate-200 rounded-lg px-3 py-1.5 mb-2">
+                          <Search className="h-3 w-3 text-slate-500 shrink-0 mt-0.5" />
+                          <p className="text-xs text-slate-500 italic">Found in resume: {gap.signalFound}</p>
                         </div>
                       )}
 
                       {/* What to do */}
                       <div className="flex items-start gap-1.5">
-                        <Zap className="h-3.5 w-3.5 text-indigo-400 shrink-0 mt-0.5" />
-                        <p className="text-sm text-slate-300">{gap.action}</p>
+                        <Zap className="h-3.5 w-3.5 text-indigo-500 shrink-0 mt-0.5" />
+                        <p className="text-sm text-slate-700">{gap.action}</p>
                       </div>
                     </div>
                   </div>
@@ -238,7 +238,7 @@ export default function JobMatchPage() {
       </div>
 
       {/* Input card */}
-      <div className="bg-[#1a1b23] rounded-2xl border border-white/10 shadow-sm p-6 space-y-4">
+      <div className="bg-[#161820] rounded-2xl border border-white/10 shadow-sm p-6 space-y-4">
         <div className="flex items-center gap-2 mb-1">
           <div className="h-9 w-9 rounded-xl bg-indigo-500/10 flex items-center justify-center">
             <Briefcase className="h-5 w-5 text-indigo-400" />

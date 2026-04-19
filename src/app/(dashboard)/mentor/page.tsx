@@ -119,7 +119,7 @@ export default function MentorPage() {
   return (
     <div className="flex flex-col h-[calc(100vh-4rem)] max-h-[calc(100vh-4rem)]">
       {/* Header */}
-      <div className="px-6 py-5 border-b border-white/8 bg-[#1a1b23] shrink-0 flex items-center justify-between">
+      <div className="px-6 py-5 border-b border-white/8 bg-[#161820] shrink-0 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center shadow-md shadow-indigo-500/25">
             <Bot className="h-5 w-5 text-white" />
@@ -197,11 +197,11 @@ export default function MentorPage() {
             <div className={cn(
               "rounded-2xl px-4 py-3 max-w-[75%] text-sm leading-relaxed",
               msg.role === "assistant"
-                ? "bg-[#1a1b23] border border-white/10 text-slate-300 shadow-sm"
+                ? "bg-white border border-slate-200 text-slate-700 shadow-sm"
                 : "bg-indigo-600 text-white"
             )}>
               {msg.content || (
-                <span className="flex gap-1 items-center text-slate-400">
+                <span className="flex gap-1 items-center text-slate-500">
                   <span className="h-1.5 w-1.5 rounded-full bg-slate-400 animate-bounce" style={{ animationDelay: "0ms" }} />
                   <span className="h-1.5 w-1.5 rounded-full bg-slate-400 animate-bounce" style={{ animationDelay: "150ms" }} />
                   <span className="h-1.5 w-1.5 rounded-full bg-slate-400 animate-bounce" style={{ animationDelay: "300ms" }} />
@@ -214,7 +214,7 @@ export default function MentorPage() {
       </div>
 
       {/* Input */}
-      <div className="shrink-0 px-4 pb-5 pt-3 border-t border-white/8 bg-[#1a1b23]">
+      <div className="shrink-0 px-4 pb-5 pt-3 border-t border-white/8 bg-[#161820]">
         <div className="max-w-3xl mx-auto flex gap-3 items-end">
           <Textarea
             ref={textareaRef}

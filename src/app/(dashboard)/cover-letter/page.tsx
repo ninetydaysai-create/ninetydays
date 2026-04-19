@@ -110,7 +110,7 @@ export default function CoverLetterPage() {
       </div>
 
       {/* Input card */}
-      <div className="bg-[#1a1b23] rounded-2xl border border-white/10 shadow-sm p-6 space-y-4">
+      <div className="bg-[#161820] rounded-2xl border border-white/10 shadow-sm p-6 space-y-4">
         <div className="flex items-center gap-2 mb-1">
           <div className="h-9 w-9 rounded-xl bg-indigo-500/10 flex items-center justify-center">
             <FileEdit className="h-5 w-5 text-indigo-400" />
@@ -187,14 +187,14 @@ export default function CoverLetterPage() {
 
       {/* Result */}
       {result && (
-        <div className="bg-[#1a1b23] rounded-2xl border border-white/10 shadow-sm p-6 space-y-5">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-5">
           {/* Key highlights */}
-          <div className="bg-indigo-500/10 rounded-xl border border-indigo-500/20 p-4 space-y-2">
-            <p className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-3">
+          <div className="bg-indigo-50 rounded-xl border border-indigo-100 p-4 space-y-2">
+            <p className="text-xs font-bold text-indigo-600 uppercase tracking-widest mb-3">
               Key highlights
             </p>
             {result.highlights.map((highlight, i) => (
-              <div key={i} className="flex items-start gap-2 text-sm text-indigo-300">
+              <div key={i} className="flex items-start gap-2 text-sm text-indigo-700">
                 <CheckCircle2 className="h-4 w-4 text-indigo-500 shrink-0 mt-0.5" />
                 {highlight}
               </div>
@@ -203,11 +203,11 @@ export default function CoverLetterPage() {
 
           {/* Letter */}
           <div>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">
+            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">
               Your cover letter
             </p>
-            <div className="bg-white/5 rounded-xl border border-white/10 px-5 py-5">
-              <p className="text-base text-slate-300 leading-relaxed whitespace-pre-wrap">
+            <div className="bg-slate-50 rounded-xl border border-slate-200 px-5 py-5">
+              <p className="text-base text-slate-700 leading-relaxed whitespace-pre-wrap">
                 {result.coverLetter}
               </p>
             </div>
@@ -219,7 +219,7 @@ export default function CoverLetterPage() {
             <Button
               variant="ghost"
               size="sm"
-              className="gap-1.5 h-9 text-sm text-slate-400"
+              className="gap-1.5 h-9 text-sm text-slate-500"
               onClick={regenerate}
               disabled={generating}
             >

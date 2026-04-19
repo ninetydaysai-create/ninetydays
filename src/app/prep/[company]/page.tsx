@@ -61,7 +61,7 @@ export default async function CompanyPrepPage({ params }: Props) {
   return (
     <div className="min-h-screen bg-white">
       {/* Nav */}
-      <header className="sticky top-0 z-50 bg-[#0a0b0f] border-b border-white/10">
+      <header className="sticky top-0 z-50 bg-[#0b0e14] border-b border-white/10">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
             <div className="h-8 w-8 rounded-xl flex items-center justify-center bg-gradient-to-br from-indigo-500 to-violet-600 shadow-md shadow-indigo-500/25">
@@ -82,7 +82,7 @@ export default async function CompanyPrepPage({ params }: Props) {
       </header>
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-[#0a0b0f] text-white">
+      <section className="relative overflow-hidden bg-[#0b0e14] text-white">
         <div
           className="absolute inset-0 opacity-[0.04]"
           style={{
@@ -336,7 +336,7 @@ export default async function CompanyPrepPage({ params }: Props) {
       </section>
 
       {/* CTA */}
-      <section className="py-16 bg-[#0a0b0f]">
+      <section className="py-16 bg-[#0b0e14]">
         <div className="max-w-4xl mx-auto px-6">
           <div className="relative overflow-hidden bg-gradient-to-br from-indigo-600/20 to-violet-600/20 border border-indigo-500/30 rounded-2xl p-10 text-center">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-indigo-600/10 blur-[80px] rounded-full pointer-events-none" />
@@ -364,7 +364,7 @@ export default async function CompanyPrepPage({ params }: Props) {
       </section>
 
       {/* Other company links */}
-      <section className="py-12 bg-[#0a0b0f] border-t border-white/5">
+      <section className="py-12 bg-[#0b0e14] border-t border-white/5">
         <div className="max-w-4xl mx-auto px-6">
           <p className="text-xs font-bold uppercase tracking-widest text-slate-600 mb-5">More prep guides</p>
           <div className="flex flex-wrap gap-2">
@@ -382,7 +382,7 @@ export default async function CompanyPrepPage({ params }: Props) {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#0a0b0f] border-t border-white/5 py-10">
+      <footer className="bg-[#0b0e14] border-t border-white/5 py-10">
         <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">
             <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">

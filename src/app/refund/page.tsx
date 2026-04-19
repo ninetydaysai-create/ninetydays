@@ -12,7 +12,7 @@ const CONTACT_EMAIL = "support@ninetydays.ai";
 
 export default function RefundPage() {
   return (
-    <div className="min-h-screen bg-[#0a0b0f]">
+    <div className="min-h-screen bg-[#0b0e14]">
       <header className="border-b border-white/10 px-6 py-4 max-w-3xl mx-auto flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">

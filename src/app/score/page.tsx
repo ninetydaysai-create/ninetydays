@@ -154,7 +154,7 @@ export default function ScorePage() {
     : `Most candidates start below 50% — you can close this gap in 4–6 weeks`;
 
   return (
-    <div className="min-h-screen bg-[#0a0b0f]">
+    <div className="min-h-screen bg-[#0b0e14]">
       {/* Nav */}
       <header className="border-b border-white/10 px-6 py-4 flex items-center justify-between max-w-4xl mx-auto">
         <Link href="/" className="flex items-center gap-2">
@@ -350,11 +350,11 @@ export default function ScorePage() {
               </div>
 
               {/* Fade overlay */}
-              <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#0a0b0f] to-transparent pointer-events-none" />
+              <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#0b0e14] to-transparent pointer-events-none" />
             </div>
 
             {/* ── PAYWALL BLOCK — A/B tests pricing model × positioning ── */}
-            <div className="rounded-2xl border border-indigo-500/30 bg-gradient-to-b from-indigo-950/60 to-[#0a0b0f] p-7 text-center space-y-6">
+            <div className="rounded-2xl border border-indigo-500/30 bg-gradient-to-b from-indigo-950/60 to-[#0b0e14] p-7 text-center space-y-6">
 
               {/* Variant-specific badge */}
               <div className="flex justify-center">

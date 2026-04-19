@@ -32,7 +32,7 @@ export function ReferralCard() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-3 p-4 bg-[#1e1f28] rounded-xl border border-white/10">
+      <div className="flex items-center gap-3 p-4 bg-[#1a1b23] rounded-xl border border-white/10">
         <code className="flex-1 text-sm text-slate-300 font-mono truncate">{data.referralUrl}</code>
         <Button size="sm" variant={copied ? "default" : "outline"} className="gap-1.5 shrink-0" onClick={copy}>
           {copied ? <><Check className="h-3.5 w-3.5" />Copied</> : <><Copy className="h-3.5 w-3.5" />Copy</>}

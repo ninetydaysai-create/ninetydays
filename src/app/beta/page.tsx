@@ -66,14 +66,14 @@ function BetaContent() {
 
   if (!isLoaded) {
     return (
-      <div className="min-h-screen bg-[#0a0b0f] flex items-center justify-center">
+      <div className="min-h-screen bg-[#0b0e14] flex items-center justify-center">
         <Loader2 className="h-6 w-6 animate-spin text-slate-500" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0b0f] flex flex-col items-center justify-center px-6">
+    <div className="min-h-screen bg-[#0b0e14] flex flex-col items-center justify-center px-6">
       {/* Logo */}
       <Link href="/" className="flex items-center gap-2 mb-10">
         <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">
@@ -183,7 +183,7 @@ export default function BetaPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#0a0b0f] flex items-center justify-center">
+        <div className="min-h-screen bg-[#0b0e14] flex items-center justify-center">
           <Loader2 className="h-6 w-6 animate-spin text-slate-500" />
         </div>
       }

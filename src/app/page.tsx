@@ -50,13 +50,13 @@ const testimonials = [
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#0f1117]">
+    <div className="min-h-screen bg-[#0b0e14]">
       {/* Beta Banner */}
       <div className="bg-indigo-600 text-white text-center py-2.5 px-4 text-sm font-semibold tracking-wide">
         🚀 You&apos;re using an early beta version of NinetyDays — expect rough edges and share your feedback!
       </div>
       {/* Nav */}
-      <header className="border-b border-white/8 sticky top-0 z-50 bg-[#0f1117]/95 backdrop-blur">
+      <header className="border-b border-white/8 sticky top-0 z-50 bg-[#0b0e14]/95 backdrop-blur">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
             <div className="h-9 w-9 rounded-xl flex items-center justify-center bg-gradient-to-br from-indigo-500 to-violet-600 shadow-md shadow-indigo-500/25">
@@ -83,7 +83,7 @@ export default function LandingPage() {
       </header>
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-[#0a0b0f] text-white">
+      <section className="relative overflow-hidden bg-[#0b0e14] text-white">
         <div
           className="absolute inset-0 opacity-[0.06]"
           style={{
@@ -157,7 +157,7 @@ export default function LandingPage() {
       </section>
 
       {/* Problem Section */}
-      <section className="py-24 bg-[#111318] border-b border-white/5">
+      <section className="py-24 bg-[#0d1018] border-b border-white/5">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <p className="text-sm font-bold uppercase tracking-widest text-red-400 mb-4">Sound familiar?</p>
           <h2 className="text-4xl font-black text-white mb-6">
@@ -185,7 +185,7 @@ export default function LandingPage() {
       </section>
 
       {/* Solution Pillars */}
-      <section className="py-24 bg-[#0f1117] border-b border-white/5">
+      <section className="py-24 bg-[#0b0e14] border-b border-white/5">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-14">
             <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">The solution</p>
@@ -232,7 +232,7 @@ export default function LandingPage() {
       </section>
 
       {/* Before / After */}
-      <section className="py-20 bg-[#111318] border-b border-white/5">
+      <section className="py-20 bg-[#0d1018] border-b border-white/5">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-14">
             <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">The transformation</p>
@@ -244,7 +244,7 @@ export default function LandingPage() {
 
           <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto mb-10">
             {/* Before */}
-            <div className="bg-[#1a1b23] rounded-2xl border-2 border-red-500/20 p-7 shadow-sm">
+            <div className="bg-[#161820] rounded-2xl border-2 border-red-500/20 p-7 shadow-sm">
               <div className="flex items-center gap-2 mb-5">
                 <div className="h-3 w-3 rounded-full bg-red-500" />
                 <span className="text-sm font-bold text-red-400 uppercase tracking-widest">Before NinetyDays</span>
@@ -273,7 +273,7 @@ export default function LandingPage() {
             </div>
 
             {/* After */}
-            <div className="bg-[#1a1b23] rounded-2xl border-2 border-emerald-500/20 p-7 shadow-sm">
+            <div className="bg-[#161820] rounded-2xl border-2 border-emerald-500/20 p-7 shadow-sm">
               <div className="flex items-center gap-2 mb-5">
                 <div className="h-3 w-3 rounded-full bg-emerald-500" />
                 <span className="text-sm font-bold text-emerald-400 uppercase tracking-widest">After 90 days</span>
@@ -319,7 +319,7 @@ export default function LandingPage() {
           </p>
         </div>
 
-        <div className="bg-[#0a0b0f] rounded-2xl p-8 space-y-4">
+        <div className="bg-[#0b0e14] rounded-2xl p-8 space-y-4">
           <div className="flex items-center justify-between mb-6">
             <div>
               <p className="text-white font-bold text-lg">Your Gap Report</p>
@@ -354,7 +354,7 @@ export default function LandingPage() {
       </section>
 
       {/* How it works */}
-      <section id="how-it-works" className="py-20 bg-[#111318] border-y border-white/5">
+      <section id="how-it-works" className="py-20 bg-[#0d1018] border-y border-white/5">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-14">
             <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">The system</p>
@@ -380,7 +380,7 @@ export default function LandingPage() {
       </section>
 
       {/* Differentiation */}
-      <section className="py-24 bg-[#0f1117] border-b border-white/5">
+      <section className="py-24 bg-[#0b0e14] border-b border-white/5">
         <div className="max-w-4xl mx-auto px-6">
           <div className="text-center mb-14">
             <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">Why NinetyDays</p>
@@ -408,7 +408,7 @@ export default function LandingPage() {
                 icon: TrendingUp,
               },
             ].map(({ bad, good, desc, icon: Icon }) => (
-              <div key={good} className="bg-[#1a1b23] rounded-2xl border border-white/10 p-6">
+              <div key={good} className="bg-[#161820] rounded-2xl border border-white/10 p-6">
                 <div className="h-10 w-10 rounded-xl bg-indigo-500/10 flex items-center justify-center mb-4">
                   <Icon className="h-5 w-5 text-indigo-400" />
                 </div>
@@ -424,7 +424,7 @@ export default function LandingPage() {
       </section>
 
       {/* AI Mentor */}
-      <section className="py-24 bg-[#0a0b0f] text-white border-b border-white/5">
+      <section className="py-24 bg-[#0b0e14] text-white border-b border-white/5">
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
@@ -493,11 +493,11 @@ export default function LandingPage() {
       </section>
 
       {/* JD Readiness Score */}
-      <section className="py-24 bg-[#0f1117] border-b border-white/5">
+      <section className="py-24 bg-[#0b0e14] border-b border-white/5">
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Score preview */}
-            <div className="bg-[#0a0b0f] rounded-2xl p-7 border border-white/5">
+            <div className="bg-[#0b0e14] rounded-2xl p-7 border border-white/5">
               <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-5">Job Readiness Score</p>
               <div className="flex items-end gap-4 mb-5">
                 <div className="text-6xl font-black text-amber-400 leading-none">71</div>
@@ -558,7 +558,7 @@ export default function LandingPage() {
       </section>
 
       {/* Share Cards */}
-      <section className="py-20 bg-[#111318] border-b border-white/5">
+      <section className="py-20 bg-[#0d1018] border-b border-white/5">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">Your progress = your marketing</p>
           <h2 className="text-4xl font-black text-white mb-5">
@@ -604,7 +604,7 @@ export default function LandingPage() {
       </section>
 
       {/* Progress System */}
-      <section className="py-24 bg-[#0a0b0f] text-white">
+      <section className="py-24 bg-[#0b0e14] text-white">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-14">
             <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">Built for consistency</p>
@@ -697,7 +697,7 @@ export default function LandingPage() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-24 bg-[#0f1117] border-b border-white/5">
+      <section className="py-24 bg-[#0b0e14] border-b border-white/5">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-14">
             <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">Results</p>
@@ -706,7 +706,7 @@ export default function LandingPage() {
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {testimonials.map((t) => (
-              <div key={t.name} className="bg-[#1a1b23] rounded-2xl border border-white/10 p-7">
+              <div key={t.name} className="bg-[#161820] rounded-2xl border border-white/10 p-7">
                 <div className="flex items-center gap-4 mb-5">
                   <div className="text-center">
                     <div className="text-2xl font-black text-red-400">{t.score.before}%</div>
@@ -737,7 +737,7 @@ export default function LandingPage() {
       </section>
 
       {/* Feature credibility strip */}
-      <section className="py-16 bg-[#111318] border-b border-white/5">
+      <section className="py-16 bg-[#0d1018] border-b border-white/5">
         <div className="max-w-4xl mx-auto px-6">
           <p className="text-center text-sm font-bold uppercase tracking-widest text-slate-400 mb-8">Everything you need to go from &ldquo;confused&rdquo; to &ldquo;interview-ready&rdquo;</p>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
@@ -765,7 +765,7 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="py-24 bg-[#0f1117] border-t border-white/8">
+      <section id="pricing" className="py-24 bg-[#0b0e14] border-t border-white/8">
         <div className="max-w-4xl mx-auto px-6">
           <div className="text-center mb-14">
             <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">Pricing</p>
@@ -775,7 +775,7 @@ export default function LandingPage() {
 
           <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
             {/* Free */}
-            <div className="bg-[#1a1b23] rounded-2xl border border-white/10 p-8 shadow-sm">
+            <div className="bg-[#161820] rounded-2xl border border-white/10 p-8 shadow-sm">
               <h3 className="text-2xl font-black text-white">Free</h3>
               <div className="mt-4 mb-1">
                 <span className="text-5xl font-black text-white">$0</span>
@@ -860,7 +860,7 @@ export default function LandingPage() {
       </section>
 
       {/* Final CTA */}
-      <section className="bg-[#0a0b0f] py-28 relative overflow-hidden">
+      <section className="bg-[#0b0e14] py-28 relative overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-indigo-600/15 blur-[100px] rounded-full pointer-events-none" />
         <div className="relative max-w-3xl mx-auto px-6 text-center">
           <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-4">Ready?</p>
@@ -888,7 +888,7 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#0a0b0f] border-t border-white/5 py-10">
+      <footer className="bg-[#0b0e14] border-t border-white/5 py-10">
         <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">
             <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">

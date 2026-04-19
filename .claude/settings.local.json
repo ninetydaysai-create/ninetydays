@@ -33,7 +33,13 @@
       "Bash(git branch *)",
       "Bash(git push *)",
       "Bash(grep -v \"^$\")",
-      "Bash(awk '{print $1, $2}')"
+      "Bash(awk '{print $1, $2}')",
+      "Bash(sed -i '' 's/text-slate-900/text-white/g' \"src/app/\\(dashboard\\)/cover-letter/page.tsx\")",
+      "Bash(sed -i '' 's/text-slate-900/text-white/g' \"src/app/\\(dashboard\\)/job-match/page.tsx\")",
+      "Bash(sed -i '' 's/text-slate-900/text-white/g' \"src/app/\\(dashboard\\)/outreach/page.tsx\")",
+      "Bash(sed -i '' 's/bg-slate-100/bg-white\\\\/10/g' \"src/app/\\(dashboard\\)/mentor/page.tsx\")",
+      "Bash(xargs sed *)",
+      "Bash(npx --no next build)"
     ]
   }
 }

@@ -296,7 +296,7 @@ export default function InterviewPage() {
                   ? "text-amber-600"
                   : "text-red-500";
               return (
-                <div key={session.id} className="bg-[#1a1b23] rounded-2xl border border-white/10 shadow-sm overflow-hidden">
+                <div key={session.id} className="bg-[#161820] rounded-2xl border border-white/10 shadow-sm overflow-hidden">
                   <button
                     className="w-full text-left px-5 py-4 flex items-center gap-4"
                     onClick={() => loadScorecard(session.id)}

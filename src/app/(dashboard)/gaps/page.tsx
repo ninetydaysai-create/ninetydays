@@ -39,20 +39,18 @@ function GapSection({ title, gaps, icon: Icon }: { title: string; gaps: GapItem[
       </div>
       <div className="space-y-3">
         {gaps.map((gap) => (
-          <Card key={gap.id} className={`transition-opacity ${gap.resolved ? "opacity-40" : "hover:border-primary/40"}`}>
-            <CardContent className="pt-4 pb-4 flex items-start gap-4">
-              <div className={`mt-1.5 h-2.5 w-2.5 rounded-full shrink-0 ${severityDot(gap.severity)}`} />
-              {gap.resolved && <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-1" />}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap mb-1">
-                  <span className="font-semibold">{gap.label}</span>
-                  <Badge variant={severityVariant(gap.severity)} className="text-xs capitalize">{gap.severity}</Badge>
-                  <span className="text-xs text-slate-400 flex items-center gap-1"><Clock className="h-3 w-3" /> ~{gap.estimatedHours}h</span>
-                </div>
-                <p className="text-base text-slate-400 leading-relaxed">{gap.description}</p>
+          <div key={gap.id} className={`bg-white rounded-2xl border border-slate-200 px-5 py-4 flex items-start gap-4 transition-opacity ${gap.resolved ? "opacity-40" : "hover:border-primary/40"}`}>
+            <div className={`mt-1.5 h-2.5 w-2.5 rounded-full shrink-0 ${severityDot(gap.severity)}`} />
+            {gap.resolved && <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-1" />}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap mb-1">
+                <span className="font-semibold text-slate-900">{gap.label}</span>
+                <Badge variant={severityVariant(gap.severity)} className="text-xs capitalize">{gap.severity}</Badge>
+                <span className="text-xs text-slate-500 flex items-center gap-1"><Clock className="h-3 w-3" /> ~{gap.estimatedHours}h</span>
               </div>
-            </CardContent>
-          </Card>
+              <p className="text-base text-slate-700 leading-relaxed">{gap.description}</p>
+            </div>
+          </div>
         ))}
       </div>
     </div>

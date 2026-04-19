@@ -130,7 +130,7 @@ export default function OutreachPage() {
       )}
 
       {/* Input card */}
-      <div className="bg-[#1a1b23] rounded-2xl border border-white/10 shadow-sm p-6 space-y-4">
+      <div className="bg-[#161820] rounded-2xl border border-white/10 shadow-sm p-6 space-y-4">
         <div className="flex items-center gap-2 mb-1">
           <div className="h-9 w-9 rounded-xl bg-red-500/10 flex items-center justify-center">
             <Mail className="h-5 w-5 text-red-400" />
@@ -217,12 +217,12 @@ export default function OutreachPage() {
       {result && (
         <div className="space-y-4">
           {/* Subject line */}
-          <div className="bg-[#1a1b23] rounded-2xl border border-white/10 shadow-sm p-5">
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">
               Subject line
             </p>
-            <div className="flex items-center justify-between gap-4 bg-white/5 border border-white/10 rounded-xl px-4 py-3">
-              <p className="text-sm font-semibold text-white flex-1">{result.subject}</p>
+            <div className="flex items-center justify-between gap-4 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3">
+              <p className="text-sm font-semibold text-slate-900 flex-1">{result.subject}</p>
               <CopyButton text={result.subject} />
             </div>
           </div>
@@ -232,15 +232,15 @@ export default function OutreachPage() {
             {result.emails.map((email) => (
               <div
                 key={email.variant}
-                className="bg-[#1a1b23] rounded-2xl border border-white/10 shadow-sm p-5 space-y-3"
+                className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-3"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-bold text-slate-300 bg-white/10 px-3 py-1 rounded-full">
+                  <span className="text-sm font-bold text-slate-900 bg-slate-100 border border-slate-200 px-3 py-1 rounded-full">
                     {email.variant}
                   </span>
                   <CopyButton text={`Subject: ${result.subject}\n\n${email.content}`} />
                 </div>
-                <p className="text-base text-slate-300 leading-relaxed whitespace-pre-wrap">
+                <p className="text-base text-slate-700 leading-relaxed whitespace-pre-wrap">
                   {email.content}
                 </p>
               </div>

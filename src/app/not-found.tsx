@@ -4,7 +4,7 @@ import { Zap, ArrowLeft } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-[#0a0b0f] flex items-center justify-center px-6">
+    <div className="min-h-screen bg-[#0b0e14] flex items-center justify-center px-6">
       <div className="text-center max-w-md">
         <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 mb-6">
           <Zap className="h-8 w-8 text-white" />

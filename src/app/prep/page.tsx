@@ -26,7 +26,7 @@ export default function PrepIndexPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Nav */}
-      <header className="sticky top-0 z-50 bg-[#0a0b0f] border-b border-white/10">
+      <header className="sticky top-0 z-50 bg-[#0b0e14] border-b border-white/10">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
             <div className="h-8 w-8 rounded-xl flex items-center justify-center bg-gradient-to-br from-indigo-500 to-violet-600 shadow-md shadow-indigo-500/25">
@@ -47,7 +47,7 @@ export default function PrepIndexPage() {
       </header>
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-[#0a0b0f] text-white">
+      <section className="relative overflow-hidden bg-[#0b0e14] text-white">
         <div
           className="absolute inset-0 opacity-[0.04]"
           style={{
@@ -178,7 +178,7 @@ export default function PrepIndexPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-[#0a0b0f]">
+      <section className="py-20 bg-[#0b0e14]">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-4">Go beyond the guide</p>
           <h2 className="text-3xl md:text-4xl font-black text-white mb-4">
@@ -205,7 +205,7 @@ export default function PrepIndexPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#0a0b0f] border-t border-white/5 py-10">
+      <footer className="bg-[#0b0e14] border-t border-white/5 py-10">
         <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">
             <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">

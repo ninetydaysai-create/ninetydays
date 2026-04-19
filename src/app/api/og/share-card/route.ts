@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: #0a0b0f;
+    background: #0b0e14;
     display: flex;
     align-items: center;
     justify-content: center;

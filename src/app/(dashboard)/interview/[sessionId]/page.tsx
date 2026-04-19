@@ -5,7 +5,6 @@ import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Send, Trophy, TrendingUp, AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -200,70 +199,66 @@ export default function InterviewSessionPage() {
       {/* Scorecard */}
       {scorecard && (
         <div className="mb-6 space-y-4 shrink-0">
-          <Card className="border-2">
-            <CardContent className="pt-6">
-              <div className="flex items-start justify-between gap-4 mb-6">
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">Overall Score</p>
-                  <div className={cn("text-5xl font-bold", scoreColor(scorecard.overallScore))}>
-                    {scorecard.overallScore}
-                    <span className="text-2xl text-muted-foreground font-normal">/100</span>
-                  </div>
-                </div>
-                <div className={cn("border rounded-lg px-4 py-2 font-semibold text-sm", verdictColor(scorecard.verdict))}>
-                  {scorecard.verdict}
+          <div className="bg-white rounded-2xl border border-slate-200 p-6">
+            <div className="flex items-start justify-between gap-4 mb-6">
+              <div>
+                <p className="text-sm text-slate-500 mb-1">Overall Score</p>
+                <div className={cn("text-5xl font-bold", scoreColor(scorecard.overallScore))}>
+                  {scorecard.overallScore}
+                  <span className="text-2xl text-slate-500 font-normal">/100</span>
                 </div>
               </div>
+              <div className={cn("border rounded-lg px-4 py-2 font-semibold text-sm", verdictColor(scorecard.verdict))}>
+                {scorecard.verdict}
+              </div>
+            </div>
 
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <p className="text-sm font-medium flex items-center gap-1.5 mb-2">
-                    <TrendingUp className="h-4 w-4 text-emerald-500" />
-                    Strengths
-                  </p>
-                  <ul className="space-y-1">
-                    {scorecard.strengths.map((s, i) => (
-                      <li key={i} className="text-sm text-muted-foreground flex items-start gap-1.5">
-                        <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 mt-0.5 shrink-0" />
-                        {s}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <p className="text-sm font-medium flex items-center gap-1.5 mb-2">
-                    <AlertCircle className="h-4 w-4 text-orange-500" />
-                    Improvements
-                  </p>
-                  <ul className="space-y-1">
-                    {scorecard.improvements.map((s, i) => (
-                      <li key={i} className="text-sm text-muted-foreground flex items-start gap-1.5">
-                        <AlertCircle className="h-3.5 w-3.5 text-orange-500 mt-0.5 shrink-0" />
-                        {s}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <p className="text-sm font-medium text-slate-900 flex items-center gap-1.5 mb-2">
+                  <TrendingUp className="h-4 w-4 text-emerald-600" />
+                  Strengths
+                </p>
+                <ul className="space-y-1">
+                  {scorecard.strengths.map((s, i) => (
+                    <li key={i} className="text-sm text-slate-700 flex items-start gap-1.5">
+                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 mt-0.5 shrink-0" />
+                      {s}
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </CardContent>
-          </Card>
+              <div>
+                <p className="text-sm font-medium text-slate-900 flex items-center gap-1.5 mb-2">
+                  <AlertCircle className="h-4 w-4 text-amber-600" />
+                  Improvements
+                </p>
+                <ul className="space-y-1">
+                  {scorecard.improvements.map((s, i) => (
+                    <li key={i} className="text-sm text-slate-700 flex items-start gap-1.5">
+                      <AlertCircle className="h-3.5 w-3.5 text-amber-600 mt-0.5 shrink-0" />
+                      {s}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
 
           {scorecard.questionScores.map((qs) => (
-            <Card key={qs.questionNumber}>
-              <CardContent className="pt-5">
-                <div className="flex items-start justify-between gap-3 mb-3">
-                  <p className="text-sm font-medium">Q{qs.questionNumber}: {qs.question}</p>
-                  <Badge variant={qs.score >= 7 ? "default" : qs.score >= 5 ? "secondary" : "destructive"}>
-                    {qs.score}/10
-                  </Badge>
-                </div>
-                <p className="text-sm text-muted-foreground mb-3">{qs.feedback}</p>
-                <div className="rounded-md bg-emerald-50 border border-emerald-100 p-3">
-                  <p className="text-xs font-medium text-emerald-800 mb-1">Ideal answer would include:</p>
-                  <p className="text-xs text-emerald-700">{qs.idealAnswer}</p>
-                </div>
-              </CardContent>
-            </Card>
+            <div key={qs.questionNumber} className="bg-white rounded-2xl border border-slate-200 p-5">
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <p className="text-sm font-medium text-slate-900">Q{qs.questionNumber}: {qs.question}</p>
+                <Badge variant={qs.score >= 7 ? "default" : qs.score >= 5 ? "secondary" : "destructive"}>
+                  {qs.score}/10
+                </Badge>
+              </div>
+              <p className="text-sm text-slate-700 mb-3">{qs.feedback}</p>
+              <div className="rounded-md bg-emerald-50 border border-emerald-100 p-3">
+                <p className="text-xs font-medium text-emerald-800 mb-1">Ideal answer would include:</p>
+                <p className="text-xs text-emerald-700">{qs.idealAnswer}</p>
+              </div>
+            </div>
           ))}
 
           <div className="flex gap-3">

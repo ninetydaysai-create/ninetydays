@@ -205,7 +205,7 @@ export default async function DashboardPage() {
       {readinessScore !== null ? (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Readiness */}
-          <div className="bg-[#1a1b23] rounded-2xl p-6 shadow-sm border border-white/10">
+          <div className="bg-[#161820] rounded-2xl p-6 shadow-sm border border-white/10">
             <div className="flex items-center gap-2 mb-3">
               <div className="h-8 w-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">
                 <TrendingUp className="h-4 w-4 text-indigo-400" />
@@ -220,7 +220,7 @@ export default async function DashboardPage() {
 
           {/* Rejection risk */}
           {rejectionRisk && (
-            <div className="bg-[#1a1b23] rounded-2xl p-6 shadow-sm border border-white/10">
+            <div className="bg-[#161820] rounded-2xl p-6 shadow-sm border border-white/10">
               <div className="flex items-center gap-2 mb-3">
                 <div className="h-8 w-8 rounded-lg bg-red-500/10 flex items-center justify-center">
                   <AlertTriangle className="h-4 w-4 text-red-400" />
@@ -233,7 +233,7 @@ export default async function DashboardPage() {
           )}
 
           {/* Interview readiness */}
-          <div className="bg-[#1a1b23] rounded-2xl p-6 shadow-sm border border-white/10">
+          <div className="bg-[#161820] rounded-2xl p-6 shadow-sm border border-white/10">
             <div className="flex items-center gap-2 mb-3">
               <div className="h-8 w-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
                 <Brain className="h-4 w-4 text-blue-400" />
@@ -247,7 +247,7 @@ export default async function DashboardPage() {
           </div>
 
           {/* Gaps remaining */}
-          <div className="bg-[#1a1b23] rounded-2xl p-6 shadow-sm border border-white/10">
+          <div className="bg-[#161820] rounded-2xl p-6 shadow-sm border border-white/10">
             <div className="flex items-center gap-2 mb-3">
               <div className="h-8 w-8 rounded-lg bg-amber-500/10 flex items-center justify-center">
                 <Target className="h-4 w-4 text-amber-400" />
@@ -269,7 +269,7 @@ export default async function DashboardPage() {
             { label: "Interview", value: avgScore ? `${avgScore}` : "—", sub: "avg score /100", color: "text-yellow-400", bg: "bg-yellow-500/10" },
             { label: "Jobs", value: user.jobApplications.length, sub: "tracked", color: "text-emerald-400", bg: "bg-emerald-500/10" },
           ].map((s) => (
-            <div key={s.label} className="bg-[#1a1b23] rounded-2xl p-6 shadow-sm border border-white/10">
+            <div key={s.label} className="bg-[#161820] rounded-2xl p-6 shadow-sm border border-white/10">
               <div className={`h-8 w-8 rounded-lg ${s.bg} flex items-center justify-center mb-4`}>
                 <div className="h-3 w-3 rounded-full bg-current opacity-60" />
               </div>
@@ -315,7 +315,7 @@ export default async function DashboardPage() {
       {(levelInfo || streak > 0) && (
         <div className="grid grid-cols-2 gap-4">
           {levelInfo && (
-            <div className="bg-[#1a1b23] rounded-2xl border border-white/10 shadow-sm p-5 flex items-center gap-4">
+            <div className="bg-[#161820] rounded-2xl border border-white/10 shadow-sm p-5 flex items-center gap-4">
               <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shrink-0">
                 <span className="text-white font-black text-sm">L{levelInfo.level}</span>
               </div>
@@ -339,7 +339,7 @@ export default async function DashboardPage() {
 
       {/* ── Biggest blocker ── */}
       {biggestBlocker && (
-        <div className="bg-[#1a1b23] rounded-2xl border border-red-500/20 shadow-sm p-6">
+        <div className="bg-[#161820] rounded-2xl border border-red-500/20 shadow-sm p-6">
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <div className="flex items-start gap-4 flex-1 min-w-0">
               <div className="h-10 w-10 rounded-xl bg-red-500/10 flex items-center justify-center shrink-0 mt-0.5">
@@ -363,7 +363,7 @@ export default async function DashboardPage() {
 
       {/* ── Roadmap progress (if exists) ── */}
       {roadmap && allTasks.length > 0 && (
-        <div className="bg-[#1a1b23] rounded-2xl border border-white/10 shadow-sm p-6">
+        <div className="bg-[#161820] rounded-2xl border border-white/10 shadow-sm p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
               <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Roadmap progress</p>
@@ -409,7 +409,7 @@ export default async function DashboardPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {quickActions.map((action) => (
             <Link key={action.href} href={action.href}>
-              <div className="bg-[#1a1b23] rounded-2xl p-5 border border-white/10 card-hover cursor-pointer group hover:border-white/20 transition-colors">
+              <div className="bg-[#161820] rounded-2xl p-5 border border-white/10 card-hover cursor-pointer group hover:border-white/20 transition-colors">
                 <div className="flex items-start justify-between mb-4">
                   <div className="h-10 w-10 rounded-xl bg-indigo-500/10 flex items-center justify-center group-hover:bg-indigo-500/20 transition-colors">
                     <action.icon className="h-5 w-5 text-indigo-400" />
