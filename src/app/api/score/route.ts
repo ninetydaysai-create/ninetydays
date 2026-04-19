@@ -16,6 +16,7 @@ const ScoreSchema = z.object({
     label: z.string(),
     severity: z.enum(["critical", "major", "minor"]),
     impact: z.string(),
+    timeToFix: z.string(),
   })),
   strongMatches: z.array(z.string()),
   topAction: z.string(),
@@ -113,7 +114,12 @@ Score the candidate's readiness and return JSON. Be brutally honest — most ser
   "readinessScore": <0-100: subtract from 100 for each critical gap (-15 to -25), major gap (-8 to -12), minor gap (-3 to -5)>,
   "verdict": "<one blunt line — NO encouragement. Examples: 'Your resume will not pass the ATS filter for this role.' / 'You are missing the two skills that screen out 90% of applicants.' / 'You have the raw skills but zero evidence of using them at scale.' / 'Strong match — you can apply this week without changes.'>",
   "topGaps": [
-    { "label": "<gap name>", "severity": "critical|major|minor", "impact": "<be specific and direct — name the exact consequence: 'No system design experience means automatic rejection at the technical screen' not 'may need improvement'>" }
+    {
+      "label": "<gap name>",
+      "severity": "critical|major|minor",
+      "impact": "<be specific and direct — name the exact consequence: 'No system design experience means automatic rejection at the technical screen' not 'may need improvement'>",
+      "timeToFix": "<realistic hours or weeks — e.g. 'Fixable in ~12–15 hours of deliberate practice' or 'Requires 3–4 weeks of project work' — be honest, not optimistic>"
+    }
   ],
   "strongMatches": ["<specific skill or experience that matches the JD — 2-4 items>"],
   "topAction": "<single most impactful thing to do right now — specific and direct. Not 'learn system design'. Say 'Build one end-to-end project using microservices and deploy it — without this you will fail the tech screen.'>",

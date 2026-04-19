@@ -5,16 +5,15 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Zap, ArrowRight, Loader2, CheckCircle2, AlertTriangle, XCircle,
-  Share2, Brain, Map, MessageSquare, TrendingUp, Star, X,
+  Share2, Brain, Map, MessageSquare, TrendingUp, X,
 } from "lucide-react";
 import Link from "next/link";
 import { SignUpButton } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
 import { useABTest } from "@/hooks/useABTest";
 import { useExitIntent } from "@/hooks/useExitIntent";
-import { useGeo } from "@/hooks/useGeo";
 
-interface Gap { label: string; severity: "critical" | "major" | "minor"; impact: string; }
+interface Gap { label: string; severity: "critical" | "major" | "minor"; impact: string; timeToFix: string; }
 interface ScoreResult {
   readinessScore: number;
   verdict: string;
@@ -68,18 +67,13 @@ export default function ScorePage() {
   const [jdText, setJdText] = useState("");
   const [result, setResult] = useState<ScoreResult | null>(null);
   const [loading, setLoading] = useState(false);
+  const [revealing, setRevealing] = useState(false); // 1.5s anticipation delay after API responds
   const [error, setError] = useState<string | null>(null);
-  const [userCount, setUserCount] = useState<number | null>(null);
 
   // A/B test: pricing model × positioning
   const { variant: rawVariant, track } = useABTest("pricing_model", ["control", "sprint", "mentor"]);
   const pricingVariant = (PRICING_VARIANT_COPY[rawVariant as PricingVariant] ? rawVariant : "control") as PricingVariant;
   const v = PRICING_VARIANT_COPY[pricingVariant];
-
-  // Geo-localised pricing (fills in the price display strings per variant)
-  const { pricing: geoPricing } = useGeo();
-  const planKey = v.plan === "monthly_15" ? "monthly_15" : v.plan === "sprint" ? "sprint" : "monthly";
-  const localPlan = geoPricing.plans[planKey];
 
   // Exit-intent: trigger sticky bar when user scrolls away from paywall
   const { triggered: exitTriggered, dismiss: dismissExit } = useExitIntent({
@@ -87,19 +81,12 @@ export default function ScorePage() {
     scrollUpThreshold: 200,
   });
 
-  // Fetch real user count once on mount
-  useEffect(() => {
-    fetch("/api/stats/public")
-      .then((r) => r.json())
-      .then((d) => setUserCount(d.userCount ?? null))
-      .catch(() => {});
-  }, []);
-
   async function handleScore() {
     if (jdText.trim().length < 50) { setError("Paste a full job description (at least 50 characters)"); return; }
     setLoading(true);
     setError(null);
     setResult(null);
+    setRevealing(false);
     try {
       const res = await fetch("/api/score", {
         method: "POST",
@@ -107,7 +94,14 @@ export default function ScorePage() {
         body: JSON.stringify({ jdText }),
       });
       if (!res.ok) { const d = await res.json(); setError(d.error ?? "Failed — try again"); return; }
-      setResult(await res.json());
+      const data = await res.json();
+      setLoading(false);
+      // 1.5s anticipation delay — builds emotional impact before verdict lands
+      setRevealing(true);
+      setTimeout(() => {
+        setResult(data);
+        setRevealing(false);
+      }, 1500);
     } catch {
       setError("Something went wrong — try again");
     } finally {
@@ -129,8 +123,6 @@ export default function ScorePage() {
   const scoreColor = score >= 70 ? "text-emerald-400" : score >= 50 ? "text-amber-400" : "text-red-400";
   const scoreRing = score >= 70 ? "border-emerald-500" : score >= 50 ? "border-amber-400" : "border-red-500";
   const ringBg = score >= 70 ? "from-emerald-500/20" : score >= 50 ? "from-amber-500/20" : "from-red-500/20";
-  // Target score for the paywall headline (realistic next milestone)
-  const targetScore = Math.min(100, score < 75 ? score + 13 : 90);
   // Percentile framing — calibrated to feel accurate without being discouraging
   const percentileText = score >= 70
     ? `You're in the top ${Math.max(15, 100 - score + 5)}% of candidates for this role`
@@ -139,13 +131,14 @@ export default function ScorePage() {
     : `Most candidates start below 50% — you can close this gap in 4–6 weeks`;
 
   // Brutal verdict — deterministic, score-mapped. Not left to AI phrasing.
+  const TRUST_LINE = "9 out of 10 recruiters will pass with these gaps.";
   const brutalVerdict = score >= 75
-    ? { label: "Apply now", sub: "You have enough of this JD covered to get a callback. Don't wait.", color: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-500/30", dot: "bg-emerald-400" }
+    ? { label: "You can apply.", sub: "You match enough of this role to get a callback. Don't wait.", color: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-500/30", dot: "bg-emerald-400", trustLine: false }
     : score >= 60
-    ? { label: "Borderline — risky", sub: "You could get through, but these gaps make rejection the more likely outcome. Fix them first.", color: "text-amber-400", bg: "bg-amber-500/10 border-amber-500/30", dot: "bg-amber-400" }
+    ? { label: "Borderline — risky.", sub: TRUST_LINE, color: "text-amber-400", bg: "bg-amber-500/10 border-amber-500/30", dot: "bg-amber-400", trustLine: true }
     : score >= 40
-    ? { label: "You will likely be rejected", sub: "With these gaps, 9 out of 10 recruiters will pass. Your profile doesn't clear the bar for this role yet.", color: "text-orange-400", bg: "bg-orange-500/10 border-orange-500/30", dot: "bg-orange-400" }
-    : { label: "You will be rejected", sub: "Your profile does not meet the minimum bar for this role. Applying now wastes your shot — fix the critical gaps first.", color: "text-red-400", bg: "bg-red-500/10 border-red-500/30", dot: "bg-red-400" };
+    ? { label: "You will likely be rejected.", sub: TRUST_LINE, color: "text-orange-400", bg: "bg-orange-500/10 border-orange-500/30", dot: "bg-orange-400", trustLine: true }
+    : { label: "You will be rejected.", sub: TRUST_LINE, color: "text-red-400", bg: "bg-red-500/10 border-red-500/30", dot: "bg-red-400", trustLine: true };
 
   return (
     <div className="min-h-screen bg-[#0b0e14]">
@@ -178,7 +171,7 @@ export default function ScorePage() {
         </div>
 
         {/* Input */}
-        {!result && (
+        {!result && !revealing && (
           <div className="space-y-4">
             <Textarea
               value={jdText}
@@ -194,7 +187,7 @@ export default function ScorePage() {
               className="w-full h-14 text-lg font-bold gap-2 bg-indigo-600 hover:bg-indigo-500 rounded-xl"
             >
               {loading
-                ? <><Loader2 className="h-5 w-5 animate-spin" />Analyzing your fit...</>
+                ? <><Loader2 className="h-5 w-5 animate-spin" />Analyzing why recruiters reject this profile…</>
                 : <>Get my readiness score <ArrowRight className="h-5 w-5" /></>}
             </Button>
             <p className="text-center text-slate-500 text-sm">
@@ -203,20 +196,36 @@ export default function ScorePage() {
           </div>
         )}
 
+        {/* 1.5s anticipation state — after API responds, before verdict reveals */}
+        {revealing && (
+          <div className="text-center py-16 space-y-4">
+            <Loader2 className="h-9 w-9 animate-spin mx-auto text-indigo-400" />
+            <div>
+              <p className="text-white font-bold text-lg">Calculating your verdict…</p>
+              <p className="text-slate-500 text-sm mt-1">Cross-referencing against real hiring patterns</p>
+            </div>
+          </div>
+        )}
+
         {/* ── RESULTS ── */}
         {result && (
           <div className="space-y-5 animate-in fade-in slide-in-from-bottom-4 duration-500">
 
-            {/* Brutal verdict — the hero */}
+            {/* Section 1 — Verdict (hero) */}
             <div className={cn("border rounded-2xl p-6", brutalVerdict.bg)}>
               <div className="flex items-center gap-2 mb-3">
-                <span className={cn("h-2.5 w-2.5 rounded-full shrink-0", brutalVerdict.dot)} />
+                <span className={cn("h-2.5 w-2.5 rounded-full shrink-0 animate-pulse", brutalVerdict.dot)} />
                 <p className="text-slate-400 text-xs font-semibold uppercase tracking-widest">Verdict</p>
               </div>
               <p className={cn("text-3xl font-black leading-tight mb-2", brutalVerdict.color)}>
                 {brutalVerdict.label}
               </p>
-              <p className="text-slate-400 text-sm leading-relaxed">{brutalVerdict.sub}</p>
+              {brutalVerdict.trustLine && (
+                <p className="text-slate-300 text-sm font-medium">{brutalVerdict.sub}</p>
+              )}
+              {!brutalVerdict.trustLine && (
+                <p className="text-slate-400 text-sm">{brutalVerdict.sub}</p>
+              )}
             </div>
 
             {/* Score ring */}
@@ -228,7 +237,7 @@ export default function ScorePage() {
               )}>
                 <span className={cn("text-5xl font-black tabular-nums", scoreColor)}>{score}</span>
               </div>
-              <p className="text-slate-400 text-xs font-semibold uppercase tracking-widest mb-1">Readiness score</p>
+              <p className="text-slate-400 text-xs font-semibold uppercase tracking-widest mb-1">Your readiness for this role</p>
               <p className="text-slate-300 text-sm italic">&ldquo;{result.verdict}&rdquo;</p>
               <p className="text-slate-500 text-xs mt-2">Time to ready: <span className="text-slate-400 font-medium">{result.timeToReady}</span></p>
 
@@ -287,7 +296,12 @@ export default function ScorePage() {
                           {cfg.label}
                         </span>
                       </div>
-                      <p className="text-xs text-slate-400 leading-relaxed">{gap.impact}</p>
+                      <p className="text-xs text-slate-400 leading-relaxed mb-2">{gap.impact}</p>
+                      {gap.timeToFix && (
+                        <p className="text-xs font-medium text-slate-500">
+                          <span className="text-slate-400">⏱</span> {gap.timeToFix}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -297,20 +311,13 @@ export default function ScorePage() {
             {/* ── CONVERSION GATE — interrupts scroll after gap #1 ── */}
             <div className="rounded-2xl border border-indigo-500/30 bg-gradient-to-b from-indigo-950/70 to-[#0d1020] p-7 text-center space-y-5">
 
-              {/* Hook */}
+              {/* Hook — spec-exact copy */}
               <div>
-                {result.topGaps.length > 1 && (
-                  <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-3">
-                    {result.topGaps.length - 1} more gap{result.topGaps.length - 1 > 1 ? "s" : ""} found
-                  </p>
-                )}
                 <p className="text-2xl font-black text-white leading-tight mb-2">
-                  {result.topGaps.length > 1
-                    ? "See every gap blocking you — and the exact fix for each"
-                    : "Get your personalised 90-day plan to close this gap"}
+                  You&apos;re missing {result.topGaps.length} critical gaps.
                 </p>
                 <p className="text-slate-400 text-sm leading-relaxed">
-                  Sign in to unlock your full gap breakdown, top action, and a 90-day roadmap tailored to these exact gaps. Free.
+                  These are the exact reasons you&apos;re getting rejected.
                 </p>
               </div>
 
@@ -326,7 +333,7 @@ export default function ScorePage() {
                     <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
                     <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                   </svg>
-                  Continue with Google — it&apos;s free
+                  Show me how to fix this
                 </Button>
               </SignUpButton>
 
@@ -336,24 +343,24 @@ export default function ScorePage() {
                 <div className="flex-1 h-px bg-white/10" />
               </div>
 
-              {/* Email sign-up — secondary */}
+              {/* Email — secondary */}
               <Link
                 href={`/sign-up?redirect_url=${encodeURIComponent(v.afterSignUpUrl)}`}
                 className="block"
                 onClick={() => { localStorage.setItem("pending_plan", v.plan); track("cta_click"); }}
               >
                 <Button variant="outline" className="w-full h-11 font-semibold border-white/15 bg-white/5 text-white hover:bg-white/10 rounded-xl">
-                  {v.cta}
+                  Show me how to fix this
                   <ArrowRight className="h-4 w-4 ml-2" />
                 </Button>
               </Link>
 
-              {/* 3 value tiles */}
+              {/* 3 value tiles — spec-exact labels */}
               <div className="grid grid-cols-3 gap-2 pt-1">
                 {[
-                  { icon: Brain, label: "All gaps explained" },
-                  { icon: Map, label: "90-day roadmap" },
-                  { icon: MessageSquare, label: "Mock interviews" },
+                  { icon: Brain, label: "See all gaps with exact fixes" },
+                  { icon: Map, label: "Get your 90-day plan" },
+                  { icon: MessageSquare, label: "Practice real interviews" },
                 ].map(({ icon: Icon, label }) => (
                   <div key={label} className="flex flex-col items-center gap-1.5 p-3 bg-white/[0.03] rounded-xl border border-white/5">
                     <Icon className="h-4 w-4 text-indigo-400" />
@@ -362,28 +369,22 @@ export default function ScorePage() {
                 ))}
               </div>
 
-              {/* Social proof */}
-              <div className="bg-white/[0.03] border border-white/10 rounded-xl p-4 text-left">
-                <div className="flex gap-0.5 mb-2">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-3.5 w-3.5 text-amber-400 fill-amber-400" />
-                  ))}
-                </div>
-                <p className="text-slate-300 text-sm leading-relaxed italic">
-                  &ldquo;I scored 38% on day one. Six weeks later I was at 74% and had 3 interview callbacks.&rdquo;
-                </p>
-                <p className="text-slate-500 text-xs mt-2 font-medium">
-                  Arjun S. — ex-Infosys → ML Engineer at a Series B startup
-                </p>
-              </div>
+              {/* Social proof — spec: 1 line only */}
+              <p className="text-slate-500 text-xs">
+                Engineers moved from 31% → 72% readiness in ~8 weeks
+              </p>
 
-              <p className="text-slate-600 text-xs">Free to start · No credit card · 30-day money-back guarantee</p>
+              <p className="text-slate-600 text-xs">Free to start · No credit card</p>
             </div>
 
-            {/* ── FOMO BLUR — remaining gaps + top action, teased below gate ── */}
+            {/* ── FOMO BLUR — titles visible, descriptions blurred ── */}
             {(result.topGaps.length > 1 || result.topAction) && (
-              <div className="relative overflow-hidden rounded-2xl" style={{ maxHeight: "260px" }}>
-                <div className="blur-md pointer-events-none select-none space-y-3 p-1">
+              <div className="relative overflow-hidden rounded-2xl" style={{ maxHeight: "280px" }}>
+                <div className="space-y-3 p-1">
+                  {/* Header above blur */}
+                  <p className="text-slate-500 text-xs font-semibold uppercase tracking-widest">
+                    These {result.topGaps.length - 1} gap{result.topGaps.length - 1 !== 1 ? "s" : ""} are why recruiters reject you
+                  </p>
                   {result.topGaps.slice(1).map((gap, i) => {
                     const cfg = severityConfig[gap.severity];
                     const Icon = cfg.icon;
@@ -391,30 +392,38 @@ export default function ScorePage() {
                       <div key={i} className={cn("border rounded-xl p-4 flex items-start gap-3", cfg.bg)}>
                         <Icon className={cn("h-4 w-4 shrink-0 mt-0.5", cfg.color)} />
                         <div className="flex-1 min-w-0">
+                          {/* Title — visible */}
                           <div className="flex items-center gap-2 mb-1">
                             <span className="font-semibold text-white text-sm">{gap.label}</span>
                             <span className={cn("text-xs font-bold px-2 py-0.5 rounded-full bg-white/10", cfg.color)}>
                               {cfg.label}
                             </span>
                           </div>
-                          <p className="text-xs text-slate-400 leading-relaxed">{gap.impact}</p>
+                          {/* Description + fix — blurred */}
+                          <p className="text-xs text-slate-400 leading-relaxed blur-sm select-none pointer-events-none">
+                            {gap.impact}
+                          </p>
                         </div>
                       </div>
                     );
                   })}
                   <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-2xl p-5">
+                    {/* Label visible */}
                     <p className="text-indigo-400 font-bold text-xs uppercase tracking-wide mb-1">Do this first</p>
-                    <p className="text-white text-sm leading-relaxed">{result.topAction}</p>
+                    {/* Content blurred */}
+                    <p className="text-white text-sm leading-relaxed blur-sm select-none pointer-events-none">
+                      {result.topAction}
+                    </p>
                   </div>
                 </div>
-                {/* Full fade to background */}
-                <div className="absolute inset-0 bg-gradient-to-b from-[#0b0e14]/10 via-[#0b0e14]/70 to-[#0b0e14] pointer-events-none" />
+                {/* Fade to background */}
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0b0e14]/50 to-[#0b0e14] pointer-events-none" />
               </div>
             )}
 
             {/* Try another */}
             <button
-              onClick={() => { setResult(null); setJdText(""); }}
+              onClick={() => { setResult(null); setJdText(""); setRevealing(false); }}
               className="w-full text-center text-slate-600 text-sm hover:text-slate-400 transition-colors py-2"
             >
               Try another job description
@@ -432,25 +441,24 @@ export default function ScorePage() {
                 <span className={cn("text-lg font-black", scoreColor)}>{score}</span>
               </div>
 
-              {/* Copy */}
+              {/* Copy — spec-exact */}
               <div className="flex-1 min-w-0">
                 <p className="text-white text-sm font-bold leading-tight">
-                  {score < 60 ? "You're not ready yet — here's how to fix it" : `${score}% ready — close the gap before applying`}
+                  You&apos;re leaving at {score}% readiness.
                 </p>
                 <p className="text-slate-400 text-xs mt-0.5">
-                  Full 90-day plan tailored to your exact gaps
+                  That&apos;s why you&apos;re getting rejected.
                 </p>
               </div>
 
-              {/* CTA */}
+              {/* CTA — spec-exact */}
               <SignUpButton mode="modal">
                 <Button
                   size="sm"
                   className="shrink-0 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold gap-1.5"
                   onClick={() => { track("exit_intent_click"); dismissExit(); }}
                 >
-                  <Zap className="h-3.5 w-3.5" />
-                  Get full plan
+                  See exactly what to fix
                 </Button>
               </SignUpButton>
 

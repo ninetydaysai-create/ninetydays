@@ -69,15 +69,39 @@ export function useExitIntent({
       lastScrollY.current = currentY;
     }
 
+    // ── Tab switch / visibility change (PRIMARY) ─────────────────────────
+    function onVisibilityChange() {
+      if (document.visibilityState === "hidden" && window.scrollY >= minScrollDepth) {
+        fire();
+      }
+    }
+
     document.addEventListener("mouseleave", onMouseLeave);
     window.addEventListener("scroll", onScroll, { passive: true });
+    document.addEventListener("visibilitychange", onVisibilityChange);
 
     return () => {
       document.removeEventListener("mouseleave", onMouseLeave);
       window.removeEventListener("scroll", onScroll);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [minScrollDepth, scrollUpThreshold, cooldownMs]);
+
+  // ── Back button (SECONDARY) — push sentinel on mount ──────────────────
+  useEffect(() => {
+    window.history.pushState({ _exitSentinel: true }, "");
+
+    function onPopState() {
+      fire();
+      // Push again so next back press also fires
+      window.history.pushState({ _exitSentinel: true }, "");
+    }
+
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return { triggered, dismiss };
 }
