@@ -103,7 +103,7 @@ export default function CoverLetterPage() {
     <div className="max-w-3xl mx-auto space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-slate-900">Cover Letter Generator</h1>
+        <h1 className="text-3xl font-bold text-white">Cover Letter Generator</h1>
         <p className="text-slate-400 mt-1 text-base">
           Paste a job description and get a tailored, non-generic cover letter in seconds.
         </p>

@@ -115,7 +115,7 @@ export default function OutreachPage() {
     <div className="max-w-3xl mx-auto space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-slate-900">Cold Outreach Generator</h1>
+        <h1 className="text-3xl font-bold text-white">Cold Outreach Generator</h1>
         <p className="text-slate-400 mt-1 text-base">
           Paste a JD &rarr; get a personalized recruiter email in seconds
         </p>

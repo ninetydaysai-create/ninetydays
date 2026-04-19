@@ -185,7 +185,7 @@ export default function MentorPage() {
               "h-8 w-8 rounded-lg shrink-0 flex items-center justify-center mt-0.5",
               msg.role === "assistant"
                 ? "bg-gradient-to-br from-indigo-500 to-blue-600 shadow-sm"
-                : "bg-slate-100"
+                : "bg-white/10"
             )}>
               {msg.role === "assistant"
                 ? <Bot className="h-4 w-4 text-white" />
