@@ -27,7 +27,7 @@ export async function GET(req: Request) {
             select: {
               weekNumber: true,
               tasks: {
-                select: { id: true, completed: true, updatedAt: true },
+                select: { id: true, completed: true, completedAt: true },
               },
             },
           },
@@ -55,7 +55,8 @@ export async function GET(req: Request) {
 
     // Find most recent task completion
     const lastCompleted = completedTasks
-      .map((t) => t.updatedAt)
+      .map((t) => t.completedAt)
+      .filter((d): d is Date => d !== null)
       .sort((a, b) => b.getTime() - a.getTime())[0];
 
     const daysSinceLastTask = lastCompleted
