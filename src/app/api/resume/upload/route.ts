@@ -3,10 +3,9 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 
 async function parsePdf(buffer: Buffer): Promise<string> {
-  // Use the inner lib path to avoid pdf-parse loading its test fixture file at
-  // require-time — that file does not exist in Vercel serverless and causes a crash.
+  // pdf-parse is in serverExternalPackages — loaded by Node.js at runtime, not bundled.
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const pdfParse = require("pdf-parse/lib/pdf-parse") as (buf: Buffer) => Promise<{ text: string }>;
+  const pdfParse = require("pdf-parse") as (buf: Buffer) => Promise<{ text: string; numpages: number }>;
   const result = await pdfParse(buffer);
   return result.text ?? "";
 }
@@ -29,9 +28,10 @@ export async function POST(req: Request) {
   try {
     rawText = await parsePdf(buffer);
   } catch (err) {
-    console.error("PDF parse error:", err);
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("PDF parse error:", msg);
     return NextResponse.json(
-      { error: "Failed to parse PDF. Please use a text-based PDF." },
+      { error: `PDF parse failed: ${msg}` },
       { status: 422 }
     );
   }
@@ -45,15 +45,16 @@ export async function POST(req: Request) {
 
   const fileUrl = `data:application/pdf;name=${encodeURIComponent(file.name)};size=${file.size}`;
 
-  const resume = await db.resume.create({
-    data: {
-      userId,
-      fileUrl,
-      fileName: file.name,
-      fileSize: file.size,
-      rawText,
-    },
-  });
+  let resume;
+  try {
+    resume = await db.resume.create({
+      data: { userId, fileUrl, fileName: file.name, fileSize: file.size, rawText },
+    });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("DB error:", msg);
+    return NextResponse.json({ error: `Database error: ${msg}` }, { status: 500 });
+  }
 
   return NextResponse.json({ resumeId: resume.id });
 }

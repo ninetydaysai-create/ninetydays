@@ -82,7 +82,12 @@ export default function ResumePage() {
     const formData = new FormData();
     formData.append("file", file);
     const uploadRes = await fetch("/api/resume/upload", { method: "POST", body: formData });
-    if (!uploadRes.ok) { toast.error("Upload failed"); setUploadStep("idle"); return; }
+    if (!uploadRes.ok) {
+      const errData = await uploadRes.json().catch(() => ({}));
+      toast.error(errData.error ?? `Upload failed (${uploadRes.status})`);
+      setUploadStep("idle");
+      return;
+    }
     const { resumeId } = await uploadRes.json();
     setUploadStep("analyzing");
     const analyzeRes = await fetch("/api/resume/analyze", {
