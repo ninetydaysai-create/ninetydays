@@ -1,43 +1,12 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import path from "path";
 
 async function parsePdf(buffer: Buffer): Promise<string> {
-  // Use pdfjs-dist directly — more reliable in Next.js server context than pdf-parse v2
-  const { getDocument, GlobalWorkerOptions } = await import(
-    "pdfjs-dist/legacy/build/pdf.mjs"
-  );
-
-  // Point to the worker file on disk; avoids "fake worker" error in Node.js
-  const workerPath = path.resolve(
-    process.cwd(),
-    "node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs"
-  );
-  GlobalWorkerOptions.workerSrc = `file://${workerPath}`;
-
-  const data = new Uint8Array(buffer);
-  const doc = await getDocument({
-    data,
-    useWorkerFetch: false,
-    isEvalSupported: false,
-    useSystemFonts: true,
-  }).promise;
-
-  let text = "";
-  for (let i = 1; i <= doc.numPages; i++) {
-    const page = await doc.getPage(i);
-    const content = await page.getTextContent();
-    const pageText = content.items
-      // TextItem has .str; TextMarkedContent does not — filter to text items only
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .map((item: any) => (typeof item.str === "string" ? item.str : ""))
-      .join(" ");
-    text += pageText + "\n";
-    page.cleanup();
-  }
-  await doc.destroy();
-  return text;
+  // pdf-parse is listed in serverExternalPackages so it runs in Node.js context on Vercel
+  const pdfParse = (await import("pdf-parse")).default;
+  const result = await pdfParse(buffer);
+  return result.text ?? "";
 }
 
 export async function POST(req: Request) {
