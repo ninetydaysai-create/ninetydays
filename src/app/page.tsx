@@ -74,7 +74,7 @@ export default function LandingPage() {
               <Button variant="ghost" className="text-base font-medium">Sign in</Button>
             </Link>
             <Link href="/sign-up">
-              <Button className="h-10 px-5 font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 shadow-sm shadow-indigo-500/25">
+              <Button className="h-10 px-5 font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm shadow-indigo-500/25">
                 Get started free
               </Button>
             </Link>
@@ -454,7 +454,7 @@ export default function LandingPage() {
                 ))}
               </div>
               <Link href="/sign-up">
-                <Button className="h-12 px-7 font-bold bg-indigo-600 hover:bg-indigo-500 rounded-xl gap-2">
+                <Button className="h-12 px-7 font-bold bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl gap-2">
                   Get your AI mentor free <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
@@ -548,7 +548,7 @@ export default function LandingPage() {
                 ))}
               </div>
               <Link href="/score">
-                <Button className="h-12 px-7 font-bold bg-indigo-600 hover:bg-indigo-700 rounded-xl gap-2">
+                <Button className="h-12 px-7 font-bold bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl gap-2">
                   Try free — no signup <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
@@ -595,7 +595,7 @@ export default function LandingPage() {
           </div>
           <div className="mt-8">
             <Link href="/sign-up">
-              <Button className="h-12 px-7 font-bold bg-indigo-600 hover:bg-indigo-700 rounded-xl gap-2">
+              <Button className="h-12 px-7 font-bold bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl gap-2">
                 Start tracking your progress <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>

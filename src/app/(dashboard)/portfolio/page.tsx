@@ -210,7 +210,7 @@ export default function PortfolioPage() {
                     <Button size="sm" className="gap-1.5">Upgrade to publish</Button>
                   </a>
                 ) : (
-                  <Button size="sm" onClick={handlePublish} disabled={publishing} className={portfolio.isPublic ? "bg-slate-700 hover:bg-slate-800" : ""}>
+                  <Button size="sm" onClick={handlePublish} disabled={publishing} className={portfolio.isPublic ? "bg-slate-700 hover:bg-slate-800 text-white" : "text-white"}>
                     {publishing ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : portfolio.isPublic ? "Unpublish" : "Publish portfolio"}
                   </Button>
                 )}
