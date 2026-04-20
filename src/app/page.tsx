@@ -774,8 +774,8 @@ export default function LandingPage() {
                 <span className="text-white font-black text-xl">G</span>
               </div>
               <div>
-                <p className="text-white font-bold text-lg">Gaurav Malviya</p>
-                <p className="text-slate-400 text-sm mt-0.5">Founder · ex-IT services engineer → product company</p>
+                <p className="text-white font-bold text-lg">The Founder</p>
+                <p className="text-slate-400 text-sm mt-0.5">ex-IT services engineer → product company</p>
               </div>
             </div>
 
