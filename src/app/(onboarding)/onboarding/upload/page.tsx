@@ -16,7 +16,11 @@ export default function OnboardingUpload() {
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
     if (!f) return;
-    if (f.type !== "application/pdf") { toast.error("Please upload a PDF file"); return; }
+    const ext = "." + (f.name.split(".").pop() ?? "").toLowerCase();
+    if (![".pdf", ".doc", ".docx"].includes(ext)) {
+      toast.error("Please upload a PDF or Word document (.pdf, .doc, .docx)");
+      return;
+    }
     if (f.size > 10 * 1024 * 1024) { toast.error("File must be under 10MB"); return; }
     setFile(f);
   }
@@ -30,7 +34,8 @@ export default function OnboardingUpload() {
     formData.append("file", file);
     const uploadRes = await fetch("/api/resume/upload", { method: "POST", body: formData });
     if (!uploadRes.ok) {
-      toast.error("Upload failed. Please try again.");
+      const errData = await uploadRes.json().catch(() => ({}));
+      toast.error(errData.error ?? "Upload failed. Please try again.");
       setStep("idle");
       return;
     }
@@ -112,10 +117,10 @@ export default function OnboardingUpload() {
             <>
               <Upload className="h-10 w-10 text-muted-foreground mb-3" />
               <span className="font-semibold text-base">Click to upload your resume</span>
-              <span className="text-sm text-muted-foreground mt-1">PDF only · max 10MB</span>
+              <span className="text-sm text-muted-foreground mt-1">PDF or Word (.pdf, .doc, .docx) · max 10MB</span>
             </>
           )}
-          <input id="resume-upload" type="file" accept="application/pdf" className="hidden" onChange={handleFileChange} disabled={busy} />
+          <input id="resume-upload" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" className="hidden" onChange={handleFileChange} disabled={busy} />
         </label>
 
         {/* Status */}
