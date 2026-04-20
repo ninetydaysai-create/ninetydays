@@ -10,7 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { COMPANY_OPTIONS } from "@/lib/constants";
-import { ArrowRight, Loader2, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Loader2, CheckCircle2, Link, GitBranch } from "lucide-react";
 
 const PENDING_BETA_CODE_KEY = "pending_beta_code";
 
@@ -18,9 +18,13 @@ const schema = z.object({
   currentCompany: z.string().min(1, "Select your company type"),
   currentRole: z.string().min(2, "Enter your current role title"),
   yearsExperience: z.number().min(0).max(50),
+  linkedinUrl: z.string().url("Enter a valid LinkedIn URL").or(z.literal("")).optional(),
+  githubUrl: z.string().url("Enter a valid GitHub URL").or(z.literal("")).optional(),
 });
 
 type FormValues = z.infer<typeof schema>;
+
+const LABEL = "block text-sm font-semibold text-slate-700 mb-1.5";
 
 export default function OnboardingStep1() {
   const router = useRouter();
@@ -49,7 +53,7 @@ export default function OnboardingStep1() {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { currentCompany: "", currentRole: "", yearsExperience: 3 },
+    defaultValues: { currentCompany: "", currentRole: "", yearsExperience: 3, linkedinUrl: "", githubUrl: "" },
   });
 
   async function onSubmit(values: FormValues) {
@@ -69,12 +73,14 @@ export default function OnboardingStep1() {
         {[1, 2, 3].map((s) => (
           <div key={s} className="flex items-center gap-2">
             <div className={`h-7 w-7 rounded-full flex items-center justify-center text-xs font-semibold transition-all ${
-              s === 1 ? "bg-primary text-white shadow-md shadow-primary/30" : "bg-border text-muted-foreground"
+              s === 1
+                ? "bg-primary text-white shadow-md shadow-primary/30"
+                : "bg-slate-200 text-slate-500"
             }`}>{s}</div>
-            {s < 3 && <div className={`h-px w-8 ${s < 1 ? "bg-primary/40" : "bg-border"}`} />}
+            {s < 3 && <div className={`h-px w-8 ${s < 1 ? "bg-primary/40" : "bg-slate-200"}`} />}
           </div>
         ))}
-        <span className="ml-2 text-xs text-muted-foreground">Step 1 of 3</span>
+        <span className="ml-2 text-xs text-slate-500 font-medium">Step 1 of 3</span>
       </div>
 
       {/* Beta activation banner */}
@@ -87,18 +93,20 @@ export default function OnboardingStep1() {
 
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
         <div className="mb-7">
-          <h1 className="text-2xl font-bold">Tell us where you are now</h1>
-          <p className="text-base text-muted-foreground mt-2">We use this to calibrate your resume analysis and gap report.</p>
+          <h1 className="text-2xl font-bold text-slate-900">Tell us where you are now</h1>
+          <p className="text-sm text-slate-500 mt-2">We use this to calibrate your resume analysis and gap report.</p>
         </div>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+
+            {/* Company type */}
             <FormField control={form.control} name="currentCompany" render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-base font-semibold">Current company type</FormLabel>
+                <FormLabel className={LABEL}>Current company type</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
-                    <SelectTrigger className="h-12 text-base">
+                    <SelectTrigger className="h-12 text-sm text-slate-900 border-slate-300 focus:border-primary focus:ring-primary">
                       <SelectValue placeholder="Select your company type" />
                     </SelectTrigger>
                   </FormControl>
@@ -108,33 +116,89 @@ export default function OnboardingStep1() {
                     ))}
                   </SelectContent>
                 </Select>
-                <FormMessage />
+                <FormMessage className="text-xs" />
               </FormItem>
             )} />
 
+            {/* Current role */}
             <FormField control={form.control} name="currentRole" render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-base font-semibold">Current role title</FormLabel>
+                <FormLabel className={LABEL}>Current role title</FormLabel>
                 <FormControl>
-                  <Input className="h-12 text-base" placeholder="e.g. Senior Software Engineer" {...field} />
+                  <Input
+                    className="h-12 text-sm text-slate-900 border-slate-300 placeholder:text-slate-400 focus-visible:border-primary focus-visible:ring-primary"
+                    placeholder="e.g. Senior Software Engineer"
+                    {...field}
+                  />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-xs" />
               </FormItem>
             )} />
 
+            {/* Years of experience */}
             <FormField control={form.control} name="yearsExperience" render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-base font-semibold">Years of total experience</FormLabel>
+                <FormLabel className={LABEL}>Years of total experience</FormLabel>
                 <FormControl>
-                  <Input className="h-12 text-base" type="number" min={0} max={50} {...field}
-                    onChange={(e) => field.onChange(Number(e.target.value))} />
+                  <Input
+                    className="h-12 text-sm text-slate-900 border-slate-300 focus-visible:border-primary focus-visible:ring-primary"
+                    type="number" min={0} max={50}
+                    {...field}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                  />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-xs" />
               </FormItem>
             )} />
 
-            <Button type="submit" className="w-full h-12 gap-2 font-semibold text-base shadow-md shadow-primary/25 hover:shadow-lg" disabled={loading}>
-              {loading ? <><Loader2 className="h-4 w-4 animate-spin" />Saving...</> : <><ArrowRight className="h-4 w-4" />Continue</>}
+            <div className="border-t border-slate-100 pt-5">
+              <p className="text-xs text-slate-400 font-medium uppercase tracking-wide mb-4">Optional — helps personalize your plan</p>
+
+              {/* LinkedIn URL */}
+              <FormField control={form.control} name="linkedinUrl" render={({ field }) => (
+                <FormItem className="mb-4">
+                  <FormLabel className={LABEL}>LinkedIn profile URL</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Link className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                      <Input
+                        className="h-12 text-sm text-slate-900 border-slate-300 placeholder:text-slate-400 pl-9 focus-visible:border-primary focus-visible:ring-primary"
+                        placeholder="https://linkedin.com/in/yourname"
+                        {...field}
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage className="text-xs" />
+                </FormItem>
+              )} />
+
+              {/* GitHub URL */}
+              <FormField control={form.control} name="githubUrl" render={({ field }) => (
+                <FormItem>
+                  <FormLabel className={LABEL}>GitHub profile URL</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <GitBranch className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                      <Input
+                        className="h-12 text-sm text-slate-900 border-slate-300 placeholder:text-slate-400 pl-9 focus-visible:border-primary focus-visible:ring-primary"
+                        placeholder="https://github.com/yourusername"
+                        {...field}
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage className="text-xs" />
+                </FormItem>
+              )} />
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full h-12 gap-2 font-semibold text-base shadow-md shadow-primary/25 hover:shadow-lg mt-2"
+              disabled={loading}
+            >
+              {loading
+                ? <><Loader2 className="h-4 w-4 animate-spin" />Saving...</>
+                : <><ArrowRight className="h-4 w-4" />Continue</>}
             </Button>
           </form>
         </Form>

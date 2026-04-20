@@ -54,6 +54,8 @@ model User {
   currentCompany         String?
   currentRole            String?
   yearsExperience        Int?
+  linkedinUrl            String?
+  githubUrl              String?
   targetRole             TargetRole?
   onboardingDone         Boolean     @default(false)
   plan                   Plan        @default(FREE)
