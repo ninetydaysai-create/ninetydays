@@ -36,10 +36,11 @@ export default function TermsPage() {
         </div>
 
         <Section title="1. Who We Are">
-          NinetyDays (&quot;NinetyDays&quot;, &quot;we&quot;, &quot;us&quot;, &quot;our&quot;) operates the NinetyDays platform at ninetydays.ai —
-          an AI-powered career transition service. For users in the EU/UK, NinetyDays acts as both the service provider
-          and the data controller under GDPR. For Indian users, NinetyDays is the Data Fiduciary under the Digital
-          Personal Data Protection Act 2023 (DPDPA).
+          NinetyDays is operated by <strong className="text-slate-300">Gaurav Malviya</strong>, an individual trading
+          as NinetyDays (&quot;NinetyDays&quot;, &quot;we&quot;, &quot;us&quot;, &quot;our&quot;), at ninetydays.ai — an AI-powered career
+          transition service. For users in the EU/UK, NinetyDays acts as both the service provider and the data
+          controller under GDPR. For Indian users, NinetyDays is the Data Fiduciary under the Digital Personal Data
+          Protection Act 2023 (DPDPA).
           <br /><br />
           Contact for legal matters:{" "}
           <a href={`mailto:${CONTACT_EMAIL}`} className="text-indigo-400 hover:underline">{CONTACT_EMAIL}</a>

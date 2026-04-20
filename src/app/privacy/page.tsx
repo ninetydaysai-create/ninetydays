@@ -35,7 +35,8 @@ export default function PrivacyPage() {
         </div>
 
         <Section title="1. Who We Are">
-          NinetyDays (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;) operates the NinetyDays platform at ninetydays.ai — an AI-powered career transition service.
+          NinetyDays is operated by <strong className="text-slate-300">Gaurav Malviya</strong>, an individual trading
+          as NinetyDays (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;), at ninetydays.ai — an AI-powered career transition service.
           For the purposes of GDPR, NinetyDays is the <strong className="text-white">data controller</strong> of your personal data.
           <br /><br />
           <strong className="text-white">Data Protection Officer (DPO):</strong>{" "}
