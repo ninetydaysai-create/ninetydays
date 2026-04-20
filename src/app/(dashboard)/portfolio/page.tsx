@@ -155,7 +155,7 @@ export default function PortfolioPage() {
         </div>
         <div className="flex gap-3">
           <div className="flex-1">
-            <Label className="text-sm font-semibold mb-1.5 block">
+            <Label className="text-sm font-semibold mb-1.5 block text-slate-200">
               GitHub username{" "}
               <span className="font-normal text-slate-400">(or connect via OAuth above for private repos)</span>
             </Label>

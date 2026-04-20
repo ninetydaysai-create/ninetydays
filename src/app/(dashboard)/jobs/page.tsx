@@ -66,13 +66,13 @@ function AddJobDialog({ onClose, onAdded }: { onClose: () => void; onAdded: (job
       <Card className="w-full max-w-md" onClick={(e) => e.stopPropagation()}>
         <CardContent className="pt-6 pb-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold">Add Job</h2>
+            <h2 className="text-xl font-semibold text-slate-900">Add Job</h2>
             <Button variant="ghost" size="icon" onClick={onClose}><X className="h-4 w-4" /></Button>
           </div>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label className="text-sm font-medium">Company *</Label>
+                <Label className="text-sm font-medium text-slate-700">Company *</Label>
                 <Input
                   value={form.company}
                   onChange={(e) => setForm({ ...form, company: e.target.value })}
@@ -82,7 +82,7 @@ function AddJobDialog({ onClose, onAdded }: { onClose: () => void; onAdded: (job
                 />
               </div>
               <div className="space-y-1.5">
-                <Label className="text-sm font-medium">Role *</Label>
+                <Label className="text-sm font-medium text-slate-700">Role *</Label>
                 <Input
                   value={form.roleTitle}
                   onChange={(e) => setForm({ ...form, roleTitle: e.target.value })}
@@ -93,7 +93,7 @@ function AddJobDialog({ onClose, onAdded }: { onClose: () => void; onAdded: (job
               </div>
             </div>
             <div className="space-y-1.5">
-              <Label className="text-sm font-medium">Job URL</Label>
+              <Label className="text-sm font-medium text-slate-700">Job URL</Label>
               <Input
                 value={form.jobUrl}
                 onChange={(e) => setForm({ ...form, jobUrl: e.target.value })}
@@ -104,7 +104,7 @@ function AddJobDialog({ onClose, onAdded }: { onClose: () => void; onAdded: (job
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label className="text-sm font-medium">Salary (optional)</Label>
+                <Label className="text-sm font-medium text-slate-700">Salary (optional)</Label>
                 <Input
                   value={form.salary}
                   onChange={(e) => setForm({ ...form, salary: e.target.value })}
@@ -113,7 +113,7 @@ function AddJobDialog({ onClose, onAdded }: { onClose: () => void; onAdded: (job
                 />
               </div>
               <div className="space-y-1.5">
-                <Label className="text-sm font-medium">Location</Label>
+                <Label className="text-sm font-medium text-slate-700">Location</Label>
                 <Input
                   value={form.location}
                   onChange={(e) => setForm({ ...form, location: e.target.value })}
@@ -123,12 +123,12 @@ function AddJobDialog({ onClose, onAdded }: { onClose: () => void; onAdded: (job
               </div>
             </div>
             <div className="space-y-1.5">
-              <Label className="text-sm font-medium">Job Description (optional)</Label>
+              <Label className="text-sm font-medium text-slate-700">Job Description (optional)</Label>
               <textarea
                 value={form.rawJd}
                 onChange={(e) => setForm({ ...form, rawJd: e.target.value })}
                 placeholder="Paste the full job description here to enable AI match scoring..."
-                className="w-full min-h-[100px] text-sm border rounded-md px-3 py-2 bg-background resize-y"
+                className="w-full min-h-[100px] text-sm text-slate-900 border border-slate-300 rounded-md px-3 py-2 bg-white placeholder:text-slate-400 resize-y"
               />
             </div>
             <Separator />

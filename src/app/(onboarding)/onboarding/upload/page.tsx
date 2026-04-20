@@ -29,7 +29,6 @@ export default function OnboardingUpload() {
     if (!file) return;
     setStep("uploading");
 
-    // Step 1: upload PDF
     const formData = new FormData();
     formData.append("file", file);
     const uploadRes = await fetch("/api/resume/upload", { method: "POST", body: formData });
@@ -41,7 +40,6 @@ export default function OnboardingUpload() {
     }
     const { resumeId } = await uploadRes.json();
 
-    // Step 2: analyze with AI
     setStep("analyzing");
     const analyzeRes = await fetch("/api/resume/analyze", {
       method: "POST",
@@ -55,7 +53,6 @@ export default function OnboardingUpload() {
     }
     const { analysisId } = await analyzeRes.json();
 
-    // Step 3: generate gap report
     await fetch("/api/gaps/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -82,18 +79,22 @@ export default function OnboardingUpload() {
         {[1, 2, 3].map((s) => (
           <div key={s} className="flex items-center gap-2">
             <div className={`h-7 w-7 rounded-full flex items-center justify-center text-xs font-semibold transition-all ${
-              s === 2 ? "bg-primary text-white shadow-md shadow-primary/30" : s < 2 ? "bg-primary/30 text-primary" : "bg-border text-muted-foreground"
+              s === 2
+                ? "bg-primary text-white shadow-md shadow-primary/30"
+                : s < 2
+                ? "bg-primary/20 text-primary"
+                : "bg-slate-200 text-slate-500"
             }`}>{s}</div>
-            {s < 3 && <div className={`h-px w-8 ${s < 2 ? "bg-primary/40" : "bg-border"}`} />}
+            {s < 3 && <div className={`h-px w-8 ${s < 2 ? "bg-primary/40" : "bg-slate-200"}`} />}
           </div>
         ))}
-        <span className="ml-2 text-xs text-muted-foreground">Step 2 of 3</span>
+        <span className="ml-2 text-xs text-slate-500 font-medium">Step 2 of 3</span>
       </div>
 
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
         <div className="mb-7">
-          <h1 className="text-2xl font-bold">Upload your resume</h1>
-          <p className="text-base text-muted-foreground mt-2">
+          <h1 className="text-2xl font-bold text-slate-900">Upload your resume</h1>
+          <p className="text-sm text-slate-500 mt-2">
             We&apos;ll analyze it with AI and generate your personalized gap report automatically.
           </p>
         </div>
@@ -108,19 +109,26 @@ export default function OnboardingUpload() {
           {file ? (
             <>
               <FileText className="h-10 w-10 text-primary mb-3" />
-              <span className="font-semibold text-base">{file.name}</span>
-              <span className="text-sm text-muted-foreground mt-1">
+              <span className="font-semibold text-base text-slate-900">{file.name}</span>
+              <span className="text-sm text-slate-500 mt-1">
                 {(file.size / 1024).toFixed(0)} KB · Click to change
               </span>
             </>
           ) : (
             <>
-              <Upload className="h-10 w-10 text-muted-foreground mb-3" />
-              <span className="font-semibold text-base">Click to upload your resume</span>
-              <span className="text-sm text-muted-foreground mt-1">PDF or Word (.pdf, .doc, .docx) · max 10MB</span>
+              <Upload className="h-10 w-10 text-slate-400 mb-3" />
+              <span className="font-semibold text-base text-slate-700">Click to upload your resume</span>
+              <span className="text-sm text-slate-500 mt-1">PDF or Word (.pdf, .doc, .docx) · max 10MB</span>
             </>
           )}
-          <input id="resume-upload" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" className="hidden" onChange={handleFileChange} disabled={busy} />
+          <input
+            id="resume-upload"
+            type="file"
+            accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            className="hidden"
+            onChange={handleFileChange}
+            disabled={busy}
+          />
         </label>
 
         {/* Status */}
@@ -147,7 +155,7 @@ export default function OnboardingUpload() {
           )}
         </Button>
 
-        <Button variant="ghost" className="w-full mt-3 text-sm" onClick={() => router.push("/onboarding/goals")} disabled={busy}>
+        <Button variant="ghost" className="w-full mt-3 text-sm text-slate-500 hover:text-slate-700" onClick={() => router.push("/onboarding/goals")} disabled={busy}>
           Skip for now
         </Button>
       </div>
