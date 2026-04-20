@@ -1,6 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { syncUser } from "@/lib/sync-user";
 import { defaultModel } from "@/lib/ai";
 import { generateObject } from "ai";
 import { z } from "zod";
@@ -32,6 +33,7 @@ const RoadmapSchema = z.object({ weeks: z.array(WeekSchema) });
 export async function POST(req: Request) {
   const { userId } = await auth();
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  await syncUser(userId);
 
   const _planGuard = await assertPlanAllows(userId, "roadmap_generation");
   if (_planGuard) return _planGuard;

@@ -1,6 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { syncUser } from "@/lib/sync-user";
 import { defaultModel } from "@/lib/ai";
 import { generateObject } from "ai";
 import { z } from "zod";
@@ -58,6 +59,7 @@ const DEFAULT_BENCHMARKS: Record<string, { requiredSkills: string[]; requiredPro
 export async function POST(req: Request) {
   const { userId } = await auth();
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  await syncUser(userId);
 
   const { analysisId } = await req.json();
   if (!analysisId) return NextResponse.json({ error: "analysisId required" }, { status: 400 });

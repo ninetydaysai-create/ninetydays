@@ -1,6 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { syncUser } from "@/lib/sync-user";
 import { streamText } from "ai";
 import { defaultModel } from "@/lib/ai";
 import { buildInterviewSystemPrompt } from "@/prompts/interview-evaluator";
@@ -11,6 +12,7 @@ import { TranscriptMessage } from "@/types/interview";
 export async function POST(req: Request) {
   const { userId } = await auth();
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  await syncUser(userId);
 
   const _planGuard = await assertPlanAllows(userId, "interview_session"); if (_planGuard) return _planGuard;
 
