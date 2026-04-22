@@ -70,7 +70,7 @@ function AddJobDialog({ onClose, onAdded }: { onClose: () => void; onAdded: (job
             <Button variant="ghost" size="icon" onClick={onClose}><X className="h-4 w-4" /></Button>
           </div>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <Label className="text-sm font-medium text-slate-700">Company *</Label>
                 <Input
@@ -102,7 +102,7 @@ function AddJobDialog({ onClose, onAdded }: { onClose: () => void; onAdded: (job
                 className="h-10"
               />
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <Label className="text-sm font-medium text-slate-700">Salary (optional)</Label>
                 <Input
@@ -254,10 +254,11 @@ export default function JobsPage() {
           </CardContent>
         </Card>
       ) : (
-        <div className="overflow-x-auto -mx-4 px-4">
-          <div className="flex gap-4 min-w-max pb-4">
-            {grouped.map((col) => (
-              <div key={col.status} className="w-56 shrink-0">
+        <>
+          {/* ── Mobile: vertical grouped list ── */}
+          <div className="md:hidden space-y-5">
+            {grouped.filter((col) => col.jobs.length > 0).map((col) => (
+              <div key={col.status}>
                 <div className="flex items-center gap-2 mb-3">
                   <span className={`text-xs font-semibold px-2 py-1 rounded-full ${col.color}`}>
                     {col.label}
@@ -270,18 +271,11 @@ export default function JobsPage() {
                       <CardContent className="pt-3 pb-3 px-3">
                         <p className="font-semibold text-sm leading-tight">{job.company}</p>
                         <p className="text-sm text-slate-300 mt-0.5 leading-tight">{job.roleTitle}</p>
-                        {job.location && (
-                          <p className="text-sm text-slate-300 mt-1">{job.location}</p>
-                        )}
-                        {job.salary && (
-                          <p className="text-xs font-medium text-primary mt-1">{job.salary}</p>
-                        )}
+                        {job.location && <p className="text-sm text-slate-300 mt-1">{job.location}</p>}
+                        {job.salary && <p className="text-xs font-medium text-primary mt-1">{job.salary}</p>}
                         {job.appliedAt && (
-                          <p className="text-xs text-slate-400 mt-1">
-                            Applied {format(new Date(job.appliedAt), "MMM d")}
-                          </p>
+                          <p className="text-xs text-slate-400 mt-1">Applied {format(new Date(job.appliedAt), "MMM d")}</p>
                         )}
-                        {/* Match score badge */}
                         {job.keywordMatchPct !== null && job.keywordMatchPct !== undefined && (
                           <span className={`inline-block text-xs font-bold px-2 py-0.5 rounded-full mt-1.5 ${
                             job.keywordMatchPct >= 70 ? "bg-emerald-500/15 text-emerald-400" :
@@ -321,16 +315,89 @@ export default function JobsPage() {
                       </CardContent>
                     </Card>
                   ))}
-                  {col.jobs.length === 0 && (
-                    <div className="border-2 border-dashed rounded-lg h-20 flex items-center justify-center">
-                      <p className="text-xs text-slate-400">Empty</p>
-                    </div>
-                  )}
                 </div>
               </div>
             ))}
           </div>
-        </div>
+
+          {/* ── Desktop: kanban ── */}
+          <div className="hidden md:block overflow-x-auto -mx-4 px-4">
+            <div className="flex gap-4 min-w-max pb-4">
+              {grouped.map((col) => (
+                <div key={col.status} className="w-56 shrink-0">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className={`text-xs font-semibold px-2 py-1 rounded-full ${col.color}`}>
+                      {col.label}
+                    </span>
+                    <span className="text-xs text-slate-400">{col.jobs.length}</span>
+                  </div>
+                  <div className="space-y-2">
+                    {col.jobs.map((job) => (
+                      <Card key={job.id} className="hover:shadow-md transition-shadow">
+                        <CardContent className="pt-3 pb-3 px-3">
+                          <p className="font-semibold text-sm leading-tight">{job.company}</p>
+                          <p className="text-sm text-slate-300 mt-0.5 leading-tight">{job.roleTitle}</p>
+                          {job.location && (
+                            <p className="text-sm text-slate-300 mt-1">{job.location}</p>
+                          )}
+                          {job.salary && (
+                            <p className="text-xs font-medium text-primary mt-1">{job.salary}</p>
+                          )}
+                          {job.appliedAt && (
+                            <p className="text-xs text-slate-400 mt-1">
+                              Applied {format(new Date(job.appliedAt), "MMM d")}
+                            </p>
+                          )}
+                          {job.keywordMatchPct !== null && job.keywordMatchPct !== undefined && (
+                            <span className={`inline-block text-xs font-bold px-2 py-0.5 rounded-full mt-1.5 ${
+                              job.keywordMatchPct >= 70 ? "bg-emerald-500/15 text-emerald-400" :
+                              job.keywordMatchPct >= 50 ? "bg-amber-500/15 text-amber-400" :
+                              "bg-red-500/15 text-red-400"
+                            }`}>
+                              {job.keywordMatchPct}% match
+                            </span>
+                          )}
+                          {!job.keywordMatchPct && job.rawJd && (
+                            <button
+                              onClick={(e) => { e.stopPropagation(); checkJobMatch(job); }}
+                              disabled={matchingJobId === job.id}
+                              className="text-xs text-indigo-500 hover:text-indigo-700 font-medium flex items-center gap-1 mt-1.5"
+                            >
+                              {matchingJobId === job.id ? <><Loader2 className="h-3 w-3 animate-spin" />Analyzing...</> : "Check match →"}
+                            </button>
+                          )}
+                          <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+                            {job.jobUrl && (
+                              <a href={job.jobUrl} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}>
+                                <Button variant="ghost" size="icon" className="h-6 w-6">
+                                  <ExternalLink className="h-3 w-3" />
+                                </Button>
+                              </a>
+                            )}
+                            <select
+                              value={job.status}
+                              onChange={(e) => moveJob(job.id, e.target.value as JobStatus)}
+                              className="text-xs border rounded px-1 py-0.5 bg-background flex-1 min-w-0"
+                            >
+                              {COLUMNS.map((c) => (
+                                <option key={c.status} value={c.status}>{c.label}</option>
+                              ))}
+                            </select>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                    {col.jobs.length === 0 && (
+                      <div className="border-2 border-dashed rounded-lg h-20 flex items-center justify-center">
+                        <p className="text-xs text-slate-400">Empty</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

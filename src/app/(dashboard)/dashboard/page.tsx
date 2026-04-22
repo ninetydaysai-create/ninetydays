@@ -151,7 +151,7 @@ export default async function DashboardPage() {
       <Suspense fallback={null}><UpgradeSuccessToast /></Suspense>
 
       {/* ── Outcome hero banner ── */}
-      <div className="rounded-2xl overflow-hidden relative bg-gradient-to-br from-indigo-600 via-indigo-500 to-violet-600 p-8 text-white shadow-xl shadow-indigo-500/20">
+      <div className="rounded-2xl overflow-hidden relative bg-gradient-to-br from-indigo-600 via-indigo-500 to-violet-600 p-5 sm:p-8 text-white shadow-xl shadow-indigo-500/20">
         <div className="absolute inset-0 opacity-20" style={{ backgroundImage: "radial-gradient(circle at 70% 50%, white 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
         <div className="relative">
           {readinessScore !== null ? (
@@ -203,7 +203,7 @@ export default async function DashboardPage() {
 
       {/* ── Career outcome metrics ── */}
       {readinessScore !== null ? (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Readiness */}
           <div className="bg-[#161820] rounded-2xl p-6 shadow-sm border border-white/10">
             <div className="flex items-center gap-2 mb-3">
@@ -262,7 +262,7 @@ export default async function DashboardPage() {
         </div>
       ) : (
         /* Fallback vanity metrics if no gap report yet */
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
             { label: "Day", value: dayOfJourney || "—", sub: "of 90", color: "text-amber-400", bg: "bg-amber-500/10" },
             { label: "Tasks", value: `${completedTasks}/${allTasks.length}`, sub: "completed", color: "text-indigo-400", bg: "bg-indigo-500/10" },
@@ -313,7 +313,7 @@ export default async function DashboardPage() {
 
       {/* ── Level + Streak ── */}
       {(levelInfo || streak > 0) && (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {levelInfo && (
             <div className="bg-[#161820] rounded-2xl border border-white/10 shadow-sm p-5 flex items-center gap-4">
               <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shrink-0">

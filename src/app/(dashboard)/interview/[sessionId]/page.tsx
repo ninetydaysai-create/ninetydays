@@ -174,7 +174,7 @@ export default function InterviewSessionPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto flex flex-col h-[calc(100vh-6rem)]">
+    <div className="max-w-3xl mx-auto flex flex-col h-[calc(100dvh-6rem)]">
       {/* Header */}
       <div className="flex items-center gap-4 mb-6 shrink-0">
         <Link href="/interview">
@@ -318,13 +318,13 @@ export default function InterviewSessionPage() {
                     }
                   }}
                   placeholder="Type your answer... (Enter to send, Shift+Enter for new line)"
-                  className="min-h-[80px] max-h-[200px] resize-none text-base"
+                  className="min-h-[56px] md:min-h-[80px] max-h-[140px] md:max-h-[200px] resize-none text-base"
                   disabled={streaming || evaluating}
                 />
                 <Button
                   onClick={sendMessage}
                   disabled={!input.trim() || streaming || evaluating}
-                  className="h-[80px] w-14 shrink-0"
+                  className="h-[56px] md:h-[80px] w-14 shrink-0"
                 >
                   <Send className="h-4 w-4" />
                 </Button>

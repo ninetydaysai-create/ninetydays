@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { LandingMobileMenu } from "@/components/layout/LandingMobileMenu";
 import {
   Zap,
   ArrowRight,
@@ -70,14 +71,15 @@ export default function LandingPage() {
             <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
           </nav>
           <div className="flex items-center gap-3">
-            <Link href="/sign-in">
+            <Link href="/sign-in" className="hidden md:block">
               <Button variant="ghost" className="text-base font-medium">Sign in</Button>
             </Link>
-            <Link href="/sign-up">
+            <Link href="/sign-up" className="hidden md:block">
               <Button className="h-10 px-5 font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm shadow-indigo-500/25">
                 Get started free
               </Button>
             </Link>
+            <LandingMobileMenu />
           </div>
         </div>
       </header>

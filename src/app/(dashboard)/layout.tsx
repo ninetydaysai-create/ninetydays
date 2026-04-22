@@ -12,7 +12,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <Sidebar />
         <div className="flex-1 flex flex-col min-w-0">
           <Navbar />
-          <main className="flex-1 p-8 overflow-auto max-w-[1100px] mx-auto w-full">{children}</main>
+          <main className="flex-1 p-4 sm:p-6 md:p-8 overflow-auto max-w-[1100px] mx-auto w-full">{children}</main>
         </div>
         <Suspense>
           <ReferralTracker />

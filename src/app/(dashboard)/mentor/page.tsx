@@ -117,7 +117,7 @@ export default function MentorPage() {
   const isEmpty = messages.length === 0 && !historyLoading;
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] max-h-[calc(100vh-4rem)]">
+    <div className="flex flex-col h-[calc(100dvh-4rem)] max-h-[calc(100dvh-4rem)]">
       {/* Header */}
       <div className="px-6 py-5 border-b border-white/8 bg-[#161820] shrink-0 flex items-center justify-between">
         <div className="flex items-center gap-3">
