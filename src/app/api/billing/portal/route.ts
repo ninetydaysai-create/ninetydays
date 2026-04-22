@@ -15,21 +15,22 @@ export async function POST() {
   });
 
   // No active subscription — send to settings to upgrade
-  if (!user?.stripeSubscriptionId && !user?.stripeCustomerId) {
+  if (!user?.stripeCustomerId) {
     return NextResponse.redirect(`${APP_URL}/settings`, 303);
   }
 
   try {
     const paddle = getPaddle();
 
-    // If we have the Paddle customer ID, get their portal session URL
-    if (user.stripeCustomerId) {
-      const customer = await paddle.customers.get(user.stripeCustomerId);
-      // Paddle customer portal URL (v2 Billing)
-      // The portal URL is at customers[].importMeta.externalId or via portal session
-      // Use the Paddle-managed URL pattern
-      const portalUrl = `https://customer.paddle.com/portal/manage/${user.stripeCustomerId}`;
-      void customer; // suppress unused warning — we verified customer exists
+    // Create a Paddle Customer Portal Session — returns a short-lived URL
+    const session = await paddle.customerPortalSessions.create(
+      user.stripeCustomerId,
+      // subscriptionIds limits the portal to just this subscription (optional but cleaner)
+      user.stripeSubscriptionId ? [user.stripeSubscriptionId] : [],
+    );
+
+    const portalUrl = session.urls?.general?.overview;
+    if (portalUrl) {
       return NextResponse.redirect(portalUrl, 303);
     }
   } catch (err) {

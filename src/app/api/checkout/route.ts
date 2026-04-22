@@ -30,15 +30,15 @@ export async function POST(req: Request) {
 
   // Create a one-time transaction — Paddle generates a hosted checkout URL.
   // customData is passed through to the webhook so we know which user upgraded.
+  // Include email in customData (Paddle collects it during checkout if not pre-filled).
   const transaction = await paddle.transactions.create({
     items: [{ priceId, quantity: 1 }],
-    customData: { userId, plan } as Record<string, unknown>,
+    customData: { userId, plan, email: user?.email ?? "" } as Record<string, unknown>,
     checkout: {
       url: isSprint
         ? `${APP_URL}/dashboard?upgraded=1&plan=sprint`
         : `${APP_URL}/dashboard?upgraded=1`,
     },
-    ...(user?.email ? { customer: { email: user.email } } : {}),
   });
 
   const checkoutUrl = transaction.checkout?.url;
