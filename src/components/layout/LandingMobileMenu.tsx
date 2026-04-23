@@ -28,7 +28,7 @@ export function LandingMobileMenu() {
       {/* Backdrop */}
       {open && (
         <div
-          className="fixed inset-0 bg-black/70 z-40"
+          className="fixed inset-0 bg-black/70 z-[60]"
           onClick={() => setOpen(false)}
         />
       )}
@@ -36,7 +36,7 @@ export function LandingMobileMenu() {
       {/* Drawer */}
       <div
         className={cn(
-          "fixed inset-y-0 right-0 w-64 bg-[#0d1018] border-l border-white/10 z-50 flex flex-col transition-transform duration-200 ease-in-out",
+          "fixed inset-y-0 right-0 w-64 bg-[#0d1018] border-l border-white/10 z-[70] flex flex-col transition-transform duration-200 ease-in-out",
           open ? "translate-x-0" : "translate-x-full"
         )}
       >

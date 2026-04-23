@@ -37,7 +37,7 @@ export function Navbar() {
       {/* Backdrop */}
       {open && (
         <div
-          className="md:hidden fixed inset-0 bg-black/60 z-40"
+          className="md:hidden fixed inset-0 bg-black/60 z-[60]"
           onClick={() => setOpen(false)}
         />
       )}
@@ -45,7 +45,7 @@ export function Navbar() {
       {/* Slide-in drawer */}
       <div
         className={cn(
-          "md:hidden fixed inset-y-0 left-0 w-72 bg-[#0b0e14] z-50 flex flex-col transition-transform duration-200 ease-in-out",
+          "md:hidden fixed inset-y-0 left-0 w-72 bg-[#0b0e14] z-[70] flex flex-col transition-transform duration-200 ease-in-out",
           open ? "translate-x-0" : "-translate-x-full"
         )}
       >
