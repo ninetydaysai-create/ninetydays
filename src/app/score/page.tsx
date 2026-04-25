@@ -12,6 +12,7 @@ import { SignUpButton } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
 import { useABTest } from "@/hooks/useABTest";
 import { useExitIntent } from "@/hooks/useExitIntent";
+import { ScoreShareCard } from "@/components/score/ScoreShareCard";
 
 interface Gap { label: string; severity: "critical" | "major" | "minor"; impact: string; timeToFix: string; }
 interface ScoreResult {
@@ -41,15 +42,27 @@ const severityConfig = {
 
 export default function ScorePage() {
   const [jdText, setJdText] = useState("");
+  const [resumeText, setResumeText] = useState("");
   const [result, setResult] = useState<ScoreResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [revealing, setRevealing] = useState(false); // 1.5s anticipation delay after API responds
   const [error, setError] = useState<string | null>(null);
+  const [loadingStep, setLoadingStep] = useState(0);
+  const [showShareCard, setShowShareCard] = useState(false);
 
   // A/B test: pricing model × positioning
   const { variant: rawVariant, track } = useABTest("pricing_model", ["control", "sprint", "mentor"]);
   const pricingVariant = (PRICING_VARIANT_COPY[rawVariant as PricingVariant] ? rawVariant : "control") as PricingVariant;
   const v = PRICING_VARIANT_COPY[pricingVariant];
+
+  useEffect(() => {
+    if (!loading) { setLoadingStep(0); return; }
+    setLoadingStep(1);
+    const t1 = setTimeout(() => setLoadingStep(2), 900);
+    const t2 = setTimeout(() => setLoadingStep(3), 1800);
+    const t3 = setTimeout(() => setLoadingStep(4), 2700);
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+  }, [loading]);
 
   // Exit-intent: trigger sticky bar when user scrolls away from paywall
   const { triggered: exitTriggered, dismiss: dismissExit } = useExitIntent({
@@ -58,7 +71,7 @@ export default function ScorePage() {
   });
 
   async function handleScore() {
-    if (jdText.trim().length < 50) { setError("Paste a full job description (at least 50 characters)"); return; }
+    if (resumeText.trim().length < 100) { setError("Paste your full resume (at least 100 characters)"); return; }
     setLoading(true);
     setError(null);
     setResult(null);
@@ -67,7 +80,7 @@ export default function ScorePage() {
       const res = await fetch("/api/score", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ jdText }),
+        body: JSON.stringify({ jdText, resumeText }),
       });
       if (!res.ok) { const d = await res.json(); setError(d.error ?? "Failed — try again"); return; }
       const data = await res.json();
@@ -87,12 +100,7 @@ export default function ScorePage() {
 
   function handleShare() {
     if (!result) return;
-    const text = `I scored ${result.readinessScore}% ready for this role on NinetyDays.ai\n\n${result.verdict}\n\nninetydays.ai/score`;
-    if (navigator.share) {
-      navigator.share({ title: "My Job Readiness Score", text }).catch(() => {});
-    } else {
-      navigator.clipboard.writeText(text);
-    }
+    setShowShareCard(true);
   }
 
   const score = result?.readinessScore ?? 0;
@@ -138,47 +146,89 @@ export default function ScorePage() {
         <div className="text-center mb-10">
           <div className="inline-flex items-center gap-2 bg-indigo-500/15 border border-indigo-500/30 rounded-full px-4 py-1.5 text-sm font-medium text-indigo-300 mb-5">
             <Zap className="h-3.5 w-3.5" />
-            Instant JD Readiness Score
+            Free Resume Check — No Signup
           </div>
-          <h1 className="text-4xl font-black text-white mb-3">Will you get rejected for this role?</h1>
+          <h1 className="text-4xl font-black text-white mb-3">Check if your resume can pass a real product company interview</h1>
           <p className="text-slate-400 text-lg">
-            Paste any job description. Get a brutal, honest readiness verdict in seconds — no signup required.
+            Paste your resume + a job description. Get an honest score, real gaps, and exactly what&apos;s holding you back.
           </p>
         </div>
 
         {/* Input */}
         {!result && !revealing && (
           <div className="space-y-4">
-            <Textarea
-              value={jdText}
-              onChange={(e) => setJdText(e.target.value)}
-              placeholder="Paste the full job description here..."
-              rows={10}
-              className="bg-white/5 border-white/10 text-white placeholder:text-slate-500 resize-none text-sm rounded-xl focus-visible:ring-indigo-500 focus-visible:border-indigo-500"
-            />
+            <div>
+              <label className="block text-sm font-semibold text-slate-300 mb-1.5">
+                Your resume <span className="text-red-400">*</span>
+              </label>
+              <Textarea
+                value={resumeText}
+                onChange={(e) => setResumeText(e.target.value)}
+                placeholder="Paste your full resume here — work experience, skills, projects, education..."
+                rows={8}
+                className="bg-white/5 border-white/10 text-white placeholder:text-slate-500 resize-none text-sm rounded-xl focus-visible:ring-indigo-500 focus-visible:border-indigo-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-slate-300 mb-1.5">
+                Job description <span className="text-slate-500 text-xs font-normal">(optional — improves accuracy)</span>
+              </label>
+              <Textarea
+                value={jdText}
+                onChange={(e) => setJdText(e.target.value)}
+                placeholder="Paste the job description you're targeting... (leave blank for a general product company assessment)"
+                rows={5}
+                className="bg-white/5 border-white/10 text-white placeholder:text-slate-500 resize-none text-sm rounded-xl focus-visible:ring-indigo-500 focus-visible:border-indigo-500"
+              />
+            </div>
             {error && <p className="text-red-400 text-sm">{error}</p>}
             <Button
               onClick={handleScore}
-              disabled={loading || jdText.trim().length < 50}
+              disabled={loading || resumeText.trim().length < 100}
               className="w-full h-14 text-lg font-bold gap-2 bg-indigo-600 hover:bg-indigo-500 rounded-xl"
             >
               {loading
-                ? <><Loader2 className="h-5 w-5 animate-spin" />Analyzing why recruiters reject this profile…</>
-                : <>Get my readiness score <ArrowRight className="h-5 w-5" /></>}
+                ? <><Loader2 className="h-5 w-5 animate-spin" />Analyzing your profile…</>
+                : <>Analyze my profile <ArrowRight className="h-5 w-5" /></>}
             </Button>
             <p className="text-center text-slate-500 text-sm">
-              Sign in for personalized scoring based on YOUR actual resume
+              We simulate how hiring managers actually screen candidates — not generic AI feedback.
             </p>
           </div>
         )}
 
-        {/* 1.5s anticipation state — after API responds, before verdict reveals */}
-        {revealing && (
-          <div className="text-center py-16 space-y-4">
-            <Loader2 className="h-9 w-9 animate-spin mx-auto text-indigo-400" />
-            <div>
-              <p className="text-white font-bold text-lg">Calculating your verdict…</p>
+        {/* Loading / anticipation state */}
+        {(loading || revealing) && (
+          <div className="py-12 space-y-6">
+            <div className="text-center">
+              <p className="text-white font-bold text-lg">Analyzing your profile…</p>
               <p className="text-slate-500 text-sm mt-1">Cross-referencing against real hiring patterns</p>
+            </div>
+            <div className="space-y-3 max-w-sm mx-auto">
+              {[
+                "Parsing experience and tech stack",
+                "Comparing against real job requirements",
+                "Identifying skill gaps",
+                "Estimating interview rejection probability",
+              ].map((step, i) => {
+                const done = revealing || loadingStep > i + 1;
+                const active = !revealing && loadingStep === i + 1;
+                return (
+                  <div key={step} className={cn(
+                    "flex items-center gap-3 text-sm transition-opacity duration-500",
+                    loadingStep <= i ? "opacity-0" : "opacity-100"
+                  )}>
+                    {done
+                      ? <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+                      : active
+                      ? <Loader2 className="h-4 w-4 animate-spin text-indigo-400 shrink-0" />
+                      : <div className="h-4 w-4 shrink-0" />}
+                    <span className={done ? "text-slate-300" : active ? "text-indigo-400" : "text-slate-600"}>
+                      {step}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
@@ -285,15 +335,16 @@ export default function ScorePage() {
             })()}
 
             {/* ── CONVERSION GATE — interrupts scroll after gap #1 ── */}
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest text-center">What you need to fix this</p>
             <div className="rounded-2xl border border-indigo-500/30 bg-gradient-to-b from-indigo-950/70 to-[#0d1020] p-7 text-center space-y-5">
 
               {/* Hook — spec-exact copy */}
               <div>
                 <p className="text-2xl font-black text-white leading-tight mb-2">
-                  You&apos;re missing {result.topGaps.length} critical gaps.
+                  You&apos;re not far — but you&apos;re not ready yet.
                 </p>
                 <p className="text-slate-400 text-sm leading-relaxed">
-                  These are the exact reasons you&apos;re getting rejected.
+                  These gaps are exactly why you&apos;re getting rejected. Here&apos;s your fix.
                 </p>
               </div>
 
@@ -399,7 +450,7 @@ export default function ScorePage() {
 
             {/* Try another */}
             <button
-              onClick={() => { setResult(null); setJdText(""); setRevealing(false); }}
+              onClick={() => { setResult(null); setJdText(""); setResumeText(""); setRevealing(false); }}
               className="w-full text-center text-slate-600 text-sm hover:text-slate-400 transition-colors py-2"
             >
               Try another job description
@@ -407,6 +458,16 @@ export default function ScorePage() {
           </div>
         )}
       </div>
+      {/* ── SHARE CARD MODAL ── */}
+      {showShareCard && result && (
+        <ScoreShareCard
+          score={result.readinessScore}
+          verdict={result.verdict}
+          topGaps={result.topGaps}
+          onClose={() => setShowShareCard(false)}
+        />
+      )}
+
       {/* ── EXIT-INTENT STICKY BAR ── */}
       {result && exitTriggered && (
         <div className="fixed bottom-0 left-0 right-0 z-50 animate-in slide-in-from-bottom-4 duration-300">

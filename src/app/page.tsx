@@ -98,42 +98,42 @@ export default function LandingPage() {
         <div className="relative max-w-4xl mx-auto px-6 pt-24 pb-20 text-center">
           <div className="inline-flex items-center gap-2 bg-indigo-500/15 border border-indigo-500/30 rounded-full px-4 py-1.5 text-sm font-medium text-indigo-300 mb-8">
             <Flame className="h-3.5 w-3.5" />
-            From service company → product company in 90 days
+            For engineers stuck in service companies
           </div>
 
           <h1 className="text-4xl md:text-6xl lg:text-[4.25rem] font-black tracking-tight leading-[1.06] mb-6">
-            Get interview-ready in 90 days —
+            You&apos;re not failing interviews.
             <br />
             <span className="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">
-              with a system that guides you daily.
+              You&apos;re not ready yet.
             </span>
           </h1>
 
           <p className="text-base text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
-            NinetyDays tracks your readiness, fixes what&apos;s blocking you, and keeps you on track with an AI mentor, real interviews, and measurable progress — every week.
+            Find out exactly what&apos;s blocking you — not generic advice, but the specific gaps that make product companies reject you. Fix them in 90 days.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-            <Link href="/sign-up">
+            <Link href="/score">
               <Button
                 size="lg"
                 className="h-14 px-9 text-lg font-bold gap-2 bg-indigo-600 hover:bg-indigo-500 shadow-xl shadow-indigo-500/30 rounded-xl transition-all hover:-translate-y-0.5"
               >
-                Get my readiness score — free
+                Check my score — free
                 <ArrowRight className="h-5 w-5" />
               </Button>
             </Link>
-            <Link href="/score">
+            <Link href="/sign-up">
               <Button
                 size="lg"
                 variant="outline"
                 className="h-14 px-7 text-lg font-semibold gap-2 border-white/20 bg-white/5 text-white hover:bg-white/10 rounded-xl"
               >
-                Test a job description
+                Get full analysis free
               </Button>
             </Link>
           </div>
-          <p className="text-sm text-slate-500">No credit card · 60-second setup · results in under 2 minutes</p>
+          <p className="text-sm text-slate-500">No credit card · Paste your resume · Score in 20 seconds</p>
           <p className="text-xs text-slate-600 mt-2">Built for engineers with 5–12 years experience trying to break into product companies</p>
         </div>
 
@@ -161,18 +161,19 @@ export default function LandingPage() {
       {/* Problem Section */}
       <section className="py-24 bg-[#0d1018] border-b border-white/5">
         <div className="max-w-3xl mx-auto px-6 text-center">
-          <p className="text-sm font-bold uppercase tracking-widest text-red-400 mb-4">Sound familiar?</p>
+          <p className="text-sm font-bold uppercase tracking-widest text-red-400 mb-4">Why you keep getting rejected</p>
           <h2 className="text-4xl font-black text-white mb-6">
             You&apos;ve done everything &ldquo;right&rdquo;...
           </h2>
           <p className="text-base text-slate-400 leading-relaxed mb-10">
             Years of experience. Dozens of applications. Still no callbacks from product companies.
           </p>
-          <div className="grid sm:grid-cols-3 gap-4 mb-10">
+          <div className="grid sm:grid-cols-2 gap-4 mb-10">
             {[
-              { icon: XCircle, text: "Your resume isn't telling the right story" },
-              { icon: XCircle, text: "You don't know exactly what's missing" },
-              { icon: XCircle, text: "You're guessing what to fix and in what order" },
+              { icon: XCircle, text: "You're optimizing for the wrong signals — service company work doesn't translate 1:1 to product company expectations" },
+              { icon: XCircle, text: "Your resume has years of experience but none of the evidence product companies care about" },
+              { icon: XCircle, text: "You're taking random courses with no idea which gaps actually move the needle at interview" },
+              { icon: XCircle, text: "You don't know what \"good enough\" means for your target role — so you keep applying and keep losing" },
             ].map(({ icon: Icon, text }) => (
               <div key={text} className="flex items-start gap-3 bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-left">
                 <Icon className="h-4 w-4 text-red-400 shrink-0 mt-0.5" />
@@ -856,14 +857,13 @@ export default function LandingPage() {
               <div className="relative">
                 <div className="flex items-center justify-between mb-1">
                   <h3 className="text-2xl font-black text-white">Pro</h3>
-                  <span className="bg-amber-400 text-amber-900 text-xs font-black px-3 py-1 rounded-full">Early access</span>
+                  <span className="bg-amber-400 text-amber-900 text-xs font-black px-3 py-1 rounded-full">Most popular</span>
                 </div>
                 <div className="mt-3 mb-1 flex items-end gap-2">
-                  <span className="text-5xl font-black text-white">$12</span>
+                  <span className="text-5xl font-black text-white">$19</span>
                   <span className="text-white/70 text-base mb-1">/month</span>
-                  <span className="text-white/50 text-sm mb-1 line-through ml-1">$24</span>
                 </div>
-                <p className="text-white/60 text-sm mb-8">Or $99/yr — save $45. Price locks in forever at early access rate.</p>
+                <p className="text-white/60 text-sm mb-8">Or $149/yr — save $79. One role change = 6-figure salary bump.</p>
                 <ul className="space-y-3 mb-8">
                   {[
                     "Everything in Free",
@@ -885,7 +885,7 @@ export default function LandingPage() {
                 </ul>
                 <Link href="/sign-up">
                   <Button className="w-full h-12 text-base font-bold rounded-xl bg-white text-indigo-700 hover:bg-white/90 shadow-lg">
-                    Join early access — $12/mo
+                    Get started — $19/mo
                     <ArrowRight className="h-4 w-4 ml-2" />
                   </Button>
                 </Link>
@@ -900,7 +900,7 @@ export default function LandingPage() {
           </div>
 
           <p className="text-center text-slate-400 text-sm mt-8">
-            One role change = 6-figure salary bump. The $12/mo math writes itself.
+            One role change = 6-figure salary bump. The $19/mo math writes itself.
           </p>
         </div>
       </section>
@@ -909,27 +909,27 @@ export default function LandingPage() {
       <section className="bg-[#0b0e14] py-28 relative overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-indigo-600/15 blur-[100px] rounded-full pointer-events-none" />
         <div className="relative max-w-3xl mx-auto px-6 text-center">
-          <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-4">Ready?</p>
+          <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-4">You're closer than you think</p>
           <h2 className="text-4xl md:text-5xl font-black text-white leading-tight mb-5">
             You don&apos;t need more courses.
             <br />
             <span className="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">
-              You need a plan that works.
+              You need direction.
             </span>
           </h2>
           <p className="text-slate-400 text-base mb-10 leading-relaxed">
-            Upload your resume. Get your readiness score and exact gap breakdown in 2 minutes. Free.
+            Check your score in 20 seconds. Find out exactly what&apos;s blocking you. Free.
           </p>
-          <Link href="/sign-up">
+          <Link href="/score">
             <Button
               size="lg"
               className="h-16 px-12 text-xl font-black gap-2.5 bg-indigo-600 hover:bg-indigo-500 rounded-xl shadow-2xl shadow-indigo-500/40 transition-all hover:-translate-y-0.5"
             >
-              Get my readiness score
+              Check my score →
               <ArrowRight className="h-6 w-6" />
             </Button>
           </Link>
-          <p className="text-slate-600 text-sm mt-5">No credit card · 60 seconds · instant results</p>
+          <p className="text-slate-600 text-sm mt-5">No credit card · Paste your resume · Score in 20 seconds</p>
         </div>
       </section>
 

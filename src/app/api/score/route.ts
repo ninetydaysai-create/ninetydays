@@ -63,15 +63,17 @@ const FREE_LIMIT = { max: 5, windowMs: 60 * 60 * 1000 };
 const PRO_LIMIT  = { max: 50, windowMs: 60 * 60 * 1000 };
 
 export async function POST(req: Request) {
-  const { jdText } = await req.json();
-  if (!jdText || jdText.trim().length < 50) {
-    return NextResponse.json({ error: "Paste a job description (at least 50 characters)." }, { status: 400 });
+  const { jdText, resumeText } = await req.json();
+  if (!resumeText || resumeText.trim().length < 100) {
+    return NextResponse.json({ error: "Paste your resume (at least 100 characters)." }, { status: 400 });
   }
 
-  // Fast heuristic — reject obvious gibberish before hitting AI
-  const heuristicError = quickJdCheck(jdText);
-  if (heuristicError) {
-    return NextResponse.json({ error: heuristicError }, { status: 400 });
+  // Fast heuristic — reject obvious gibberish before hitting AI (only if JD provided)
+  if (jdText && jdText.trim().length > 20) {
+    const heuristicError = quickJdCheck(jdText);
+    if (heuristicError) {
+      return NextResponse.json({ error: heuristicError }, { status: 400 });
+    }
   }
 
   // Determine if user is logged in + their plan
@@ -100,7 +102,7 @@ export async function POST(req: Request) {
 
   // Cache check — skip AI if same JD scored in last 24h
   // Personalized results are cached per-user; anon results are shared
-  const jdHash = hashJd(jdText) + (userId ? `:${userId}` : ":anon");
+  const jdHash = hashJd((resumeText ?? "") + (jdText ?? "")) + (userId ? `:${userId}` : ":anon");
   const cached = getCachedScore(jdHash);
   if (cached) {
     return NextResponse.json({ ...cached as object, cached: true });
@@ -142,17 +144,26 @@ Use this data to personalize the readiness score for THIS specific JD.`;
     }
   }
 
+  // Anonymous user pasted resume directly — use it as candidate context
+  if (!candidateContext && resumeText) {
+    candidateContext = `
+CANDIDATE RESUME (pasted directly):
+${resumeText.slice(0, 3000)}
+
+Use this to score their readiness. Be brutally honest — most service-company engineers are NOT ready for product roles.`;
+  }
+
   const prompt = `You are a career readiness scorer. Analyze how ready a candidate is for this specific job.
 
 FIRST: Determine if the pasted text is a real job description.
 A real JD contains recognizable job requirements, responsibilities, skills, or qualifications — even if brief.
 If the text is gibberish, random characters, test input, lorem ipsum, a single word, a company name only, or clearly NOT a job description, you MUST set isValidJd: false. Do NOT score it. Do NOT fall back to a generic baseline. Just flag it invalid.
 
-${candidateContext || `
-GENERIC MODE: No candidate profile available. Score based on what a typical service-company engineer (5-8 years experience) would bring to this role. Be realistic — most will score 40-60% for product company roles.`}
+${candidateContext || "GENERIC MODE: No resume available. Score for a typical 5-8 year service-company engineer. Most score 40-60% for product roles."}
 
-JOB DESCRIPTION:
-${jdText.slice(0, 3000)}
+${jdText?.trim()
+  ? `JOB DESCRIPTION:\n${jdText.slice(0, 3000)}`
+  : "JOB DESCRIPTION: Not provided. Score against general product company engineering standards (system design, algorithms, real project ownership, impact evidence)."}
 
 If isValidJd is false, set readinessScore: 0, topGaps: [], strongMatches: [], topAction: "", timeToReady: "", verdict: "".
 
@@ -186,7 +197,7 @@ Return ONLY valid JSON.`;
   });
 
   // AI flagged the input as not a real JD — don't cache, return error
-  if (!object.isValidJd) {
+  if (!object.isValidJd && jdText?.trim()) {
     return NextResponse.json(
       { error: "This doesn't look like a real job description. Paste an actual JD to get your readiness score." },
       { status: 400 }

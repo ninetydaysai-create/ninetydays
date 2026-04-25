@@ -11,5 +11,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/sign-in`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${base}/terms`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
     { url: `${base}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${base}/am-i-ready-for-faang`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/service-to-product-company`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/software-engineer-resume-score`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/why-getting-rejected`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/90-day-roadmap-software-engineer`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
   ];
 }
