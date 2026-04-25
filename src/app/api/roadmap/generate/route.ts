@@ -5,18 +5,19 @@ import { syncUser } from "@/lib/sync-user";
 import { defaultModel } from "@/lib/ai";
 import { generateObject } from "ai";
 import { z } from "zod";
-import { buildRoadmapPrompt } from "@/prompts/roadmap-generator";
+import { buildRoadmapPrompt, PlanningContext } from "@/prompts/roadmap-generator";
 import { GapReportResult } from "@/types/gaps";
 import { TargetRole } from "@prisma/client";
 import { assertPlanAllows } from "@/lib/plan-guard";
+import { fetchGitHubSignal } from "@/lib/github-signal";
 
 const TaskSchema = z.object({
   label: z.string(),
   description: z.string(),
   resourceUrls: z.array(z.string()),
   hours: z.number(),
-  impactScore: z.number(),    // 1-10: how much this task boosts readiness
-  whyItMatters: z.string(),   // e.g. "Asked in 80% of ML Engineer interviews"
+  impactScore: z.number(),
+  whyItMatters: z.string(),
 });
 
 const WeekSchema = z.object({
@@ -27,7 +28,6 @@ const WeekSchema = z.object({
   tasks: z.array(TaskSchema),
 });
 
-// Anthropic structured output requires a root object — wrap the array
 const RoadmapSchema = z.object({ weeks: z.array(WeekSchema) });
 
 export async function POST(req: Request) {
@@ -38,7 +38,7 @@ export async function POST(req: Request) {
   const _planGuard = await assertPlanAllows(userId, "roadmap_generation");
   if (_planGuard) return _planGuard;
 
-  const { gapReportId, hoursPerWeek = 10 } = await req.json();
+  const { gapReportId } = await req.json();
 
   const gapReport = await db.gapReport.findFirst({
     where: gapReportId ? { id: gapReportId, userId } : { userId },
@@ -48,17 +48,47 @@ export async function POST(req: Request) {
 
   const user = await db.user.findUnique({
     where: { id: userId },
-    select: { targetRole: true },
+    select: {
+      targetRole: true,
+      hoursPerWeek: true,
+      targetTimeline: true,
+      targetCompanyType: true,
+      learningStyle: true,
+      targetReason: true,
+      githubUrl: true,
+      githubSignal: true,
+    },
   });
 
   const targetRole = (user?.targetRole ?? "product_swe") as TargetRole;
 
+  const planning: PlanningContext = {
+    hoursPerWeek:       user?.hoursPerWeek        ?? 10,
+    targetTimeline:     user?.targetTimeline       ?? "6_months",
+    targetCompanyType:  user?.targetCompanyType    ?? "any_product",
+    learningStyle:      user?.learningStyle        ?? "mix",
+    targetReason:       user?.targetReason         ?? "growth",
+  };
+
+  // Fetch GitHub signal — use cached value if available, otherwise fetch live
+  let githubSignal = user?.githubSignal
+    ? (user.githubSignal as unknown as import("@/lib/github-signal").GitHubSignal)
+    : null;
+
+  if (!githubSignal && user?.githubUrl) {
+    githubSignal = await fetchGitHubSignal(user.githubUrl);
+    if (githubSignal) {
+      // Cache for future regenerations (fire-and-forget)
+      db.user.update({ where: { id: userId }, data: { githubSignal: githubSignal as unknown as import("@prisma/client").Prisma.InputJsonValue } }).catch(() => {});
+    }
+  }
+
   const gapReportResult: GapReportResult = {
-    skillGaps: (gapReport.skillGaps as unknown) as GapReportResult["skillGaps"],
-    projectGaps: (gapReport.projectGaps as unknown) as GapReportResult["projectGaps"],
-    storyGaps: (gapReport.storyGaps as unknown) as GapReportResult["storyGaps"],
+    skillGaps:     (gapReport.skillGaps as unknown) as GapReportResult["skillGaps"],
+    projectGaps:   (gapReport.projectGaps as unknown) as GapReportResult["projectGaps"],
+    storyGaps:     (gapReport.storyGaps as unknown) as GapReportResult["storyGaps"],
     totalGapScore: gapReport.totalGapScore,
-    summary: "",
+    summary:       "",
   };
 
   // Fetch resume + analysis for deep signal calibration
@@ -71,11 +101,11 @@ export async function POST(req: Request) {
   const resumeText = analysis?.resume?.rawText ?? undefined;
   const resumeSignal = analysis
     ? {
-        overallScore: analysis.overallScore,
-        skillsFound: (analysis.skillsFound as string[]) ?? [],
-        techYears: (analysis.techYears as Record<string, number>) ?? {},
+        overallScore:     analysis.overallScore,
+        skillsFound:      (analysis.skillsFound as string[]) ?? [],
+        techYears:        (analysis.techYears as Record<string, number>) ?? {},
         starStoriesCount: analysis.starStoriesCount,
-        impactScore: analysis.impactScore,
+        impactScore:      analysis.impactScore,
         projectComplexity: analysis.projectComplexity,
       }
     : undefined;
@@ -83,7 +113,7 @@ export async function POST(req: Request) {
   const { object } = await generateObject({
     model: defaultModel,
     schema: RoadmapSchema,
-    prompt: buildRoadmapPrompt(gapReportResult, targetRole, hoursPerWeek, resumeText, resumeSignal),
+    prompt: buildRoadmapPrompt(gapReportResult, targetRole, planning, resumeText, resumeSignal, githubSignal),
   });
   const weeks = object.weeks;
 
@@ -98,20 +128,20 @@ export async function POST(req: Request) {
       startedAt: new Date(),
       weeks: {
         create: weeks.map((w) => ({
-          weekNumber: w.weekNumber,
-          theme: w.theme,
+          weekNumber:     w.weekNumber,
+          theme:          w.theme,
           estimatedHours: w.estimatedHours,
-          deliverable: w.deliverable,
+          deliverable:    w.deliverable,
           deliverableDone: false,
           tasks: {
             create: w.tasks.map((t) => ({
-              label: t.label,
-              description: t.description,
-              resourceUrls: t.resourceUrls,
-              hours: t.hours,
-              impactScore: Math.min(10, Math.max(1, Math.round(t.impactScore))),
-              whyItMatters: t.whyItMatters,
-              completed: false,
+              label:         t.label,
+              description:   t.description,
+              resourceUrls:  t.resourceUrls,
+              hours:         t.hours,
+              impactScore:   Math.min(10, Math.max(1, Math.round(t.impactScore))),
+              whyItMatters:  t.whyItMatters,
+              completed:     false,
             })),
           },
         })),
@@ -119,7 +149,6 @@ export async function POST(req: Request) {
     },
   });
 
-  // Track usage for plan guard (lifetime count)
   await db.activityLog.create({
     data: { userId, type: "roadmap_generated", metadata: { roadmapId: roadmap.id } },
   });

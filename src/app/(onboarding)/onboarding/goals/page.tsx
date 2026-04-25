@@ -9,25 +9,33 @@ import { TargetRole } from "@prisma/client";
 import { cn } from "@/lib/utils";
 
 const roleDescriptions: Record<string, string> = {
-  product_swe: "Build features at SaaS/product companies — LeetCode, system design, product thinking",
-  staff_eng: "Technical leadership, architecture, cross-team impact at scale",
-  ml_eng: "Build and deploy ML models — Python, PyTorch, MLOps, LLMs",
-  ai_pm: "Ship AI features as a PM — metrics, roadmaps, ML fundamentals",
-  data_scientist: "Experiments, insights, forecasting — statistics, Python, SQL",
+  product_swe:     "Build features at SaaS/product companies — LeetCode, system design, product thinking",
+  staff_eng:       "Technical leadership, architecture, cross-team impact at scale",
+  ml_eng:          "Build and deploy ML models — Python, PyTorch, MLOps, LLMs",
+  ai_pm:           "Ship AI features as a PM — metrics, roadmaps, ML fundamentals",
+  data_scientist:  "Experiments, insights, forecasting — statistics, Python, SQL",
 };
+
+const REASON_OPTIONS = [
+  { value: "growth",     label: "Better growth & earnings",    sub: "Faster progression, higher TC" },
+  { value: "passion",    label: "Passionate about products",   sub: "I want to own what I build" },
+  { value: "culture",    label: "Better engineering culture",  sub: "Ownership, craft, low politics" },
+  { value: "relocation", label: "Location / remote",           sub: "Targeting a city or full remote" },
+];
 
 export default function OnboardingGoals() {
   const router = useRouter();
-  const [selected, setSelected] = useState<TargetRole | null>(null);
+  const [selectedRole, setSelectedRole] = useState<TargetRole | null>(null);
+  const [selectedReason, setSelectedReason] = useState<string>("growth");
   const [saving, setSaving] = useState(false);
 
   async function handleFinish() {
-    if (!selected) return;
+    if (!selectedRole) return;
     setSaving(true);
     await fetch("/api/onboarding/complete", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ targetRole: selected }),
+      body: JSON.stringify({ targetRole: selectedRole, targetReason: selectedReason }),
     });
     router.push("/dashboard");
   }
@@ -60,10 +68,10 @@ export default function OnboardingGoals() {
             <button
               key={opt.value}
               type="button"
-              onClick={() => setSelected(opt.value)}
+              onClick={() => setSelectedRole(opt.value)}
               className={cn(
                 "w-full flex items-start justify-between rounded-xl border-2 p-4 text-left transition-all hover:border-primary/50",
-                selected === opt.value
+                selectedRole === opt.value
                   ? "border-primary bg-primary/5 shadow-sm"
                   : "border-slate-200 bg-white"
               )}
@@ -72,14 +80,39 @@ export default function OnboardingGoals() {
                 <p className="font-semibold text-base text-slate-900">{opt.label}</p>
                 <p className="text-sm text-slate-500 mt-0.5">{roleDescriptions[opt.value]}</p>
               </div>
-              {selected === opt.value && <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5 ml-3" />}
+              {selectedRole === opt.value && <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5 ml-3" />}
             </button>
           ))}
         </div>
 
+        {/* Why making this move */}
+        <div className="border-t border-slate-100 pt-5 mb-7">
+          <p className="text-sm font-semibold text-slate-700 mb-3">Why are you making this move?</p>
+          <div className="grid grid-cols-2 gap-2">
+            {REASON_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => setSelectedReason(opt.value)}
+                className={cn(
+                  "rounded-xl border-2 p-3 text-left transition-all",
+                  selectedReason === opt.value
+                    ? "border-primary bg-primary/5"
+                    : "border-slate-200 hover:border-primary/40"
+                )}
+              >
+                <p className={cn("text-sm font-semibold leading-snug", selectedReason === opt.value ? "text-primary" : "text-slate-800")}>
+                  {opt.label}
+                </p>
+                <p className="text-xs text-slate-500 mt-0.5">{opt.sub}</p>
+              </button>
+            ))}
+          </div>
+        </div>
+
         <Button
           className="w-full h-12 gap-2 font-semibold text-base shadow-md shadow-primary/25"
-          disabled={!selected || saving}
+          disabled={!selectedRole || saving}
           onClick={handleFinish}
         >
           {saving

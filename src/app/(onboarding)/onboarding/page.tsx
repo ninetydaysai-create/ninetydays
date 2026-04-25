@@ -11,20 +11,114 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { COMPANY_OPTIONS } from "@/lib/constants";
 import { ArrowRight, Loader2, CheckCircle2, Link, GitBranch } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const PENDING_BETA_CODE_KEY = "pending_beta_code";
 
 const schema = z.object({
-  currentCompany: z.string().min(1, "Select your company type"),
-  currentRole: z.string().min(2, "Enter your current role title"),
-  yearsExperience: z.number().min(0).max(50),
-  linkedinUrl: z.string().url("Enter a valid LinkedIn URL").or(z.literal("")).optional(),
-  githubUrl: z.string().url("Enter a valid GitHub URL").or(z.literal("")).optional(),
+  currentCompany:   z.string().min(1, "Select your company type"),
+  currentRole:      z.string().min(2, "Enter your current role title"),
+  yearsExperience:  z.number().min(0).max(50),
+  hoursPerWeek:     z.number(),
+  targetTimeline:   z.string(),
+  targetCompanyType: z.string(),
+  learningStyle:    z.string(),
+  linkedinUrl:      z.string().url("Enter a valid LinkedIn URL").or(z.literal("")).optional(),
+  githubUrl:        z.string().url("Enter a valid GitHub URL").or(z.literal("")).optional(),
 });
 
 type FormValues = z.infer<typeof schema>;
 
 const LABEL = "block text-sm font-semibold text-slate-700 mb-1.5";
+
+const HOURS_OPTIONS = [
+  { value: 5,  label: "~5 hrs" },
+  { value: 10, label: "~10 hrs" },
+  { value: 15, label: "~15 hrs" },
+  { value: 20, label: "20+ hrs" },
+];
+
+const TIMELINE_OPTIONS = [
+  { value: "3_months",  label: "3 months",  sub: "Aggressive sprint" },
+  { value: "6_months",  label: "6 months",  sub: "Steady pace" },
+  { value: "12_months", label: "12 months", sub: "Deep learning" },
+];
+
+const COMPANY_TYPE_OPTIONS = [
+  { value: "faang",          label: "FAANG / Big Tech",      sub: "Google, Meta, Apple…" },
+  { value: "funded_startup", label: "Series B+ Startup",     sub: "Funded product companies" },
+  { value: "any_product",    label: "Any Product Company",   sub: "Open to options" },
+];
+
+const LEARNING_STYLE_OPTIONS = [
+  { value: "projects", label: "Building projects" },
+  { value: "courses",  label: "Video courses" },
+  { value: "docs",     label: "Docs & books" },
+  { value: "mix",      label: "Mix of all" },
+];
+
+function RadioPills<T extends string | number>({
+  options,
+  value,
+  onChange,
+}: {
+  options: { value: T; label: string }[];
+  value: T;
+  onChange: (v: T) => void;
+}) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {options.map((opt) => (
+        <button
+          key={String(opt.value)}
+          type="button"
+          onClick={() => onChange(opt.value)}
+          className={cn(
+            "px-3.5 py-1.5 rounded-full text-sm font-medium border transition-all",
+            value === opt.value
+              ? "border-primary bg-primary/5 text-primary"
+              : "border-slate-200 text-slate-600 hover:border-primary/40 hover:text-slate-800"
+          )}
+        >
+          {opt.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function RadioCards<T extends string>({
+  options,
+  value,
+  onChange,
+}: {
+  options: { value: T; label: string; sub: string }[];
+  value: T;
+  onChange: (v: T) => void;
+}) {
+  return (
+    <div className="grid grid-cols-3 gap-2">
+      {options.map((opt) => (
+        <button
+          key={opt.value}
+          type="button"
+          onClick={() => onChange(opt.value)}
+          className={cn(
+            "rounded-xl border-2 p-3 text-left transition-all",
+            value === opt.value
+              ? "border-primary bg-primary/5"
+              : "border-slate-200 hover:border-primary/40"
+          )}
+        >
+          <p className={cn("text-sm font-semibold leading-snug", value === opt.value ? "text-primary" : "text-slate-800")}>
+            {opt.label}
+          </p>
+          <p className="text-xs text-slate-500 mt-0.5 leading-snug">{opt.sub}</p>
+        </button>
+      ))}
+    </div>
+  );
+}
 
 export default function OnboardingStep1() {
   const router = useRouter();
@@ -53,7 +147,17 @@ export default function OnboardingStep1() {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { currentCompany: "", currentRole: "", yearsExperience: 3, linkedinUrl: "", githubUrl: "" },
+    defaultValues: {
+      currentCompany: "",
+      currentRole: "",
+      yearsExperience: 3,
+      hoursPerWeek: 10,
+      targetTimeline: "6_months",
+      targetCompanyType: "any_product",
+      learningStyle: "mix",
+      linkedinUrl: "",
+      githubUrl: "",
+    },
   });
 
   async function onSubmit(values: FormValues) {
@@ -151,8 +255,70 @@ export default function OnboardingStep1() {
               </FormItem>
             )} />
 
+            {/* ── Planning preferences ─────────────────────────────────────── */}
             <div className="border-t border-slate-100 pt-5">
-              <p className="text-xs text-slate-400 font-medium uppercase tracking-wide mb-4">Optional — helps personalize your plan</p>
+              <p className="text-xs text-slate-400 font-medium uppercase tracking-wide mb-4">Personalize your 90-day plan</p>
+
+              {/* Hours per week */}
+              <FormField control={form.control} name="hoursPerWeek" render={({ field }) => (
+                <FormItem className="mb-4">
+                  <FormLabel className={LABEL}>Hours available per week</FormLabel>
+                  <FormControl>
+                    <RadioPills
+                      options={HOURS_OPTIONS}
+                      value={field.value as number}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )} />
+
+              {/* Target timeline */}
+              <FormField control={form.control} name="targetTimeline" render={({ field }) => (
+                <FormItem className="mb-4">
+                  <FormLabel className={LABEL}>When do you want to land the role?</FormLabel>
+                  <FormControl>
+                    <RadioCards
+                      options={TIMELINE_OPTIONS}
+                      value={field.value as string}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )} />
+
+              {/* Target company type */}
+              <FormField control={form.control} name="targetCompanyType" render={({ field }) => (
+                <FormItem className="mb-4">
+                  <FormLabel className={LABEL}>Type of company you&apos;re targeting</FormLabel>
+                  <FormControl>
+                    <RadioCards
+                      options={COMPANY_TYPE_OPTIONS}
+                      value={field.value as string}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )} />
+
+              {/* Learning style */}
+              <FormField control={form.control} name="learningStyle" render={({ field }) => (
+                <FormItem>
+                  <FormLabel className={LABEL}>How do you learn best?</FormLabel>
+                  <FormControl>
+                    <RadioPills
+                      options={LEARNING_STYLE_OPTIONS}
+                      value={field.value as string}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )} />
+            </div>
+
+            {/* ── Optional links ───────────────────────────────────────────── */}
+            <div className="border-t border-slate-100 pt-5">
+              <p className="text-xs text-slate-400 font-medium uppercase tracking-wide mb-4">Optional — helps personalize your plan further</p>
 
               {/* LinkedIn URL */}
               <FormField control={form.control} name="linkedinUrl" render={({ field }) => (

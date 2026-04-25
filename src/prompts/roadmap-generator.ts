@@ -1,16 +1,24 @@
 import { TargetRole } from "@prisma/client";
 import { GapReportResult } from "@/types/gaps";
+import { GitHubSignal } from "@/lib/github-signal";
 
 interface ResumeSignal {
   overallScore: number;
   skillsFound: string[];
-  techYears: Record<string, number>; // { Python: 4, React: 2 }
+  techYears: Record<string, number>; // { React: 3, Java: 8, ... }
   starStoriesCount: number;
   impactScore: number;
   projectComplexity: number;
 }
 
-// Classify each gap's evidence depth from what's in the resume
+export interface PlanningContext {
+  hoursPerWeek: number;
+  targetTimeline: string;     // "3_months" | "6_months" | "12_months"
+  targetCompanyType: string;  // "faang" | "funded_startup" | "any_product"
+  learningStyle: string;      // "projects" | "courses" | "docs" | "mix"
+  targetReason: string;       // "growth" | "passion" | "culture" | "relocation"
+}
+
 function classifySignalDepth(
   gapLabel: string,
   resumeText: string,
@@ -20,18 +28,15 @@ function classifySignalDepth(
   const label = gapLabel.toLowerCase();
   const text = resumeText.toLowerCase();
 
-  // Check techYears first — has actual years of evidence
   const techMatch = Object.entries(techYears).find(([tech]) =>
     label.includes(tech.toLowerCase()) || tech.toLowerCase().includes(label.split(" ")[0])
   );
   if (techMatch && techMatch[1] >= 2) return "MODERATE";
 
-  // Check if skill appears in skillsFound
   const inSkills = skillsFound.some(
     (s) => s.toLowerCase().includes(label.split(" ")[0]) || label.includes(s.toLowerCase())
   );
 
-  // Check if it appears in resume text with project context
   const mentionCount = (text.match(new RegExp(label.split(" ")[0], "g")) ?? []).length;
   const hasProjectContext =
     text.includes("built") || text.includes("developed") || text.includes("deployed") || text.includes("implemented");
@@ -41,14 +46,88 @@ function classifySignalDepth(
   return "ABSENT";
 }
 
+function timelineInstructions(timeline: string, hoursPerWeek: number): string {
+  if (timeline === "3_months") {
+    return `URGENCY: HIGH — candidate wants a job in 3 months (12 weeks). Ruthlessly prioritize. Focus only on tasks with impactScore ≥ 7. Cut nice-to-have topics. Every week must close a CRITICAL gap or build an interview-ready deliverable. No luxury of breadth — go deep on what matters most.`;
+  }
+  if (timeline === "6_months") {
+    return `URGENCY: MEDIUM — candidate has 6 months. This 12-week plan covers the first sprint. Build a solid foundation and 2-3 portfolio projects. Include both depth and some breadth. Phase 3 has room for polish and multiple mock interviews.`;
+  }
+  return `URGENCY: LOW — candidate has 12 months. This 12-week plan is sprint 1 of 4. Prioritize deep understanding over speed. Include stretch goals and advanced topics. Build the strongest possible foundation — the candidate has time to go deep.`;
+}
+
+function companyTypeInstructions(companyType: string): string {
+  if (companyType === "faang") {
+    return `TARGET COMPANY: FAANG / Big Tech (Google, Meta, Apple, Amazon, Microsoft).
+MANDATORY inclusions every week:
+- LeetCode practice: minimum 3 problems/week, mix of Medium and Hard, focused on trees, graphs, DP, arrays
+- System design: at least 1 full system design session per week from Week 3 onwards
+- Behavioral prep: STAR story for each leadership principle
+These are non-negotiable. FAANG screens are 50% DS&A + 50% system design at senior levels.`;
+  }
+  if (companyType === "funded_startup") {
+    return `TARGET COMPANY: Series B+ Startup (funded product companies).
+Focus on: shipping speed, full-stack ownership, metrics-driven development, product intuition.
+Include: end-to-end feature builds, architecture decision records, infra basics (Docker, CI/CD), product sense exercises.
+Less emphasis on: puzzle-style algorithmic problems — do Easy/Medium LeetCode but not Hard grinding.
+More emphasis on: "show me what you can build" — strong GitHub portfolio matters more than whiteboard performance.`;
+  }
+  return `TARGET COMPANY: Any product company (balanced approach).
+Balance between: algorithmic interview prep (LeetCode Medium), system design, and portfolio projects.
+Include both coding practice and real deliverables each week.`;
+}
+
+function learningStyleInstructions(style: string): string {
+  if (style === "projects") {
+    return `LEARNING STYLE: Build-first. Candidate learns by doing. Every task must produce a code artifact or running system. Minimize reading-only tasks. Reference project-based tutorials and GitHub examples over video lectures. Default to "build X" over "watch video about X".`;
+  }
+  if (style === "courses") {
+    return `LEARNING STYLE: Structured learner. Candidate prefers watching video courses before building. Include structured course recommendations (Coursera, Udemy, YouTube playlists) as the primary learning path, followed by a small project to apply knowledge. Reference specific course names and chapter numbers where possible.`;
+  }
+  if (style === "docs") {
+    return `LEARNING STYLE: Deep reader. Candidate prefers official documentation, technical blogs, and books. Recommend official docs, engineering blogs (Google AI, Meta Engineering, Netflix Tech), and books (DDIA, CLRS) as primary references. Build exercises reinforce the reading.`;
+  }
+  return `LEARNING STYLE: Mixed. Balance structured resources (courses/docs) with hands-on project tasks. Each week should include both a learning resource and a build deliverable.`;
+}
+
+function reasonContext(reason: string): string {
+  const map: Record<string, string> = {
+    growth:     "Candidate is motivated by career growth and higher TC. Frame task descriptions in terms of career impact and progression.",
+    passion:    "Candidate wants to own and build products, not deliver for clients. Emphasize ownership language, product thinking, and builder mindset in task descriptions.",
+    culture:    "Candidate is escaping low-ownership, politics-heavy environment. Highlight tasks that demonstrate technical leadership, initiative, and engineering craft.",
+    relocation: "Candidate may be targeting specific job markets. Include remote-friendly company types and cross-timezone collaboration considerations in project ideas.",
+  };
+  return map[reason] ?? "";
+}
+
+function githubSignalSection(signal: GitHubSignal | null): string {
+  if (!signal) return "";
+  const repoList = signal.topRepos
+    .map((r) => `    • ${r.name} (${r.stars}⭐, ${r.language}): ${r.description || "no description"}`)
+    .join("\n");
+  return `
+GITHUB PROFILE SIGNAL:
+- Username: ${signal.username}
+- Own public repos: ${signal.publicRepos}
+- Languages used: ${signal.topLanguages.slice(0, 6).join(", ")}
+- Top repos:
+${repoList}
+
+INSTRUCTION: Reference specific repo names and domains in task descriptions where relevant.
+Example: instead of "Build a REST API" → "Add authentication and rate limiting to your ${signal.topRepos[0]?.name ?? "existing"} project".
+`;
+}
+
 export function buildRoadmapPrompt(
   gapReport: GapReportResult,
   targetRole: TargetRole,
-  hoursPerWeek: number,
+  planning: PlanningContext,
   resumeText?: string,
-  resumeSignal?: ResumeSignal
+  resumeSignal?: ResumeSignal,
+  githubSignal?: GitHubSignal | null
 ): string {
   const roleLabel = targetRole.replace(/_/g, " ");
+  const { hoursPerWeek, targetTimeline, targetCompanyType, learningStyle, targetReason } = planning;
 
   // Build signal depth map for all gaps
   const signalMap: Record<string, string> = {};
@@ -82,10 +161,21 @@ export function buildRoadmapPrompt(
     resumeText &&
     /tcs|infosys|wipro|accenture|cognizant|capgemini|hcl|tech mahindra/i.test(resumeText);
 
-  return `You are a senior engineering career coach building a PERSONALIZED 12-week transition plan. This is NOT a generic template — every week and every task must be calibrated to this specific candidate's actual starting point.
+  return `You are a senior engineering career coach building a PERSONALIZED 12-week transition plan. This is NOT a generic template — every week and every task must be calibrated to this specific candidate's actual starting point, goals, and constraints.
 
 TARGET ROLE: ${roleLabel} at a top product company
 AVAILABLE TIME: ${hoursPerWeek} hours/week
+
+---
+
+CANDIDATE CONTEXT:
+${timelineInstructions(targetTimeline, hoursPerWeek)}
+
+${companyTypeInstructions(targetCompanyType)}
+
+${learningStyleInstructions(learningStyle)}
+
+MOTIVATION: ${reasonContext(targetReason)}
 
 ---
 
@@ -99,7 +189,7 @@ ${hasServiceCompanyPattern ? "- ⚠️ SERVICE COMPANY BACKGROUND DETECTED: Resu
 
 RESUME EXCERPT (actual candidate content — use this to personalize tasks):
 ${resumeText ? resumeText.slice(0, 3000) : "Not available"}
-
+${githubSignalSection(githubSignal ?? null)}
 ---
 
 GAP ANALYSIS WITH SIGNAL DEPTH:
@@ -137,7 +227,7 @@ CALIBRATION RULES — follow these strictly:
      ? `Week 1-2 MUST include: Rewrite 3 resume bullets from delivery language to ownership language. Convert "worked on X" to "designed and built X that achieved Y". This is mandatory — it's the #1 rejection cause.`
      : "Not applicable."}
 
-4. PHASE STRUCTURE — derive from gap distribution, not a template:
+4. PHASE STRUCTURE — derive from gap distribution and timeline urgency:
    - Phase 1 (Weeks 1-4): Close CRITICAL+ABSENT gaps. Build foundations the candidate actually lacks.
    - Phase 2 (Weeks 5-8): Close CRITICAL+WEAK and MAJOR gaps. Build 2-3 real portfolio projects.
    - Phase 3 (Weeks 9-12): Polish + practice. Mock interviews, applications, story refinement.

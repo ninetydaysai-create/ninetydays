@@ -63,6 +63,12 @@ model User {
   stripeSubscriptionId   String?     @unique
   stripePriceId          String?
   stripeCurrentPeriodEnd DateTime?
+  hoursPerWeek           Int?        @default(10)
+  targetTimeline         String?     // "3_months" | "6_months" | "12_months"
+  targetCompanyType      String?     // "faang" | "funded_startup" | "any_product"
+  learningStyle          String?     // "projects" | "courses" | "docs" | "mix"
+  targetReason           String?     // "growth" | "passion" | "culture" | "relocation"
+  githubSignal           Json?
   referralCode           String?     @unique  // e.g. "gaurav-x3k2"
   referredBy             String?              // userId of the referrer
   referralCount          Int         @default(0)

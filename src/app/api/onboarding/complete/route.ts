@@ -9,12 +9,13 @@ export async function POST(req: Request) {
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   await syncUser(userId);
 
-  const { targetRole } = await req.json();
+  const { targetRole, targetReason } = await req.json();
 
   await db.user.update({
     where: { id: userId },
     data: {
       targetRole: targetRole as TargetRole,
+      targetReason: targetReason ?? null,
       onboardingDone: true,
     },
   });
