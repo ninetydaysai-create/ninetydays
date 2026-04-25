@@ -31,15 +31,43 @@ export async function GET() {
     : 0;
   const weeksOnPlatform = Math.max(1, Math.ceil(dayOfJourney / 7));
 
+  // Compute task streak: consecutive calendar days (UTC) with at least one completed task
+  const taskLogs = await db.activityLog.findMany({
+    where: { userId, type: "task_completed" },
+    select: { createdAt: true },
+    orderBy: { createdAt: "desc" },
+  });
+
+  function computeStreak(logs: { createdAt: Date }[]): number {
+    if (!logs.length) return 0;
+    const days = new Set(logs.map((l) => l.createdAt.toISOString().slice(0, 10)));
+    const todayStr = new Date().toISOString().slice(0, 10);
+    // Allow streak to include today OR allow yesterday as the most recent (so opening the app
+    // mid-day doesn't break a streak the user earned yesterday)
+    let cursor = days.has(todayStr) ? new Date() : new Date(Date.now() - 86_400_000);
+    let streak = 0;
+    while (true) {
+      const key = cursor.toISOString().slice(0, 10);
+      if (!days.has(key)) break;
+      streak++;
+      cursor = new Date(cursor.getTime() - 86_400_000);
+    }
+    return streak;
+  }
+
+  const streak = computeStreak(taskLogs);
+
   return NextResponse.json({
     plan:              user?.plan ?? "FREE",
     name:              user?.name ?? null,
     readinessScore:    latestGap?.totalGapScore ?? null,
     roleLabel:         user?.targetRole ? (ROLE_LABELS[user.targetRole as TargetRole] ?? "your target role") : "your target role",
+    targetRole:        user?.targetRole ?? null,
     weeksOnPlatform,
     hoursPerWeek:      user?.hoursPerWeek      ?? 10,
     targetTimeline:    user?.targetTimeline     ?? null,
     targetCompanyType: user?.targetCompanyType  ?? null,
     learningStyle:     user?.learningStyle      ?? null,
+    streak,
   });
 }

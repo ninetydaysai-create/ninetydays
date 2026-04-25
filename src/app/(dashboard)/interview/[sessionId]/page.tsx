@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Send, Trophy, TrendingUp, AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
+import { ArrowLeft, Send, Trophy, TrendingUp, AlertCircle, CheckCircle2, Loader2, Mic, MicOff, Square } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
@@ -43,6 +43,79 @@ export default function InterviewSessionPage() {
   const [userAnswers, setUserAnswers] = useState(0);
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Voice recording
+  type RecordingState = "idle" | "recording" | "transcribing";
+  const [recordingState, setRecordingState] = useState<RecordingState>("idle");
+  const [recordingSeconds, setRecordingSeconds] = useState(0);
+  const [micError, setMicError] = useState<string | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const MAX_RECORDING_SECS = 90;
+
+  function stopRecording() {
+    if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
+      mediaRecorderRef.current.stop();
+    }
+  }
+
+  async function startRecording() {
+    setMicError(null);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      audioChunksRef.current = [];
+
+      // Pick a supported MIME type — webm is best supported across browsers
+      const mimeType = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
+        ? "audio/webm;codecs=opus"
+        : MediaRecorder.isTypeSupported("audio/webm")
+        ? "audio/webm"
+        : "";
+
+      const mr = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
+      mediaRecorderRef.current = mr;
+
+      mr.ondataavailable = (e) => { if (e.data.size > 0) audioChunksRef.current.push(e.data); };
+
+      mr.onstop = async () => {
+        stream.getTracks().forEach((t) => t.stop());
+        const blob = new Blob(audioChunksRef.current, { type: mimeType || "audio/webm" });
+        setRecordingState("transcribing");
+        try {
+          const fd = new FormData();
+          fd.append("audio", blob, "recording.webm");
+          const res = await fetch("/api/interview/transcribe", { method: "POST", body: fd });
+          if (res.ok) {
+            const { text } = await res.json();
+            setInput((prev) => prev ? `${prev} ${text}` : text);
+          } else {
+            setMicError("Transcription failed — please type your answer.");
+          }
+        } catch {
+          setMicError("Transcription failed — please type your answer.");
+        } finally {
+          setRecordingState("idle");
+          setRecordingSeconds(0);
+        }
+      };
+
+      mr.start(250); // collect data every 250ms
+      setRecordingState("recording");
+      setRecordingSeconds(0);
+
+      timerRef.current = setInterval(() => {
+        setRecordingSeconds((s) => {
+          if (s + 1 >= MAX_RECORDING_SECS) { stopRecording(); return 0; }
+          return s + 1;
+        });
+      }, 1000);
+    } catch {
+      setMicError("Microphone access denied. Please allow mic access and try again.");
+    }
+  }
 
   // Auto-scroll
   useEffect(() => {
@@ -306,7 +379,31 @@ export default function InterviewSessionPage() {
           {/* Input */}
           {!done && (
             <div className="shrink-0 pt-4 border-t">
-              <div className="flex gap-3 items-end">
+              {/* Recording indicator */}
+              {recordingState === "recording" && (
+                <div className="flex items-center gap-2 mb-2 px-1">
+                  <span className="h-2 w-2 rounded-full bg-red-500 animate-pulse shrink-0" />
+                  <span className="text-sm font-medium text-red-400">
+                    Recording — {recordingSeconds}s / {MAX_RECORDING_SECS}s
+                  </span>
+                  <div className="flex-1 bg-white/10 rounded-full h-1 overflow-hidden">
+                    <div
+                      className="h-full bg-red-500 transition-all"
+                      style={{ width: `${(recordingSeconds / MAX_RECORDING_SECS) * 100}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+              {recordingState === "transcribing" && (
+                <div className="flex items-center gap-2 mb-2 px-1">
+                  <Loader2 className="h-3.5 w-3.5 animate-spin text-indigo-400 shrink-0" />
+                  <span className="text-sm text-indigo-400">Transcribing your answer…</span>
+                </div>
+              )}
+              {micError && (
+                <p className="text-xs text-red-400 mb-2 px-1">{micError}</p>
+              )}
+              <div className="flex gap-2 items-end">
                 <Textarea
                   ref={textareaRef}
                   value={input}
@@ -317,20 +414,45 @@ export default function InterviewSessionPage() {
                       sendMessage();
                     }
                   }}
-                  placeholder="Type your answer... (Enter to send, Shift+Enter for new line)"
+                  placeholder={
+                    recordingState === "transcribing"
+                      ? "Transcribing your voice answer…"
+                      : "Type your answer, or tap the mic to speak…"
+                  }
                   className="min-h-[56px] md:min-h-[80px] max-h-[140px] md:max-h-[200px] resize-none text-base"
-                  disabled={streaming || evaluating}
+                  disabled={streaming || evaluating || recordingState !== "idle"}
                 />
-                <Button
-                  onClick={sendMessage}
-                  disabled={!input.trim() || streaming || evaluating}
-                  className="h-[56px] md:h-[80px] w-14 shrink-0"
-                >
-                  <Send className="h-4 w-4" />
-                </Button>
+                <div className="flex flex-col gap-2 shrink-0">
+                  {/* Mic button */}
+                  <Button
+                    type="button"
+                    variant={recordingState === "recording" ? "destructive" : "outline"}
+                    className={cn(
+                      "h-[40px] w-12",
+                      recordingState === "transcribing" && "opacity-50 pointer-events-none"
+                    )}
+                    onClick={recordingState === "recording" ? stopRecording : startRecording}
+                    disabled={streaming || evaluating || recordingState === "transcribing"}
+                    title={recordingState === "recording" ? "Stop recording" : "Record your answer (90s max)"}
+                  >
+                    {recordingState === "recording"
+                      ? <Square className="h-3.5 w-3.5 fill-current" />
+                      : recordingState === "transcribing"
+                      ? <Loader2 className="h-4 w-4 animate-spin" />
+                      : <Mic className="h-4 w-4" />}
+                  </Button>
+                  {/* Send button */}
+                  <Button
+                    onClick={sendMessage}
+                    disabled={!input.trim() || streaming || evaluating || recordingState !== "idle"}
+                    className="h-[40px] w-12 shrink-0"
+                  >
+                    <Send className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
               <p className="text-xs text-muted-foreground mt-2">
-                Shift+Enter for new line · Enter to send
+                <Mic className="h-3 w-3 inline mr-1" />Tap mic to answer out loud · Enter to send
               </p>
             </div>
           )}

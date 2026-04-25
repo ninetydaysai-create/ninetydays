@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import Link from "next/link";
 import { MilestoneShareBanner } from "@/components/shared/ShareProgressCard";
+import { CompaniesPanel } from "@/components/shared/CompaniesPanel";
 import {
   ArrowRight,
   Lock,
@@ -21,6 +22,7 @@ import {
   Clock,
   Target,
   BookOpen,
+  Flame,
 } from "lucide-react";
 
 interface Task {
@@ -55,11 +57,13 @@ interface UserPlan {
   name?: string | null;
   readinessScore?: number | null;
   roleLabel?: string;
+  targetRole?: string | null;
   weeksOnPlatform?: number;
   hoursPerWeek?: number;
   targetTimeline?: string | null;
   targetCompanyType?: string | null;
   learningStyle?: string | null;
+  streak?: number;
 }
 
 const FREE_WEEKS_VISIBLE = 4;
@@ -387,9 +391,21 @@ export default function RoadmapPage() {
             <h1 className="text-3xl font-bold text-white">90-Day Roadmap</h1>
             <p className="text-slate-300 mt-1 text-base">Generated from your resume · every task targets a gap in your profile</p>
           </div>
-          <Badge variant="outline" className="shrink-0 text-sm px-3 py-1.5 font-semibold border-white/15 text-slate-300">
-            Week {currentWeek} / 12
-          </Badge>
+          <div className="flex items-center gap-2 shrink-0">
+            {(userPlan?.streak ?? 0) > 0 && (
+              <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border font-bold text-sm ${
+                (userPlan?.streak ?? 0) >= 7
+                  ? "bg-amber-500/15 border-amber-500/30 text-amber-400"
+                  : "bg-orange-500/10 border-orange-500/20 text-orange-400"
+              }`}>
+                <Flame className="h-3.5 w-3.5" />
+                {userPlan?.streak}d streak
+              </div>
+            )}
+            <Badge variant="outline" className="text-sm px-3 py-1.5 font-semibold border-white/15 text-slate-300">
+              Week {currentWeek} / 12
+            </Badge>
+          </div>
         </div>
 
         {/* Personalization context strip */}
@@ -454,6 +470,9 @@ export default function RoadmapPage() {
           </div>
         </div>
       </div>
+
+      {/* Companies panel */}
+      <CompaniesPanel targetRole={userPlan?.targetRole} roleLabel={userPlan?.roleLabel} />
 
       {/* Phase groups */}
       {PHASES.map((phase) => {
