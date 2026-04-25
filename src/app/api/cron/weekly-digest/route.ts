@@ -128,6 +128,8 @@ export async function GET(req: Request) {
           progressPct: pct,
           dashboardUrl: `${appUrl}/roadmap`,
           nextSteps: pendingTasks.slice(0, 3).map((t) => t.label),
+          readiness,
+          tasksThisWeek,
         })
       );
 

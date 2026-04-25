@@ -16,8 +16,10 @@ interface WeeklyDigestEmailProps {
   weekNumber: number;
   tasksCompleted: number;
   tasksTotal: number;
+  tasksThisWeek: number;
   currentWeekTheme: string;
   progressPct: number;
+  readiness: number;
   dashboardUrl: string;
   nextSteps: string[];
 }
@@ -27,17 +29,28 @@ export function WeeklyDigestEmail({
   weekNumber,
   tasksCompleted,
   tasksTotal,
+  tasksThisWeek,
   currentWeekTheme,
   progressPct,
+  readiness,
   dashboardUrl,
   nextSteps,
 }: WeeklyDigestEmailProps) {
   const firstName = name?.split(" ")[0] ?? "there";
 
+  const readinessColor =
+    readiness >= 70 ? "#16a34a" : readiness >= 50 ? "#d97706" : "#dc2626";
+
+  const readinessBg =
+    readiness >= 70 ? "#f0fdf4" : readiness >= 50 ? "#fffbeb" : "#fef2f2";
+
+  const readinessBorder =
+    readiness >= 70 ? "#bbf7d0" : readiness >= 50 ? "#fde68a" : "#fecaca";
+
   return (
     <Html>
       <Head />
-      <Preview>{`Week ${weekNumber} update — ${progressPct}% of your roadmap complete`}</Preview>
+      <Preview>{`Week ${weekNumber} — you're ${readiness}% ready`}</Preview>
       <Body style={main}>
         <Container style={container}>
           <Heading style={logo}>⚡ NinetyDays</Heading>
@@ -45,7 +58,16 @@ export function WeeklyDigestEmail({
           <Text style={eyebrow}>WEEK {weekNumber} DIGEST</Text>
           <Heading style={h1}>How&apos;s your transition going, {firstName}?</Heading>
 
-          {/* Progress */}
+          {/* Readiness Score Hero */}
+          <Section style={{ ...readinessHero, backgroundColor: readinessBg, borderColor: readinessBorder }}>
+            <Text style={{ ...readinessNumber, color: readinessColor }}>{readiness}%</Text>
+            <Text style={readinessLabel}>Interview Readiness Score</Text>
+            <Text style={{ ...readinessMotivation, color: readinessColor }}>
+              You&apos;re {readiness}% ready for a product company role
+            </Text>
+          </Section>
+
+          {/* Progress stats */}
           <Section style={statsRow}>
             <Section style={stat}>
               <Text style={statNumber}>{progressPct}%</Text>
@@ -56,8 +78,8 @@ export function WeeklyDigestEmail({
               <Text style={statLabel}>Tasks done</Text>
             </Section>
             <Section style={stat}>
-              <Text style={statNumber}>{weekNumber}</Text>
-              <Text style={statLabel}>of 12 weeks</Text>
+              <Text style={statNumber}>{tasksThisWeek}</Text>
+              <Text style={statLabel}>This week</Text>
             </Section>
           </Section>
 
@@ -101,6 +123,10 @@ const container = { margin: "0 auto", padding: "40px 24px", maxWidth: "520px" };
 const logo = { fontSize: "24px", fontWeight: "700", color: "#6366f1", marginBottom: "24px" };
 const eyebrow = { fontSize: "11px", fontWeight: "700", color: "#6366f1", letterSpacing: "2px", textTransform: "uppercase" as const, marginBottom: "8px" };
 const h1 = { fontSize: "26px", fontWeight: "700", color: "#111827", lineHeight: "1.3", marginBottom: "24px" };
+const readinessHero = { borderRadius: "12px", border: "1px solid", padding: "24px 20px", marginBottom: "28px", textAlign: "center" as const };
+const readinessNumber = { fontSize: "64px", fontWeight: "800", margin: "0 0 4px", lineHeight: "1" };
+const readinessLabel = { fontSize: "13px", fontWeight: "700", color: "#374151", textTransform: "uppercase" as const, letterSpacing: "1px", margin: "0 0 8px" };
+const readinessMotivation = { fontSize: "15px", fontWeight: "600", margin: "0" };
 const statsRow = { display: "flex", gap: "0", marginBottom: "28px" };
 const stat = { flex: "1", backgroundColor: "#f3f4f6", borderRadius: "8px", padding: "16px", margin: "0 4px", textAlign: "center" as const };
 const statNumber = { fontSize: "28px", fontWeight: "700", color: "#6366f1", margin: "0 0 4px" };

@@ -3,6 +3,42 @@ import { db } from "@/lib/db";
 import { ROLE_LABELS } from "@/lib/constants";
 import { TargetRole } from "@prisma/client";
 
+function getJobLinksForRole(targetRole: string): { label: string; url: string }[] {
+  const links: Record<string, { label: string; url: string }[]> = {
+    product_swe: [
+      { label: "LinkedIn: Software Engineer at top product companies", url: "https://www.linkedin.com/jobs/search/?keywords=software+engineer&f_C=1441%2C10667%2C1035%2C2382910" },
+      { label: "Wellfound: Software Engineer", url: "https://wellfound.com/role/r/software-engineer" },
+      { label: "Levels.fyi job board", url: "https://www.levels.fyi/jobs/?title=Software+Engineer" },
+    ],
+    ml_engineer: [
+      { label: "LinkedIn: ML Engineer roles", url: "https://www.linkedin.com/jobs/search/?keywords=machine+learning+engineer" },
+      { label: "Wellfound: ML Engineer", url: "https://wellfound.com/role/r/machine-learning-engineer" },
+      { label: "Levels.fyi: ML Engineer jobs", url: "https://www.levels.fyi/jobs/?title=ML+Engineer" },
+    ],
+    ai_engineer: [
+      { label: "LinkedIn: AI Engineer roles", url: "https://www.linkedin.com/jobs/search/?keywords=AI+engineer" },
+      { label: "Wellfound: AI/ML Engineer", url: "https://wellfound.com/role/r/machine-learning-engineer" },
+      { label: "Levels.fyi: AI Engineer jobs", url: "https://www.levels.fyi/jobs/?title=AI+Engineer" },
+    ],
+    backend_swe: [
+      { label: "LinkedIn: Backend Engineer", url: "https://www.linkedin.com/jobs/search/?keywords=backend+software+engineer" },
+      { label: "Wellfound: Backend Engineer", url: "https://wellfound.com/role/r/backend-engineer" },
+      { label: "Levels.fyi: Backend jobs", url: "https://www.levels.fyi/jobs/?title=Backend+Engineer" },
+    ],
+    fullstack_swe: [
+      { label: "LinkedIn: Fullstack Engineer", url: "https://www.linkedin.com/jobs/search/?keywords=full+stack+engineer" },
+      { label: "Wellfound: Fullstack Engineer", url: "https://wellfound.com/role/r/full-stack-engineer" },
+      { label: "Levels.fyi: Fullstack jobs", url: "https://www.levels.fyi/jobs/?title=Full+Stack+Engineer" },
+    ],
+    data_engineer: [
+      { label: "LinkedIn: Data Engineer", url: "https://www.linkedin.com/jobs/search/?keywords=data+engineer" },
+      { label: "Wellfound: Data Engineer", url: "https://wellfound.com/role/r/data-engineer" },
+      { label: "Levels.fyi: Data Engineer jobs", url: "https://www.levels.fyi/jobs/?title=Data+Engineer" },
+    ],
+  };
+  return links[targetRole] ?? links.product_swe;
+}
+
 export async function triggerReadyToApplyEmail(userId: string): Promise<void> {
   if (!process.env.RESEND_API_KEY || process.env.RESEND_API_KEY === "re_") return;
 
@@ -14,6 +50,7 @@ export async function triggerReadyToApplyEmail(userId: string): Promise<void> {
 
   const roleLabel = ROLE_LABELS[user.targetRole as TargetRole] ?? "your target role";
   const firstName = user.name?.split(" ")[0] ?? "there";
+  const jobLinks = getJobLinksForRole(user.targetRole ?? "product_swe");
 
   await resend.emails.send({
     from: FROM_EMAIL,
@@ -45,6 +82,11 @@ export async function triggerReadyToApplyEmail(userId: string): Promise<void> {
             <li>Run 3 mock interviews to warm up your answers</li>
             <li>Use Job Match Score on every JD before applying</li>
           </ol>
+        </div>
+
+        <div style="margin-bottom: 24px;">
+          <p style="color: #374151; font-size: 15px; font-weight: 600; margin: 0 0 12px;">Start applying — companies hiring ${roleLabel} right now:</p>
+          ${jobLinks.map(link => `<a href="${link.url}" style="display: block; color: #4f46e5; font-size: 14px; text-decoration: none; margin-bottom: 8px; padding: 10px 14px; background: #eef2ff; border-radius: 8px; border: 1px solid #c7d2fe;">→ ${link.label}</a>`).join("")}
         </div>
 
         <a href="${process.env.NEXT_PUBLIC_APP_URL}/jobs" style="display: inline-block; background: #4f46e5; color: white; font-weight: 700; font-size: 15px; padding: 14px 28px; border-radius: 10px; text-decoration: none; margin-bottom: 32px;">

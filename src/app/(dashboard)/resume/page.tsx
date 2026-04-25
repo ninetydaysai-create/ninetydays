@@ -48,6 +48,8 @@ export default function ResumePage() {
   const [bulletLoading, setBulletLoading] = useState(false);
   const [bulletError, setBulletError] = useState<string | null>(null);
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
+  const [inlineRewrites, setInlineRewrites] = useState<Record<string, { loading: boolean; result: { text: string; impactScore: number; reasoning: string }[] | null }>>({});
+  const [inlineCopiedKey, setInlineCopiedKey] = useState<string | null>(null);
 
   const loadData = useCallback(async () => {
     const [aRes, pRes] = await Promise.all([
@@ -160,6 +162,33 @@ export default function ResumePage() {
     await navigator.clipboard.writeText(text);
     setCopiedIdx(idx);
     setTimeout(() => setCopiedIdx(null), 2000);
+  }
+
+  async function rewriteInline(original: string) {
+    setInlineRewrites((prev) => ({ ...prev, [original]: { loading: true, result: null } }));
+    try {
+      const res = await fetch("/api/resume/rewrite-bullet", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ original }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setInlineRewrites((prev) => ({ ...prev, [original]: { loading: false, result: data.rewrites } }));
+      } else {
+        setInlineRewrites((prev) => ({ ...prev, [original]: { loading: false, result: null } }));
+        toast.error("Rewrite failed");
+      }
+    } catch {
+      setInlineRewrites((prev) => ({ ...prev, [original]: { loading: false, result: null } }));
+      toast.error("Rewrite failed");
+    }
+  }
+
+  async function copyInlineBullet(text: string, key: string) {
+    await navigator.clipboard.writeText(text);
+    setInlineCopiedKey(key);
+    setTimeout(() => setInlineCopiedKey(null), 2000);
   }
 
   const busy = uploadStep === "uploading" || uploadStep === "analyzing";
@@ -458,13 +487,67 @@ export default function ResumePage() {
                   <div>
                     <p className="text-sm font-semibold text-slate-900 mb-3">Top bullet rewrites</p>
                     <div className="space-y-3">
-                      {(analysis.weakBullets as WeakBullet[]).slice(0, 3).map((b, i) => (
-                        <div key={i} className="rounded-xl border border-slate-200 p-4 text-sm space-y-2 bg-slate-50">
-                          <div className="text-slate-400 line-through">{b.original}</div>
-                          <div className="text-emerald-600 font-medium">{b.rewrite}</div>
-                          <div className="text-sm text-slate-500">Why: {b.reason}</div>
-                        </div>
-                      ))}
+                      {(analysis.weakBullets as WeakBullet[]).slice(0, 3).map((b, i) => {
+                        const inlineState = inlineRewrites[b.original];
+                        return (
+                          <div key={i} className="rounded-xl border border-slate-200 p-4 text-sm space-y-2 bg-slate-50">
+                            <div className="flex items-start justify-between gap-2">
+                              <div className="text-slate-400 line-through flex-1">{b.original}</div>
+                              {inlineState?.loading ? (
+                                <Loader2 className="h-4 w-4 animate-spin text-indigo-500 shrink-0 mt-0.5" />
+                              ) : (
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  className="h-7 gap-1 text-xs text-indigo-600 hover:text-indigo-700 shrink-0 px-2"
+                                  onClick={() => rewriteInline(b.original)}
+                                >
+                                  <Sparkles className="h-3 w-3" />
+                                  Rewrite ✦
+                                </Button>
+                              )}
+                            </div>
+                            <div className="text-emerald-600 font-medium">{b.rewrite}</div>
+                            <div className="text-sm text-slate-500">Why: {b.reason}</div>
+                            {inlineState?.result && inlineState.result.length > 0 && (
+                              <div className="mt-3 pt-3 border-t border-slate-200 space-y-2">
+                                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">AI rewrites (click to copy)</p>
+                                {inlineState.result.map((r, ri) => {
+                                  const copyKey = `${b.original}::${ri}`;
+                                  return (
+                                    <div
+                                      key={ri}
+                                      className="rounded-lg border border-slate-200 bg-white p-3 flex items-start justify-between gap-2 hover:border-indigo-300 transition-colors cursor-pointer"
+                                      onClick={() => copyInlineBullet(r.text, copyKey)}
+                                    >
+                                      <div className="flex-1 min-w-0">
+                                        <div className="flex items-center gap-2 mb-1">
+                                          <span className="text-xs font-bold px-1.5 py-0.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200">
+                                            {r.impactScore}/10
+                                          </span>
+                                        </div>
+                                        <p className="text-xs font-medium text-slate-900 leading-relaxed">{r.text}</p>
+                                        <p className="text-xs text-indigo-600 mt-1 flex items-start gap-1">
+                                          <Zap className="h-3 w-3 mt-0.5 shrink-0" />
+                                          {r.reasoning}
+                                        </p>
+                                      </div>
+                                      <Button
+                                        size="sm"
+                                        variant={inlineCopiedKey === copyKey ? "default" : "outline"}
+                                        className="shrink-0 h-7 gap-1 text-xs px-2"
+                                        onClick={(e) => { e.stopPropagation(); copyInlineBullet(r.text, copyKey); }}
+                                      >
+                                        {inlineCopiedKey === copyKey ? <><CheckCircle2 className="h-3 w-3" />Copied</> : <><Copy className="h-3 w-3" />Copy</>}
+                                      </Button>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
