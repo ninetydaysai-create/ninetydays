@@ -105,26 +105,40 @@ function getDomainLabel(url: string): string {
   try {
     const u = new URL(url);
     const host = u.hostname.replace(/^www\./, "");
-    // Map common domains to friendly labels
     const map: Record<string, string> = {
-      "youtube.com": "YouTube",
-      "youtu.be": "YouTube",
-      "github.com": "GitHub",
-      "arxiv.org": "arXiv Paper",
-      "huggingface.co": "HuggingFace",
-      "docs.python.org": "Python Docs",
-      "pytorch.org": "PyTorch Docs",
-      "tensorflow.org": "TensorFlow",
-      "kaggle.com": "Kaggle",
-      "medium.com": "Medium",
+      "youtube.com":            "YouTube",
+      "youtu.be":               "YouTube",
+      "github.com":             "GitHub",
+      "arxiv.org":              "arXiv Paper",
+      "huggingface.co":         "HuggingFace",
+      "docs.python.org":        "Python Docs",
+      "pytorch.org":            "PyTorch Docs",
+      "tensorflow.org":         "TensorFlow",
+      "kaggle.com":             "Kaggle",
+      "medium.com":             "Medium",
       "towardsdatascience.com": "Towards DS",
-      "coursera.org": "Coursera",
-      "fast.ai": "fast.ai",
-      "deeplearning.ai": "DeepLearning.AI",
-      "openai.com": "AI Research",
-      "anthropic.com": "AI Research",
-      "langchain.com": "LangChain",
+      "coursera.org":           "Coursera",
+      "fast.ai":                "fast.ai",
+      "deeplearning.ai":        "DeepLearning.AI",
+      "langchain.com":          "LangChain",
+      "neetcode.io":            "NeetCode",
+      "leetcode.com":           "LeetCode",
+      "techinterviewhandbook.org": "Interview Handbook",
+      "levels.fyi":             "Levels.fyi",
+      "realpython.com":         "Real Python",
+      "javascript.info":        "javascript.info",
+      "web.dev":                "web.dev",
+      "refactoring.guru":       "Refactoring Guru",
+      "d2l.ai":                 "D2L Book",
+      "dataintensive.net":      "DDIA Book",
+      "3blue1brown.com":        "3Blue1Brown",
+      "interviewing.io":        "interviewing.io",
+      "pramp.com":              "Pramp",
+      "goodfirstissue.dev":     "Good First Issue",
     };
+    // For search fallback URLs, add helpful suffix
+    if (host === "youtube.com" && u.pathname === "/results") return "YouTube Search";
+    if (host === "github.com" && u.pathname === "/search")   return "GitHub Search";
     return map[host] ?? host;
   } catch {
     return "Resource";

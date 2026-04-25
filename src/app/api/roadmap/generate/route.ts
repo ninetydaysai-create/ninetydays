@@ -10,6 +10,7 @@ import { GapReportResult } from "@/types/gaps";
 import { TargetRole } from "@prisma/client";
 import { assertPlanAllows } from "@/lib/plan-guard";
 import { fetchGitHubSignal } from "@/lib/github-signal";
+import { enrichTaskResources } from "@/lib/resource-links";
 
 const TaskSchema = z.object({
   label:        z.string(),
@@ -138,7 +139,8 @@ export async function POST(req: Request) {
             create: w.tasks.map((t) => ({
               label:         t.label,
               description:   t.description,
-              resourceUrls:  t.resourceUrls,
+              // Replace AI-hallucinated URLs with curated library links (or search fallbacks)
+              resourceUrls:  enrichTaskResources(t.label, t.gapLabel),
               hours:         t.hours,
               impactScore:   Math.min(10, Math.max(1, Math.round(t.impactScore))),
               whyItMatters:  t.whyItMatters,
