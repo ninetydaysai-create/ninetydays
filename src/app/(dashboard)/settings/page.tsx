@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { CheckCircle2, Sparkles, Crown, Users } from "lucide-react";
 import { ReferralCard } from "@/components/shared/ReferralCard";
+import { PlanPreferencesCard } from "@/components/settings/PlanPreferencesCard";
 import { getPricingForCountry } from "@/lib/geo-pricing";
 import { format } from "date-fns";
 
@@ -36,14 +37,19 @@ export default async function SettingsPage() {
   const user = await db.user.findUnique({
     where: { id: userId },
     select: {
-      email: true,
-      plan: true,
+      email:                 true,
+      plan:                  true,
       stripeCurrentPeriodEnd: true,
-      stripeSubscriptionId: true,
-      name: true,
-      targetRole: true,
-      currentRole: true,
-      yearsExperience: true,
+      stripeSubscriptionId:  true,
+      name:                  true,
+      targetRole:            true,
+      currentRole:           true,
+      yearsExperience:       true,
+      hoursPerWeek:          true,
+      targetTimeline:        true,
+      targetCompanyType:     true,
+      learningStyle:         true,
+      targetReason:          true,
     },
   });
 
@@ -260,6 +266,17 @@ export default async function SettingsPage() {
           </CardContent>
         </Card>
       )}
+      {/* Plan preferences */}
+      <PlanPreferencesCard
+        initial={{
+          hoursPerWeek:      user.hoursPerWeek      ?? null,
+          targetTimeline:    user.targetTimeline     ?? null,
+          targetCompanyType: user.targetCompanyType  ?? null,
+          learningStyle:     user.learningStyle      ?? null,
+          targetReason:      user.targetReason       ?? null,
+        }}
+      />
+
       {/* Referral */}
       <Card>
         <CardHeader>

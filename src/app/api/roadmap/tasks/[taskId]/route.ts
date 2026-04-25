@@ -3,6 +3,17 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { triggerReadyToApplyEmail } from "@/lib/email-triggers";
 
+interface GapItem {
+  label: string;
+  severity: string;
+}
+
+function severityBonus(severity: string): number {
+  if (severity === "critical") return 12;
+  if (severity === "major")    return 7;
+  return 4;
+}
+
 export async function PATCH(
   req: Request,
   { params }: { params: Promise<{ taskId: string }> }
@@ -15,10 +26,7 @@ export async function PATCH(
 
   // Verify task belongs to user via roadmap
   const task = await db.roadmapTask.findFirst({
-    where: {
-      id: taskId,
-      week: { roadmap: { userId } },
-    },
+    where: { id: taskId, week: { roadmap: { userId } } },
     include: { week: true },
   });
   if (!task) return NextResponse.json({ error: "Task not found" }, { status: 404 });
@@ -35,10 +43,42 @@ export async function PATCH(
     await db.roadmapWeek.update({ where: { id: task.weekId }, data: { deliverableDone: true } });
   }
 
-  // Recalculate readiness: impactScore contributes to totalGapScore in gap report
-  // Each task completion nudges readiness up (completing = +impact, unchecking = -impact)
+  // --- Gap-aware readiness recalculation ---
   const direction = completed ? 1 : -1;
-  const impactBump = Math.round((task.impactScore * direction) / 2); // max +5 per task
+
+  // Base bump from this task's impact score
+  let impactBump = Math.round((task.impactScore * direction) / 2);
+
+  // Extra bonus when an entire gap is resolved or un-resolved
+  if (task.gapLabel) {
+    const [siblingTasks, gapReport] = await Promise.all([
+      db.roadmapTask.findMany({
+        where: { week: { roadmap: { userId } }, gapLabel: task.gapLabel },
+        select: { id: true, completed: true, impactScore: true },
+      }),
+      db.gapReport.findFirst({
+        where: { userId },
+        orderBy: { createdAt: "desc" },
+        select: { id: true, totalGapScore: true, skillGaps: true, projectGaps: true, storyGaps: true },
+      }),
+    ]);
+
+    const allGapDone = siblingTasks.every((t) => (t.id === taskId ? completed : t.completed));
+    const noneGapDone = siblingTasks.every((t) => (t.id === taskId ? !completed : !t.completed));
+
+    if (gapReport) {
+      const allGaps = [
+        ...(gapReport.skillGaps as unknown as GapItem[]),
+        ...(gapReport.projectGaps as unknown as GapItem[]),
+        ...(gapReport.storyGaps as unknown as GapItem[]),
+      ];
+      const gap = allGaps.find((g) => g.label === task.gapLabel);
+      const bonus = gap ? severityBonus(gap.severity) : 5;
+
+      if (allGapDone && completed)  impactBump += bonus;  // fully closed this gap
+      if (noneGapDone && !completed) impactBump -= bonus; // re-opened this gap
+    }
+  }
 
   const gapReport = await db.gapReport.findFirst({
     where: { userId },
@@ -49,23 +89,17 @@ export async function PATCH(
   let newReadiness: number | null = null;
   if (gapReport) {
     const newScore = Math.min(100, Math.max(0, gapReport.totalGapScore + impactBump));
-    await db.gapReport.update({
-      where: { id: gapReport.id },
-      data: { totalGapScore: newScore },
-    });
+    await db.gapReport.update({ where: { id: gapReport.id }, data: { totalGapScore: newScore } });
     newReadiness = newScore;
 
-    // Trigger "ready to apply" email if crossing 70% for the first time
     if (completed && newReadiness !== null && newReadiness >= 70 && gapReport.totalGapScore < 70) {
-      // Fire and forget — non-blocking
       triggerReadyToApplyEmail(userId).catch(() => {});
     }
   }
 
-  // Log activity for streak tracking
   await db.activityLog.create({
     data: { userId, type: "task_completed", metadata: { taskId, taskLabel: task.label, completed } },
-  }).catch(() => {}); // non-fatal
+  }).catch(() => {});
 
   return NextResponse.json({ task: updated, newReadiness });
 }

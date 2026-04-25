@@ -211,6 +211,7 @@ model RoadmapTask {
   hours        Int
   impactScore  Int         @default(5) // 1-10, how much this task boosts readiness
   whyItMatters String?                 // "Asked in 80% ML interviews"
+  gapLabel     String?                 // matches a gap label from the gap report
   completed    Boolean     @default(false)
   completedAt  DateTime?
 

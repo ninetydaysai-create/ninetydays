@@ -15,6 +15,10 @@ export async function GET() {
       plan: true,
       name: true,
       targetRole: true,
+      hoursPerWeek:      true,
+      targetTimeline:    true,
+      targetCompanyType: true,
+      learningStyle:     true,
       roadmap: { select: { startedAt: true } },
       gapReports: { orderBy: { createdAt: "desc" }, take: 1, select: { totalGapScore: true } },
     },
@@ -28,10 +32,14 @@ export async function GET() {
   const weeksOnPlatform = Math.max(1, Math.ceil(dayOfJourney / 7));
 
   return NextResponse.json({
-    plan: user?.plan ?? "FREE",
-    name: user?.name ?? null,
-    readinessScore: latestGap?.totalGapScore ?? null,
-    roleLabel: user?.targetRole ? (ROLE_LABELS[user.targetRole as TargetRole] ?? "your target role") : "your target role",
+    plan:              user?.plan ?? "FREE",
+    name:              user?.name ?? null,
+    readinessScore:    latestGap?.totalGapScore ?? null,
+    roleLabel:         user?.targetRole ? (ROLE_LABELS[user.targetRole as TargetRole] ?? "your target role") : "your target role",
     weeksOnPlatform,
+    hoursPerWeek:      user?.hoursPerWeek      ?? 10,
+    targetTimeline:    user?.targetTimeline     ?? null,
+    targetCompanyType: user?.targetCompanyType  ?? null,
+    learningStyle:     user?.learningStyle      ?? null,
   });
 }

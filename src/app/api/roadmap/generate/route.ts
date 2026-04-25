@@ -12,12 +12,13 @@ import { assertPlanAllows } from "@/lib/plan-guard";
 import { fetchGitHubSignal } from "@/lib/github-signal";
 
 const TaskSchema = z.object({
-  label: z.string(),
-  description: z.string(),
+  label:        z.string(),
+  description:  z.string(),
   resourceUrls: z.array(z.string()),
-  hours: z.number(),
-  impactScore: z.number(),
+  hours:        z.number(),
+  impactScore:  z.number(),
   whyItMatters: z.string(),
+  gapLabel:     z.string().optional(),
 });
 
 const WeekSchema = z.object({
@@ -141,6 +142,7 @@ export async function POST(req: Request) {
               hours:         t.hours,
               impactScore:   Math.min(10, Math.max(1, Math.round(t.impactScore))),
               whyItMatters:  t.whyItMatters,
+              gapLabel:      t.gapLabel ?? null,
               completed:     false,
             })),
           },

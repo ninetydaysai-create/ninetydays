@@ -247,6 +247,13 @@ CALIBRATION RULES — follow these strictly:
 
 ---
 
+GAP LABELS (exact strings — use these for gapLabel in tasks):
+${[...gapReport.skillGaps, ...gapReport.projectGaps, ...gapReport.storyGaps]
+  .map((g) => `  "${g.label}"`)
+  .join("\n")}
+
+---
+
 Return a JSON object: { "weeks": [ ... ] }
 
 Each week:
@@ -262,7 +269,8 @@ Each week:
       "whyItMatters": "<one sentence: why this closes a real gap, cite interview data if possible>",
       "resourceUrls": ["<real free URL — docs, YouTube, GitHub, HuggingFace, papers>"],
       "hours": <integer>,
-      "impactScore": <1-10>
+      "impactScore": <1-10>,
+      "gapLabel": "<exact label from the GAP LABELS list above, or omit if this task doesn't directly close a gap>"
     }
   ]
 }

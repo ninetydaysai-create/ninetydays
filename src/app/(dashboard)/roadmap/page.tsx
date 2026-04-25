@@ -56,6 +56,10 @@ interface UserPlan {
   readinessScore?: number | null;
   roleLabel?: string;
   weeksOnPlatform?: number;
+  hoursPerWeek?: number;
+  targetTimeline?: string | null;
+  targetCompanyType?: string | null;
+  learningStyle?: string | null;
 }
 
 const FREE_WEEKS_VISIBLE = 4;
@@ -222,7 +226,7 @@ export default function RoadmapPage() {
       const res = await fetch("/api/roadmap/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ hoursPerWeek: 10 }),
+        body: JSON.stringify({}),
       });
       if (res.ok) {
         await loadData();
@@ -364,7 +368,7 @@ export default function RoadmapPage() {
 
       {/* Header */}
       <div>
-        <div className="flex items-start justify-between gap-4 mb-4">
+        <div className="flex items-start justify-between gap-4 mb-3">
           <div>
             <h1 className="text-3xl font-bold text-white">90-Day Roadmap</h1>
             <p className="text-slate-300 mt-1 text-base">Generated from your resume · every task targets a gap in your profile</p>
@@ -373,6 +377,36 @@ export default function RoadmapPage() {
             Week {currentWeek} / 12
           </Badge>
         </div>
+
+        {/* Personalization context strip */}
+        {userPlan && (userPlan.targetTimeline || userPlan.targetCompanyType || userPlan.hoursPerWeek) && (
+          <div className="flex flex-wrap gap-2 mb-4">
+            {userPlan.hoursPerWeek && (
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-slate-300">
+                <Clock className="h-3 w-3 text-slate-400" />
+                {userPlan.hoursPerWeek}h / week
+              </span>
+            )}
+            {userPlan.targetTimeline && (
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-slate-300">
+                <Target className="h-3 w-3 text-slate-400" />
+                {userPlan.targetTimeline === "3_months" ? "3-month sprint" : userPlan.targetTimeline === "6_months" ? "6-month plan" : "12-month plan"}
+              </span>
+            )}
+            {userPlan.targetCompanyType && (
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-slate-300">
+                <Zap className="h-3 w-3 text-slate-400" />
+                {userPlan.targetCompanyType === "faang" ? "FAANG track" : userPlan.targetCompanyType === "funded_startup" ? "Startup track" : "Product co track"}
+              </span>
+            )}
+            {userPlan.learningStyle && (
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-slate-300">
+                <BookOpen className="h-3 w-3 text-slate-400" />
+                {userPlan.learningStyle === "projects" ? "Project-focused" : userPlan.learningStyle === "courses" ? "Course-focused" : userPlan.learningStyle === "docs" ? "Docs-focused" : "Mixed learning"}
+              </span>
+            )}
+          </div>
+        )}
 
         {/* Overall progress */}
         <div className="bg-[#161820] rounded-2xl border border-white/10 p-5 shadow-sm">
