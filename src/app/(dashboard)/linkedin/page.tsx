@@ -14,6 +14,13 @@ interface OptimizationResult {
   outputSummary: string;
   alternatives: string[];
   keywordsAdded: string[];
+  profileScore: number;
+  scoreBreakdown: {
+    keywords: number;
+    hook: number;
+    credibility: number;
+    callToAction: number;
+  };
 }
 
 const benefits = [
@@ -130,10 +137,53 @@ export default function LinkedInPage() {
       {/* Results */}
       {result && (
         <div className="space-y-4">
-          <div className="flex items-center gap-2 text-emerald-600">
+          <div className="flex items-center gap-2 text-emerald-400">
             <CheckCircle2 className="h-5 w-5" />
             <span className="font-semibold text-sm">Your optimized profile is ready — copy and paste into LinkedIn</span>
           </div>
+
+          {/* Score card */}
+          {(() => {
+            const s = result.profileScore;
+            const ring = s >= 70 ? "text-emerald-400" : s >= 40 ? "text-amber-400" : "text-red-400";
+            const ringBg = s >= 70 ? "bg-emerald-500/10 border-emerald-500/20" : s >= 40 ? "bg-amber-500/10 border-amber-500/20" : "bg-red-500/10 border-red-500/20";
+            const label = s >= 70 ? "Strong" : s >= 40 ? "Needs work" : "Weak";
+            const dims = [
+              { key: "Keywords", val: result.scoreBreakdown.keywords },
+              { key: "Hook strength", val: result.scoreBreakdown.hook },
+              { key: "Credibility", val: result.scoreBreakdown.credibility },
+              { key: "Call to action", val: result.scoreBreakdown.callToAction },
+            ];
+            return (
+              <div className={`rounded-2xl border p-6 ${ringBg}`}>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-4">Your current LinkedIn score</p>
+                <div className="flex items-center gap-6">
+                  <div className="shrink-0 text-center">
+                    <div className={`text-5xl font-black ${ring}`}>{s}</div>
+                    <div className={`text-xs font-bold mt-1 ${ring}`}>{label}</div>
+                    <div className="text-xs text-slate-500 mt-0.5">out of 100</div>
+                  </div>
+                  <div className="flex-1 space-y-2.5">
+                    {dims.map((d) => (
+                      <div key={d.key}>
+                        <div className="flex justify-between text-xs mb-1">
+                          <span className="text-slate-300 font-medium">{d.key}</span>
+                          <span className="text-slate-400">{d.val}/25</span>
+                        </div>
+                        <div className="h-1.5 rounded-full bg-white/10">
+                          <div
+                            className={`h-1.5 rounded-full transition-all ${d.val >= 20 ? "bg-emerald-400" : d.val >= 12 ? "bg-amber-400" : "bg-red-400"}`}
+                            style={{ width: `${(d.val / 25) * 100}%` }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <p className="text-xs text-slate-500 mt-4">Scroll down to see your optimized version ↓</p>
+              </div>
+            );
+          })()}
 
           {/* Headline */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">

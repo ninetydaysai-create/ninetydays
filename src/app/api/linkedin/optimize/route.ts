@@ -14,6 +14,13 @@ const LinkedInResultSchema = z.object({
   alternatives: z.array(z.string()),
   keywordsAdded: z.array(z.string()),
   keywordsMissing: z.array(z.string()),
+  profileScore: z.number().min(0).max(100),
+  scoreBreakdown: z.object({
+    keywords:     z.number().min(0).max(25),
+    hook:         z.number().min(0).max(25),
+    credibility:  z.number().min(0).max(25),
+    callToAction: z.number().min(0).max(25),
+  }),
 });
 
 export async function POST(req: Request) {

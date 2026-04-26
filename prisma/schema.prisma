@@ -91,6 +91,7 @@ model User {
   jobMatches        JobMatch[]
   bulletRewrites    BulletRewrite[]
   mentorMessages    MentorMessage[]
+  cohortMember      CohortMember?
 
   @@map("users")
 }
@@ -452,4 +453,27 @@ model MentorMessage {
 
   @@index([userId])
   @@map("mentor_messages")
+}
+
+// ─── Cohort Groups ────────────────────────────────────────────────────────────
+
+model CohortGroup {
+  id         String         @id @default(cuid())
+  targetRole String
+  weekSlot   Int            // ISO week number the group was formed
+  createdAt  DateTime       @default(now())
+  members    CohortMember[]
+
+  @@map("cohort_groups")
+}
+
+model CohortMember {
+  id       String      @id @default(cuid())
+  groupId  String
+  group    CohortGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  userId   String      @unique
+  user     User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  joinedAt DateTime    @default(now())
+
+  @@map("cohort_members")
 }

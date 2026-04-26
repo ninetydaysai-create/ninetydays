@@ -54,6 +54,14 @@ OPTIMIZATION PHILOSOPHY:
 - The summary ends with a clear call to action (not "Looking for new opportunities")
 - Credibility > keyword density
 
+SCORING RUBRIC (score the CURRENT profile, not the rewrite):
+Rate each dimension 0–25:
+- keywords (0–25): How well does the current headline + summary include the right keywords for ${roleLabel} at product companies? 0 = none, 25 = comprehensive
+- hook (0–25): How strong is the first visible line (before "see more")? 0 = generic/vague, 25 = specific, compelling, and role-relevant
+- credibility (0–25): How many quantified achievements exist in the current summary? 0 = zero numbers/impact, 25 = 3+ strong quantified claims
+- callToAction (0–25): Does the current summary end with a clear CTA? 0 = no CTA / "open to opportunities", 25 = specific and confident CTA
+profileScore = sum of all four dimensions (0–100)
+
 Return JSON:
 {
   "outputHeadline": "<optimized headline, max 120 chars — says what you DO and at what level, no 'seeking' language>",
@@ -64,7 +72,14 @@ Return JSON:
     "<alternative headline 3>"
   ],
   "keywordsAdded": ["<skill or signal term added that has project evidence to back it up>"],
-  "keywordsMissing": ["<important signal for ${roleLabel} that the candidate genuinely lacks project evidence for — framed as a growth area, not a keyword dump>"]
+  "keywordsMissing": ["<important signal for ${roleLabel} that the candidate genuinely lacks project evidence for — framed as a growth area, not a keyword dump>"],
+  "profileScore": <integer 0–100, sum of the four dimensions below>,
+  "scoreBreakdown": {
+    "keywords": <0–25>,
+    "hook": <0–25>,
+    "credibility": <0–25>,
+    "callToAction": <0–25>
+  }
 }
 
 Rules:

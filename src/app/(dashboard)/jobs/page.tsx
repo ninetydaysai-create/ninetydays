@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Kanban, Plus, X, ExternalLink, Loader2 } from "lucide-react";
+import { Kanban, Plus, X, ExternalLink, Loader2, Trophy, TrendingUp } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
 
@@ -145,11 +145,66 @@ function AddJobDialog({ onClose, onAdded }: { onClose: () => void; onAdded: (job
   );
 }
 
+const INTERVIEW_STAGES: JobStatus[] = ["recruiter_screen", "technical", "final_round"];
+
+function OutcomeModal({
+  company, newStatus, onSave, onSkip,
+}: {
+  company: string;
+  newStatus: "offer" | "rejected";
+  onSave: (note: string) => void;
+  onSkip: () => void;
+}) {
+  const [note, setNote] = useState("");
+  const isOffer = newStatus === "offer";
+
+  return (
+    <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={onSkip}>
+      <div className="w-full max-w-md bg-[#161820] border border-white/10 rounded-2xl p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <div className="text-center mb-5">
+          <div className={`h-14 w-14 rounded-2xl mx-auto mb-3 flex items-center justify-center ${isOffer ? "bg-emerald-500/15" : "bg-slate-500/15"}`}>
+            {isOffer ? <Trophy className="h-7 w-7 text-emerald-400" /> : <TrendingUp className="h-7 w-7 text-slate-400" />}
+          </div>
+          <h2 className="text-xl font-bold text-white">
+            {isOffer ? `You got the offer at ${company}!` : "Every rejection is data"}
+          </h2>
+          <p className="text-slate-400 text-sm mt-1.5 leading-relaxed">
+            {isOffer
+              ? "Congrats! Share what clicked — this helps you repeat it."
+              : `You didn't get this one at ${company}. That's okay. What did you learn?`}
+          </p>
+        </div>
+        <div className="space-y-3">
+          <textarea
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            placeholder={isOffer
+              ? "e.g. The system design prep on NinetyDays really helped. They loved my distributed systems project..."
+              : "e.g. I struggled with the behavioral questions. Need more STAR story practice..."}
+            rows={3}
+            className="w-full text-sm text-white bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 resize-none placeholder:text-slate-500 focus:outline-none focus:border-white/20"
+          />
+          <div className="flex gap-2">
+            <Button variant="ghost" className="flex-1 text-slate-400" onClick={onSkip}>Skip</Button>
+            <Button
+              className={`flex-1 font-semibold ${isOffer ? "bg-emerald-500 hover:bg-emerald-400 text-white" : "bg-indigo-500 hover:bg-indigo-400 text-white"}`}
+              onClick={() => onSave(note)}
+            >
+              {isOffer ? "Save win" : "Save reflection"}
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function JobsPage() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
   const [matchingJobId, setMatchingJobId] = useState<string | null>(null);
+  const [pendingOutcome, setPendingOutcome] = useState<{ jobId: string; company: string; newStatus: "offer" | "rejected" } | null>(null);
 
   const loadJobs = useCallback(async () => {
     const res = await fetch("/api/jobs");
@@ -192,12 +247,29 @@ export default function JobsPage() {
   }
 
   async function moveJob(jobId: string, newStatus: JobStatus) {
+    const job = jobs.find((j) => j.id === jobId);
     setJobs((prev) => prev.map((j) => j.id === jobId ? { ...j, status: newStatus } : j));
     await fetch(`/api/jobs/${jobId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: newStatus, appliedAt: newStatus === "applied" ? new Date().toISOString() : undefined }),
     });
+    if ((newStatus === "offer" || newStatus === "rejected") && job && INTERVIEW_STAGES.includes(job.status)) {
+      setPendingOutcome({ jobId, company: job.company, newStatus });
+    }
+  }
+
+  async function saveOutcome(note: string) {
+    if (!pendingOutcome) return;
+    if (note.trim()) {
+      await fetch(`/api/jobs/${pendingOutcome.jobId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ notes: note }),
+      });
+      setJobs((prev) => prev.map((j) => j.id === pendingOutcome.jobId ? { ...j, notes: note } : j));
+    }
+    setPendingOutcome(null);
   }
 
   const grouped = COLUMNS.map((col) => ({
@@ -219,6 +291,14 @@ export default function JobsPage() {
         <AddJobDialog
           onClose={() => setShowAdd(false)}
           onAdded={(job) => setJobs((prev) => [job, ...prev])}
+        />
+      )}
+      {pendingOutcome && (
+        <OutcomeModal
+          company={pendingOutcome.company}
+          newStatus={pendingOutcome.newStatus}
+          onSave={saveOutcome}
+          onSkip={() => setPendingOutcome(null)}
         />
       )}
 
