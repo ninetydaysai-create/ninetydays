@@ -431,7 +431,7 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="inline-flex items-center gap-2 bg-indigo-500/15 border border-indigo-500/30 rounded-full px-4 py-1.5 text-xl font-medium text-indigo-300 mb-5">
+              <div className="inline-flex items-center gap-2 bg-indigo-500/15 border border-indigo-500/30 rounded-full px-4 py-1.5 text-sm font-medium text-indigo-300 mb-5">
                 <Bot className="h-3.5 w-3.5" />
                 New: AI Mentor
               </div>
@@ -441,7 +441,7 @@ export default function LandingPage() {
                   Knows everything about you.
                 </span>
               </h2>
-              <p className="text-slate-400 text-2xl leading-relaxed mb-6">
+              <p className="text-slate-400 text-base leading-relaxed mb-6">
                 Unlike generic AI tools, your mentor knows your resume, your exact gaps, and where you are in your roadmap. Ask it what to do next — it gives one specific answer, not 10 vague suggestions.
               </p>
               <div className="space-y-3 mb-8">
@@ -450,7 +450,7 @@ export default function LandingPage() {
                   "\"Am I ready to apply?\" → Honest answer based on your actual score",
                   "\"Which gap will hurt most in interviews?\" → Calibrated to your target company",
                 ].map((q) => (
-                  <div key={q} className="flex items-start gap-3 text-xl text-slate-300">
+                  <div key={q} className="flex items-start gap-3 text-sm text-slate-300">
                     <Sparkles className="h-4 w-4 text-indigo-400 shrink-0 mt-0.5" />
                     {q}
                   </div>
@@ -469,8 +469,8 @@ export default function LandingPage() {
                   <Bot className="h-4 w-4 text-white" />
                 </div>
                 <div>
-                  <p className="text-white text-xl font-semibold">AI Mentor</p>
-                  <p className="text-slate-500 text-2xl">Knows your resume · gaps · progress</p>
+                  <p className="text-white text-sm font-semibold">AI Mentor</p>
+                  <p className="text-slate-500 text-xs">Knows your resume · gaps · progress</p>
                 </div>
               </div>
               <div className="p-5 space-y-4">
@@ -481,10 +481,10 @@ export default function LandingPage() {
                   { role: "assistant", text: "Not yet. You're at 58% — Google's bar sits around 75%. The gap: no production ML project on your GitHub. Apply in 5–6 weeks after you ship the RAG pipeline from Week 7. I'll tell you when you're ready." },
                 ].map((m, i) => (
                   <div key={i} className={`flex gap-2.5 ${m.role === "user" ? "flex-row-reverse" : ""}`}>
-                    <div className={`h-7 w-7 rounded-lg shrink-0 flex items-center justify-center text-2xl font-bold ${m.role === "assistant" ? "bg-indigo-500/20 text-indigo-400" : "bg-white/10 text-slate-400"}`}>
+                    <div className={`h-7 w-7 rounded-lg shrink-0 flex items-center justify-center text-xs font-bold ${m.role === "assistant" ? "bg-indigo-500/20 text-indigo-400" : "bg-white/10 text-slate-400"}`}>
                       {m.role === "assistant" ? "M" : "U"}
                     </div>
-                    <div className={`rounded-xl px-3 py-2 text-2xl leading-relaxed max-w-[80%] ${m.role === "assistant" ? "bg-white/8 text-slate-300" : "bg-indigo-600 text-white"}`}>
+                    <div className={`rounded-xl px-3 py-2 text-xs leading-relaxed max-w-[80%] ${m.role === "assistant" ? "bg-white/8 text-slate-300" : "bg-indigo-600 text-white"}`}>
                       {m.text}
                     </div>
                   </div>
@@ -773,18 +773,18 @@ export default function LandingPage() {
       <section className="py-24 bg-[#0b0e14] border-b border-white/5">
         <div className="max-w-3xl mx-auto px-6">
           <div className="bg-[#161820] rounded-2xl border border-white/10 p-10">
-            <p className="text-xl font-bold uppercase tracking-widest text-indigo-400 mb-6">Why I built this</p>
+            <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-6">Why I built this</p>
             <div className="flex items-start gap-6 mb-8">
               <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shrink-0 shadow-lg shadow-indigo-500/20">
                 <span className="text-white font-black text-xl">G</span>
               </div>
               <div>
-                <p className="text-white font-bold text-3xl">The Founder</p>
-                <p className="text-slate-400 text-xl mt-0.5">ex-IT services engineer → product company</p>
+                <p className="text-white font-bold text-lg">The Founder</p>
+                <p className="text-slate-400 text-sm mt-0.5">ex-IT services engineer → product company</p>
               </div>
             </div>
 
-            <blockquote className="text-3xl text-slate-300 leading-relaxed mb-8 border-l-2 border-indigo-500/40 pl-6">
+            <blockquote className="text-lg text-slate-300 leading-relaxed mb-8 border-l-2 border-indigo-500/40 pl-6">
               &ldquo;I spent 10 years at IT services companies thinking I was building the right skills. Then I applied to product companies — and got rejected. Repeatedly.
               <br /><br />
               40+ applications. 3 first-round interviews. 0 offers. Not because I wasn&apos;t good enough. Because I didn&apos;t know what &ldquo;good enough&rdquo; meant for a product company.
@@ -800,12 +800,12 @@ export default function LandingPage() {
               ].map(({ value, label }) => (
                 <div key={label} className="text-center bg-white/5 rounded-xl p-4">
                   <div className="text-3xl font-black text-indigo-400">{value}</div>
-                  <div className="text-xl text-slate-400 mt-1">{label}</div>
+                  <div className="text-sm text-slate-400 mt-1">{label}</div>
                 </div>
               ))}
             </div>
 
-            <p className="text-slate-300 text-2xl leading-relaxed">
+            <p className="text-slate-300 text-base leading-relaxed">
               I built this for the engineers who are exactly where I was — talented, hard-working, and invisible to the companies they want to join.
               The system works. It worked for me. It&apos;s built from that experience, not from generic career advice.
             </p>
