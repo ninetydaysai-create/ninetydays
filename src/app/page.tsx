@@ -703,9 +703,9 @@ export default function LandingPage() {
       <section className="py-24 bg-[#0b0e14] border-b border-white/5">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-14">
-            <p className="text-xl font-bold uppercase tracking-widest text-indigo-400 mb-3">Results</p>
+            <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">Results</p>
             <h2 className="text-4xl font-black text-white">Engineers who closed the gap</h2>
-            <p className="text-slate-400 mt-3 text-2xl">Built on real patterns from engineers stuck in service companies — and who got out.</p>
+            <p className="text-slate-400 mt-3 text-base">Built on real patterns from engineers stuck in service companies — and who got out.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {testimonials.map((t) => (
@@ -713,12 +713,12 @@ export default function LandingPage() {
                 <div className="flex items-center gap-4 mb-5">
                   <div className="text-center">
                     <div className="text-2xl font-black text-red-400">{t.score.before}%</div>
-                    <div className="text-2xl text-slate-400">before</div>
+                    <div className="text-xs text-slate-400">before</div>
                   </div>
                   <ArrowRight className="h-4 w-4 text-slate-400 shrink-0" />
                   <div className="text-center">
                     <div className="text-2xl font-black text-emerald-400">{t.score.after}%</div>
-                    <div className="text-2xl text-slate-400">after</div>
+                    <div className="text-xs text-slate-400">after</div>
                   </div>
                   <div className="flex-1 ml-2">
                     {[...Array(5)].map((_, i) => (
@@ -726,10 +726,10 @@ export default function LandingPage() {
                     ))}
                   </div>
                 </div>
-                <p className="text-slate-300 text-xl leading-relaxed mb-5 italic">&ldquo;{t.quote}&rdquo;</p>
+                <p className="text-slate-300 text-sm leading-relaxed mb-5 italic">&ldquo;{t.quote}&rdquo;</p>
                 <div>
-                  <p className="font-bold text-xl text-white">{t.name}</p>
-                  <p className="text-2xl text-slate-400 mt-0.5 flex items-center gap-1">
+                  <p className="font-bold text-sm text-white">{t.name}</p>
+                  <p className="text-xs text-slate-400 mt-0.5 flex items-center gap-1">
                     <ChevronRight className="h-3 w-3 text-indigo-400" />{t.from}
                   </p>
                 </div>
