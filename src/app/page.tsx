@@ -739,80 +739,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Feature credibility strip */}
-      <section className="py-16 bg-[#0d1018] border-b border-white/5">
-        <div className="max-w-4xl mx-auto px-6">
-          <p className="text-center text-xl font-bold uppercase tracking-widest text-slate-400 mb-8">Everything you need to go from &ldquo;confused&rdquo; to &ldquo;interview-ready&rdquo;</p>
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
-            {[
-              "AI Mentor — context-aware daily guidance",
-              "Resume analyzer with signal depth scoring",
-              "AI bullet rewriter (before → after)",
-              "Job description readiness score (instant)",
-              "Voice interview recording + AI scoring",
-              "12-week personalized roadmap",
-              "Readiness score that updates as you work",
-              "Progress share cards (LinkedIn/Twitter)",
-              "Job tracker with interview outcome loop",
-              "LinkedIn profile grader (0–100 score)",
-              "Accountability cohort (5 peers, same role)",
-              "Cold outreach + cover letter generator",
-              "GitHub profile optimizer",
-              "Public portfolio page",
-            ].map((f) => (
-              <div key={f} className="flex items-center gap-2.5 text-xl text-slate-300">
-                <CheckCircle2 className="h-4 w-4 text-indigo-400 shrink-0" />
-                {f}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Founder Section */}
-      <section className="py-24 bg-[#0b0e14] border-b border-white/5">
-        <div className="max-w-3xl mx-auto px-6">
-          <div className="bg-[#161820] rounded-2xl border border-white/10 p-10">
-            <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-6">Why I built this</p>
-            <div className="flex items-start gap-6 mb-8">
-              <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shrink-0 shadow-lg shadow-indigo-500/20">
-                <span className="text-white font-black text-xl">G</span>
-              </div>
-              <div>
-                <p className="text-white font-bold text-lg">The Founder</p>
-                <p className="text-slate-400 text-sm mt-0.5">ex-IT services engineer → product company</p>
-              </div>
-            </div>
-
-            <blockquote className="text-lg text-slate-300 leading-relaxed mb-8 border-l-2 border-indigo-500/40 pl-6">
-              &ldquo;I spent 10 years at IT services companies thinking I was building the right skills. Then I applied to product companies — and got rejected. Repeatedly.
-              <br /><br />
-              40+ applications. 3 first-round interviews. 0 offers. Not because I wasn&apos;t good enough. Because I didn&apos;t know what &ldquo;good enough&rdquo; meant for a product company.
-              <br /><br />
-              I spent 90 days fixing the right things in the right order — and got hired. NinetyDays is the system I wish I had.&rdquo;
-            </blockquote>
-
-            <div className="grid grid-cols-3 gap-4 mb-8">
-              {[
-                { value: "10+", label: "Years in IT services" },
-                { value: "40+", label: "Rejections before cracking it" },
-                { value: "90", label: "Days to get hired" },
-              ].map(({ value, label }) => (
-                <div key={label} className="text-center bg-white/5 rounded-xl p-4">
-                  <div className="text-3xl font-black text-indigo-400">{value}</div>
-                  <div className="text-sm text-slate-400 mt-1">{label}</div>
-                </div>
-              ))}
-            </div>
-
-            <p className="text-slate-300 text-base leading-relaxed">
-              I built this for the engineers who are exactly where I was — talented, hard-working, and invisible to the companies they want to join.
-              The system works. It worked for me. It&apos;s built from that experience, not from generic career advice.
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* Pricing */}
       <section id="pricing" className="py-24 bg-[#0b0e14] border-t border-white/8">
         <div className="max-w-4xl mx-auto px-6">
@@ -905,6 +831,80 @@ export default function LandingPage() {
           <p className="text-center text-slate-400 text-xl mt-8">
             One role change = 6-figure salary bump. The $12/mo math writes itself.
           </p>
+        </div>
+      </section>
+
+      {/* Feature credibility strip */}
+      <section className="py-16 bg-[#0d1018] border-b border-white/5">
+        <div className="max-w-4xl mx-auto px-6">
+          <p className="text-center text-xl font-bold uppercase tracking-widest text-slate-400 mb-8">Everything you need to go from &ldquo;confused&rdquo; to &ldquo;interview-ready&rdquo;</p>
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
+            {[
+              "AI Mentor — context-aware daily guidance",
+              "Resume analyzer with signal depth scoring",
+              "AI bullet rewriter (before → after)",
+              "Job description readiness score (instant)",
+              "Voice interview recording + AI scoring",
+              "12-week personalized roadmap",
+              "Readiness score that updates as you work",
+              "Progress share cards (LinkedIn/Twitter)",
+              "Job tracker with interview outcome loop",
+              "LinkedIn profile grader (0–100 score)",
+              "Accountability cohort (5 peers, same role)",
+              "Cold outreach + cover letter generator",
+              "GitHub profile optimizer",
+              "Public portfolio page",
+            ].map((f) => (
+              <div key={f} className="flex items-center gap-2.5 text-xl text-slate-300">
+                <CheckCircle2 className="h-4 w-4 text-indigo-400 shrink-0" />
+                {f}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Founder Section */}
+      <section className="py-24 bg-[#0b0e14] border-b border-white/5">
+        <div className="max-w-3xl mx-auto px-6">
+          <div className="bg-[#161820] rounded-2xl border border-white/10 p-10">
+            <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-6">Why I built this</p>
+            <div className="flex items-start gap-6 mb-8">
+              <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shrink-0 shadow-lg shadow-indigo-500/20">
+                <span className="text-white font-black text-xl">G</span>
+              </div>
+              <div>
+                <p className="text-white font-bold text-lg">The Founder</p>
+                <p className="text-slate-400 text-sm mt-0.5">ex-IT services engineer → product company</p>
+              </div>
+            </div>
+
+            <blockquote className="text-lg text-slate-300 leading-relaxed mb-8 border-l-2 border-indigo-500/40 pl-6">
+              &ldquo;I spent 10 years at IT services companies thinking I was building the right skills. Then I applied to product companies — and got rejected. Repeatedly.
+              <br /><br />
+              40+ applications. 3 first-round interviews. 0 offers. Not because I wasn&apos;t good enough. Because I didn&apos;t know what &ldquo;good enough&rdquo; meant for a product company.
+              <br /><br />
+              I spent 90 days fixing the right things in the right order — and got hired. NinetyDays is the system I wish I had.&rdquo;
+            </blockquote>
+
+            <div className="grid grid-cols-3 gap-4 mb-8">
+              {[
+                { value: "10+", label: "Years in IT services" },
+                { value: "40+", label: "Rejections before cracking it" },
+                { value: "90", label: "Days to get hired" },
+              ].map(({ value, label }) => (
+                <div key={label} className="text-center bg-white/5 rounded-xl p-4">
+                  <div className="text-3xl font-black text-indigo-400">{value}</div>
+                  <div className="text-sm text-slate-400 mt-1">{label}</div>
+                </div>
+              ))}
+            </div>
+
+            <p className="text-slate-300 text-base leading-relaxed">
+              I built this for the engineers who are exactly where I was — talented, hard-working, and invisible to the companies they want to join.
+              The system works. It worked for me. It&apos;s built from that experience, not from generic career advice.
+            </p>
+          </div>
         </div>
       </section>
 
