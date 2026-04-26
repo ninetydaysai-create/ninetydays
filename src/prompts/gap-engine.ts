@@ -71,6 +71,7 @@ Return JSON matching this exact schema:
       "description": "<why this matters for ${roleLabel} AND what signal is missing — reference signal depth>",
       "severity": "<critical|major|minor>",
       "estimatedHours": <realistic hours to reach working proficiency from current signal level>,
+      "impactIfIgnored": "<one sentence: exactly what happens in their next interview if they skip this — e.g. 'This profile will not survive the system design round at Google, Stripe, or any Series B+ company until this is addressed.'>",
       "resourceLinks": [],
       "resolved": false
     }
@@ -82,6 +83,7 @@ Return JSON matching this exact schema:
       "description": "<what building this signals to a ${roleLabel} hiring manager — be specific about the credibility gap>",
       "severity": "<critical|major|minor>",
       "estimatedHours": <hours to build a credible, shippable version>,
+      "impactIfIgnored": "<one sentence: exactly what a recruiter/interviewer thinks when they see this gap on your resume — e.g. 'Recruiters see no real product work and assume delivery-only background — you get screened out before the first call.'>",
       "resourceLinks": [],
       "resolved": false
     }
@@ -93,6 +95,7 @@ Return JSON matching this exact schema:
       "description": "<why this story matters in ${roleLabel} interviews — and exactly why theirs is insufficient or missing>",
       "severity": "<critical|major|minor>",
       "estimatedHours": <hours to craft, write, and practice this story to interview-ready level>,
+      "impactIfIgnored": "<one sentence: what happens in the behavioral round without this story — e.g. 'You will stall when asked about ownership or initiative and the interviewer will flag you as a task-taker, not a builder.'>",
       "resourceLinks": [],
       "resolved": false
     }

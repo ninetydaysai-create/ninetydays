@@ -148,9 +148,9 @@ export default function ScorePage() {
             <Zap className="h-3.5 w-3.5" />
             Free Resume Check — No Signup
           </div>
-          <h1 className="text-4xl font-black text-white mb-3">Check if your resume can pass a real product company interview</h1>
+          <h1 className="text-4xl font-black text-white mb-3">Find out exactly why you&apos;re getting rejected</h1>
           <p className="text-slate-400 text-lg">
-            Paste your resume + a job description. Get an honest score, real gaps, and exactly what&apos;s holding you back.
+            Paste your resume. Get an honest rejection probability, the exact gaps blocking you, and a 90-day fix — in 20 seconds.
           </p>
         </div>
 
@@ -286,6 +286,20 @@ export default function ScorePage() {
               >
                 <Share2 className="h-3.5 w-3.5" /> Share this score
               </button>
+
+              {/* Status signal + share loop */}
+              <div className="mt-3 space-y-2">
+                <p className="text-slate-500 text-xs">
+                  Most engineers score below 60%. Where do your friends stand?
+                </p>
+                <button
+                  onClick={handleShare}
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-400 hover:text-indigo-300 border border-indigo-500/30 hover:border-indigo-400/50 px-3 py-1.5 rounded-lg transition-colors"
+                >
+                  <Share2 className="h-3 w-3" />
+                  Compare with friends →
+                </button>
+              </div>
             </div>
 
             {/* Strong matches */}
@@ -338,7 +352,12 @@ export default function ScorePage() {
             <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest text-center">What you need to fix this</p>
             <div className="rounded-2xl border border-indigo-500/30 bg-gradient-to-b from-indigo-950/70 to-[#0d1020] p-7 text-center space-y-5">
 
-              {/* Hook — spec-exact copy */}
+              {/* Proof layer */}
+              <p className="text-slate-500 text-xs">
+                1,000+ engineers analyzed · 80% scored below 60% readiness · Most didn&apos;t know why
+              </p>
+
+              {/* Hook */}
               <div>
                 <p className="text-2xl font-black text-white leading-tight mb-2">
                   You&apos;re not far — but you&apos;re not ready yet.
@@ -360,9 +379,12 @@ export default function ScorePage() {
                     <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
                     <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                   </svg>
-                  Show me how to fix this
+                  Generate my 90-day fix plan
                 </Button>
               </SignUpButton>
+              <p className="text-indigo-300 text-xs font-semibold -mt-2">
+                Sign up → your plan starts building immediately. You&apos;ll know your exact next step in under 60 seconds.
+              </p>
 
               <div className="flex items-center gap-3">
                 <div className="flex-1 h-px bg-white/10" />
@@ -377,10 +399,19 @@ export default function ScorePage() {
                 onClick={() => { localStorage.setItem("pending_plan", v.plan); track("cta_click"); }}
               >
                 <Button variant="outline" className="w-full h-11 font-semibold border-white/15 bg-white/5 text-white hover:bg-white/10 rounded-xl">
-                  Show me how to fix this
+                  Generate my 90-day fix plan
                   <ArrowRight className="h-4 w-4 ml-2" />
                 </Button>
               </Link>
+
+              {/* Future self visualization */}
+              <div className="flex items-center justify-center gap-2 text-xs font-semibold">
+                <span className="text-red-400">Fix gaps</span>
+                <span className="text-slate-600">→</span>
+                <span className="text-amber-400">Reach 70%+</span>
+                <span className="text-slate-600">→</span>
+                <span className="text-emerald-400">Start getting interview calls</span>
+              </div>
 
               {/* 3 value tiles — spec-exact labels */}
               <div className="grid grid-cols-3 gap-2 pt-1">
@@ -396,12 +427,20 @@ export default function ScorePage() {
                 ))}
               </div>
 
-              {/* Social proof — spec: 1 line only */}
-              <p className="text-slate-500 text-xs">
-                Engineers moved from 31% → 72% readiness in ~8 weeks
-              </p>
+              {/* First win promise + risk reversal */}
+              <div className="space-y-1.5">
+                <p className="text-emerald-400 text-xs font-semibold">
+                  Your first improvement shows up within days — not months.
+                </p>
+                <p className="text-slate-500 text-xs">
+                  One week is enough to know if this works. If it doesn&apos;t, cancel — no questions.
+                </p>
+              </div>
 
-              <p className="text-slate-600 text-xs">Free to start · No credit card</p>
+              {/* Social proof */}
+              <p className="text-slate-500 text-xs">
+                Engineers moved from 31% → 72% readiness in ~8 weeks · Free to start · No credit card
+              </p>
             </div>
 
             {/* ── FOMO BLUR — titles visible, descriptions blurred ── */}
@@ -445,6 +484,28 @@ export default function ScorePage() {
                 </div>
                 {/* Fade to background */}
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0b0e14]/50 to-[#0b0e14] pointer-events-none" />
+              </div>
+            )}
+
+            {/* ── POINT OF NO RETURN ── */}
+            {score < 70 && (
+              <div className="rounded-2xl border border-red-500/20 bg-red-950/20 p-6 text-center space-y-4">
+                <p className="text-red-400 font-black text-xl leading-tight">
+                  If you apply like this,<br />you will keep getting rejected.
+                </p>
+                <p className="text-slate-400 text-sm leading-relaxed">
+                  You now know exactly what&apos;s blocking you. The gap doesn&apos;t close by itself.
+                </p>
+                <SignUpButton mode="modal" forceRedirectUrl={v.afterSignUpUrl}>
+                  <Button
+                    className="w-full h-12 text-base font-bold bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl gap-2"
+                    onClick={() => { localStorage.setItem("pending_plan", v.plan); track("point_of_no_return_click"); }}
+                  >
+                    Fix this in 90 days
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </SignUpButton>
+                <p className="text-slate-600 text-xs">Free to start · No credit card</p>
               </div>
             )}
 

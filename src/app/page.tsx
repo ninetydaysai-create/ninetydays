@@ -53,7 +53,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#0b0e14]">
       {/* Beta Banner */}
-      <div className="bg-indigo-600 text-white text-center py-2.5 px-4 text-sm font-semibold tracking-wide">
+      <div className="bg-indigo-600 text-white text-center py-2.5 px-4 text-xl font-semibold tracking-wide">
         🚀 You&apos;re using an early beta version of NinetyDays — expect rough edges and share your feedback!
       </div>
       {/* Nav */}
@@ -65,14 +65,14 @@ export default function LandingPage() {
             </div>
             <span className="font-bold text-xl tracking-tight">NinetyDays</span>
           </Link>
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
+          <nav className="hidden md:flex items-center gap-8 text-xl font-medium text-slate-400">
             <a href="#how-it-works" className="hover:text-white transition-colors">How it works</a>
             <a href="#gap-engine" className="hover:text-white transition-colors">Gap Engine</a>
             <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
           </nav>
           <div className="flex items-center gap-3">
             <Link href="/sign-in" className="hidden md:block">
-              <Button variant="ghost" className="text-base font-medium">Sign in</Button>
+              <Button variant="ghost" className="text-2xl font-medium">Sign in</Button>
             </Link>
             <Link href="/sign-up" className="hidden md:block">
               <Button className="h-10 px-5 font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm shadow-indigo-500/25">
@@ -96,28 +96,28 @@ export default function LandingPage() {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-indigo-600/20 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="relative max-w-4xl mx-auto px-6 pt-24 pb-20 text-center">
-          <div className="inline-flex items-center gap-2 bg-indigo-500/15 border border-indigo-500/30 rounded-full px-4 py-1.5 text-sm font-medium text-indigo-300 mb-8">
+          <div className="inline-flex items-center gap-2 bg-indigo-500/15 border border-indigo-500/30 rounded-full px-4 py-1.5 text-xl font-medium text-indigo-300 mb-8">
             <Flame className="h-3.5 w-3.5" />
             For engineers stuck in service companies
           </div>
 
           <h1 className="text-4xl md:text-6xl lg:text-[4.25rem] font-black tracking-tight leading-[1.06] mb-6">
-            You&apos;re not failing interviews.
+            Stop getting rejected.
             <br />
             <span className="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">
-              You&apos;re not ready yet.
+              Fix it in 90 days.
             </span>
           </h1>
 
-          <p className="text-base text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
-            Find out exactly what&apos;s blocking you — not generic advice, but the specific gaps that make product companies reject you. Fix them in 90 days.
+          <p className="text-2xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
+            You&apos;re not failing interviews because you lack experience. You&apos;re failing because product companies see a different signal than service companies train for. Find out exactly what&apos;s blocking you — and close it in 90 days.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
             <Link href="/score">
               <Button
                 size="lg"
-                className="h-14 px-9 text-lg font-bold gap-2 bg-indigo-600 hover:bg-indigo-500 shadow-xl shadow-indigo-500/30 rounded-xl transition-all hover:-translate-y-0.5"
+                className="h-14 px-9 text-3xl font-bold gap-2 bg-indigo-600 hover:bg-indigo-500 shadow-xl shadow-indigo-500/30 rounded-xl transition-all hover:-translate-y-0.5"
               >
                 Check my score — free
                 <ArrowRight className="h-5 w-5" />
@@ -127,14 +127,14 @@ export default function LandingPage() {
               <Button
                 size="lg"
                 variant="outline"
-                className="h-14 px-7 text-lg font-semibold gap-2 border-white/20 bg-white/5 text-white hover:bg-white/10 rounded-xl"
+                className="h-14 px-7 text-3xl font-semibold gap-2 border-white/20 bg-white/5 text-white hover:bg-white/10 rounded-xl"
               >
                 Get full analysis free
               </Button>
             </Link>
           </div>
-          <p className="text-sm text-slate-500">No credit card · Paste your resume · Score in 20 seconds</p>
-          <p className="text-xs text-slate-600 mt-2">Built for engineers with 5–12 years experience trying to break into product companies</p>
+          <p className="text-xl text-slate-500">No credit card · Paste your resume · Score in 20 seconds</p>
+          <p className="text-2xl text-slate-600 mt-2">Built for engineers with 5–12 years experience trying to break into product companies</p>
         </div>
 
         {/* Flow preview */}
@@ -149,7 +149,7 @@ export default function LandingPage() {
               <div key={step.label} className="flex items-center gap-3">
                 <div className="flex items-center gap-2 bg-white/8 border border-white/10 rounded-xl px-4 py-2.5">
                   <step.icon className="h-4 w-4 text-indigo-400" />
-                  <span className="text-sm font-medium text-slate-300">{step.label}</span>
+                  <span className="text-xl font-medium text-slate-300">{step.label}</span>
                 </div>
                 {i < 3 && <ChevronRight className="h-4 w-4 text-slate-600 shrink-0" />}
               </div>
@@ -161,11 +161,11 @@ export default function LandingPage() {
       {/* Problem Section */}
       <section className="py-24 bg-[#0d1018] border-b border-white/5">
         <div className="max-w-3xl mx-auto px-6 text-center">
-          <p className="text-sm font-bold uppercase tracking-widest text-red-400 mb-4">Why you keep getting rejected</p>
+          <p className="text-xl font-bold uppercase tracking-widest text-red-400 mb-4">Why you keep getting rejected</p>
           <h2 className="text-4xl font-black text-white mb-6">
             You&apos;ve done everything &ldquo;right&rdquo;...
           </h2>
-          <p className="text-base text-slate-400 leading-relaxed mb-10">
+          <p className="text-2xl text-slate-400 leading-relaxed mb-10">
             Years of experience. Dozens of applications. Still no callbacks from product companies.
           </p>
           <div className="grid sm:grid-cols-2 gap-4 mb-10">
@@ -177,12 +177,12 @@ export default function LandingPage() {
             ].map(({ icon: Icon, text }) => (
               <div key={text} className="flex items-start gap-3 bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-left">
                 <Icon className="h-4 w-4 text-red-400 shrink-0 mt-0.5" />
-                <p className="text-sm text-slate-300 font-medium">{text}</p>
+                <p className="text-xl text-slate-300 font-medium">{text}</p>
               </div>
             ))}
           </div>
           <div className="bg-white/10 rounded-2xl px-8 py-6 inline-block border border-white/10">
-            <p className="text-white text-lg font-bold">The problem isn&apos;t effort. It&apos;s direction.</p>
+            <p className="text-white text-3xl font-bold">The problem isn&apos;t effort. It&apos;s direction.</p>
           </div>
         </div>
       </section>
@@ -191,7 +191,7 @@ export default function LandingPage() {
       <section className="py-24 bg-[#0b0e14] border-b border-white/5">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-14">
-            <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">The solution</p>
+            <p className="text-xl font-bold uppercase tracking-widest text-indigo-400 mb-3">The solution</p>
             <h2 className="text-4xl font-black text-white">
               NinetyDays gives you a clear path from<br />where you are → where you want to be
             </h2>
@@ -226,8 +226,8 @@ export default function LandingPage() {
               <div key={item.number} className={`${item.bg} border ${item.border} rounded-2xl p-7`}>
                 <div className={`h-1 w-10 rounded-full bg-gradient-to-r ${item.color} mb-5`} />
                 <p className="text-4xl font-black text-white/20 mb-2">{item.number}</p>
-                <h3 className="text-lg font-bold text-white mb-3">{item.title}</h3>
-                <p className="text-sm text-slate-400 leading-relaxed">{item.desc}</p>
+                <h3 className="text-3xl font-bold text-white mb-3">{item.title}</h3>
+                <p className="text-xl text-slate-400 leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -238,9 +238,9 @@ export default function LandingPage() {
       <section className="py-20 bg-[#0d1018] border-b border-white/5">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-14">
-            <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">The transformation</p>
+            <p className="text-xl font-bold uppercase tracking-widest text-indigo-400 mb-3">The transformation</p>
             <h2 className="text-4xl font-black text-white">From rejected to interview-ready</h2>
-            <p className="text-slate-400 mt-4 text-base max-w-xl mx-auto">
+            <p className="text-slate-400 mt-4 text-2xl max-w-xl mx-auto">
               The gap between rejection and an offer isn&apos;t talent — it&apos;s clarity. See what changes in 90 days.
             </p>
           </div>
@@ -250,11 +250,11 @@ export default function LandingPage() {
             <div className="bg-[#161820] rounded-2xl border-2 border-red-500/20 p-7 shadow-sm">
               <div className="flex items-center gap-2 mb-5">
                 <div className="h-3 w-3 rounded-full bg-red-500" />
-                <span className="text-sm font-bold text-red-400 uppercase tracking-widest">Before NinetyDays</span>
+                <span className="text-xl font-bold text-red-400 uppercase tracking-widest">Before NinetyDays</span>
               </div>
               <div className="space-y-4">
                 <div>
-                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Readiness score</p>
+                  <p className="text-2xl font-bold text-slate-400 uppercase tracking-widest mb-1">Readiness score</p>
                   <div className="flex items-center gap-3">
                     <div className="flex-1 bg-white/10 rounded-full h-2.5">
                       <div className="h-2.5 rounded-full bg-red-400 transition-all" style={{ width: "32%" }} />
@@ -264,13 +264,13 @@ export default function LandingPage() {
                 </div>
                 <div className="space-y-2">
                   {["Missing ML production experience", "No system design portfolio", "Generic resume bullets", "No STAR stories prepared"].map((g) => (
-                    <div key={g} className="flex items-start gap-2 text-sm text-slate-400">
+                    <div key={g} className="flex items-start gap-2 text-xl text-slate-400">
                       <span className="text-red-400 font-bold mt-0.5">✕</span> {g}
                     </div>
                   ))}
                 </div>
                 <div className="bg-red-500/10 rounded-xl p-3 text-center">
-                  <p className="text-sm font-bold text-red-400">If you apply today → Likely rejected</p>
+                  <p className="text-xl font-bold text-red-400">If you apply today → Likely rejected</p>
                 </div>
               </div>
             </div>
@@ -279,11 +279,11 @@ export default function LandingPage() {
             <div className="bg-[#161820] rounded-2xl border-2 border-emerald-500/20 p-7 shadow-sm">
               <div className="flex items-center gap-2 mb-5">
                 <div className="h-3 w-3 rounded-full bg-emerald-500" />
-                <span className="text-sm font-bold text-emerald-400 uppercase tracking-widest">After 90 days</span>
+                <span className="text-xl font-bold text-emerald-400 uppercase tracking-widest">After 90 days</span>
               </div>
               <div className="space-y-4">
                 <div>
-                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Readiness score</p>
+                  <p className="text-2xl font-bold text-slate-400 uppercase tracking-widest mb-1">Readiness score</p>
                   <div className="flex items-center gap-3">
                     <div className="flex-1 bg-white/10 rounded-full h-2.5">
                       <div className="h-2.5 rounded-full bg-emerald-500 transition-all" style={{ width: "74%" }} />
@@ -293,20 +293,20 @@ export default function LandingPage() {
                 </div>
                 <div className="space-y-2">
                   {["2 ML projects on GitHub", "System design case study written", "Resume bullets rewritten with impact", "5 STAR stories ready"].map((g) => (
-                    <div key={g} className="flex items-start gap-2 text-sm text-slate-300">
+                    <div key={g} className="flex items-start gap-2 text-xl text-slate-300">
                       <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
                       {g}
                     </div>
                   ))}
                 </div>
                 <div className="bg-emerald-500/10 rounded-xl p-3 text-center">
-                  <p className="text-sm font-bold text-emerald-400">Interview-ready → Apply confidently</p>
+                  <p className="text-xl font-bold text-emerald-400">Interview-ready → Apply confidently</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <p className="text-center text-slate-400 text-sm">
+          <p className="text-center text-slate-400 text-xl">
             Average user goes from <strong className="text-slate-300">31% → 72% readiness</strong> in 8–10 weeks following their personalized plan
           </p>
         </div>
@@ -315,9 +315,9 @@ export default function LandingPage() {
       {/* Gap Engine */}
       <section id="gap-engine" className="py-24 max-w-5xl mx-auto px-6">
         <div className="text-center mb-16">
-          <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">The core engine</p>
+          <p className="text-xl font-bold uppercase tracking-widest text-indigo-400 mb-3">The core engine</p>
           <h2 className="text-4xl font-black text-white">Your gap report — brutal, specific, actionable</h2>
-          <p className="text-slate-400 mt-4 text-base max-w-xl mx-auto">
+          <p className="text-slate-400 mt-4 text-2xl max-w-xl mx-auto">
             Not &ldquo;improve your skills.&rdquo; Exactly what&apos;s missing, why it&apos;s blocking you, and how many hours to fix it.
           </p>
         </div>
@@ -325,12 +325,12 @@ export default function LandingPage() {
         <div className="bg-[#0b0e14] rounded-2xl p-8 space-y-4">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <p className="text-white font-bold text-lg">Your Gap Report</p>
-              <p className="text-slate-400 text-sm">Target role: ML Engineer · Readiness: 32%</p>
+              <p className="text-white font-bold text-3xl">Your Gap Report</p>
+              <p className="text-slate-400 text-xl">Target role: ML Engineer · Readiness: 32%</p>
             </div>
             <div className="text-center">
               <div className="text-4xl font-black text-red-400">32</div>
-              <div className="text-xs text-slate-500">/ 100</div>
+              <div className="text-2xl text-slate-500">/ 100</div>
             </div>
           </div>
 
@@ -340,18 +340,18 @@ export default function LandingPage() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap mb-1">
                   <span className="font-semibold text-white">{gap.skill}</span>
-                  <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${gap.severity === "critical" ? "bg-red-500/20 text-red-400" : "bg-amber-500/20 text-amber-400"}`}>
+                  <span className={`text-2xl font-bold px-2 py-0.5 rounded-full ${gap.severity === "critical" ? "bg-red-500/20 text-red-400" : "bg-amber-500/20 text-amber-400"}`}>
                     {gap.severity}
                   </span>
                 </div>
-                <p className="text-sm text-indigo-400 font-medium">{gap.impact}</p>
-                <p className="text-xs text-slate-500 mt-1">~{gap.hours}h to close</p>
+                <p className="text-xl text-indigo-400 font-medium">{gap.impact}</p>
+                <p className="text-2xl text-slate-500 mt-1">~{gap.hours}h to close</p>
               </div>
             </div>
           ))}
 
           <div className="pt-2 text-center">
-            <p className="text-slate-500 text-sm">+ skill gaps, project gaps, and story gaps — all personalized to your resume</p>
+            <p className="text-slate-500 text-xl">+ skill gaps, project gaps, and story gaps — all personalized to your resume</p>
           </div>
         </div>
       </section>
@@ -360,7 +360,7 @@ export default function LandingPage() {
       <section id="how-it-works" className="py-20 bg-[#0d1018] border-y border-white/5">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-14">
-            <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">The system</p>
+            <p className="text-xl font-bold uppercase tracking-widest text-indigo-400 mb-3">The system</p>
             <h2 className="text-4xl font-black text-white">One pipeline. From resume to offer.</h2>
           </div>
 
@@ -374,8 +374,8 @@ export default function LandingPage() {
               <div key={item.step} className="relative">
                 <div className="text-[4rem] font-black text-white/10 leading-none mb-3 select-none">{item.step}</div>
                 <div className={`h-1 w-10 rounded-full bg-gradient-to-r ${item.color} mb-4`} />
-                <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
-                <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+                <h3 className="text-3xl font-bold text-white mb-2">{item.title}</h3>
+                <p className="text-slate-400 text-xl leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -386,9 +386,9 @@ export default function LandingPage() {
       <section className="py-24 bg-[#0b0e14] border-b border-white/5">
         <div className="max-w-4xl mx-auto px-6">
           <div className="text-center mb-14">
-            <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">Why NinetyDays</p>
+            <p className="text-xl font-bold uppercase tracking-widest text-indigo-400 mb-3">Why NinetyDays</p>
             <h2 className="text-4xl font-black text-white">This isn&apos;t another AI chatbot.</h2>
-            <p className="text-slate-400 mt-4 text-base">You don&apos;t just get answers. You get a system.</p>
+            <p className="text-slate-400 mt-4 text-2xl">You don&apos;t just get answers. You get a system.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {[
@@ -416,10 +416,10 @@ export default function LandingPage() {
                   <Icon className="h-5 w-5 text-indigo-400" />
                 </div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xs line-through text-slate-500">{bad}</span>
+                  <span className="text-2xl line-through text-slate-500">{bad}</span>
                 </div>
                 <h3 className="font-bold text-white mb-2">{good}</h3>
-                <p className="text-sm text-slate-400 leading-relaxed">{desc}</p>
+                <p className="text-xl text-slate-400 leading-relaxed">{desc}</p>
               </div>
             ))}
           </div>
@@ -431,7 +431,7 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="inline-flex items-center gap-2 bg-indigo-500/15 border border-indigo-500/30 rounded-full px-4 py-1.5 text-sm font-medium text-indigo-300 mb-5">
+              <div className="inline-flex items-center gap-2 bg-indigo-500/15 border border-indigo-500/30 rounded-full px-4 py-1.5 text-xl font-medium text-indigo-300 mb-5">
                 <Bot className="h-3.5 w-3.5" />
                 New: AI Mentor
               </div>
@@ -441,7 +441,7 @@ export default function LandingPage() {
                   Knows everything about you.
                 </span>
               </h2>
-              <p className="text-slate-400 text-base leading-relaxed mb-6">
+              <p className="text-slate-400 text-2xl leading-relaxed mb-6">
                 Unlike generic AI tools, your mentor knows your resume, your exact gaps, and where you are in your roadmap. Ask it what to do next — it gives one specific answer, not 10 vague suggestions.
               </p>
               <div className="space-y-3 mb-8">
@@ -450,7 +450,7 @@ export default function LandingPage() {
                   "\"Am I ready to apply?\" → Honest answer based on your actual score",
                   "\"Which gap will hurt most in interviews?\" → Calibrated to your target company",
                 ].map((q) => (
-                  <div key={q} className="flex items-start gap-3 text-sm text-slate-300">
+                  <div key={q} className="flex items-start gap-3 text-xl text-slate-300">
                     <Sparkles className="h-4 w-4 text-indigo-400 shrink-0 mt-0.5" />
                     {q}
                   </div>
@@ -469,8 +469,8 @@ export default function LandingPage() {
                   <Bot className="h-4 w-4 text-white" />
                 </div>
                 <div>
-                  <p className="text-white text-sm font-semibold">AI Mentor</p>
-                  <p className="text-slate-500 text-xs">Knows your resume · gaps · progress</p>
+                  <p className="text-white text-xl font-semibold">AI Mentor</p>
+                  <p className="text-slate-500 text-2xl">Knows your resume · gaps · progress</p>
                 </div>
               </div>
               <div className="p-5 space-y-4">
@@ -481,10 +481,10 @@ export default function LandingPage() {
                   { role: "assistant", text: "Not yet. You're at 58% — Google's bar sits around 75%. The gap: no production ML project on your GitHub. Apply in 5–6 weeks after you ship the RAG pipeline from Week 7. I'll tell you when you're ready." },
                 ].map((m, i) => (
                   <div key={i} className={`flex gap-2.5 ${m.role === "user" ? "flex-row-reverse" : ""}`}>
-                    <div className={`h-7 w-7 rounded-lg shrink-0 flex items-center justify-center text-xs font-bold ${m.role === "assistant" ? "bg-indigo-500/20 text-indigo-400" : "bg-white/10 text-slate-400"}`}>
+                    <div className={`h-7 w-7 rounded-lg shrink-0 flex items-center justify-center text-2xl font-bold ${m.role === "assistant" ? "bg-indigo-500/20 text-indigo-400" : "bg-white/10 text-slate-400"}`}>
                       {m.role === "assistant" ? "M" : "U"}
                     </div>
-                    <div className={`rounded-xl px-3 py-2 text-xs leading-relaxed max-w-[80%] ${m.role === "assistant" ? "bg-white/8 text-slate-300" : "bg-indigo-600 text-white"}`}>
+                    <div className={`rounded-xl px-3 py-2 text-2xl leading-relaxed max-w-[80%] ${m.role === "assistant" ? "bg-white/8 text-slate-300" : "bg-indigo-600 text-white"}`}>
                       {m.text}
                     </div>
                   </div>
@@ -501,12 +501,12 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Score preview */}
             <div className="bg-[#0b0e14] rounded-2xl p-7 border border-white/5">
-              <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-5">Job Readiness Score</p>
+              <p className="text-slate-400 text-2xl font-bold uppercase tracking-widest mb-5">Job Readiness Score</p>
               <div className="flex items-end gap-4 mb-5">
                 <div className="text-6xl font-black text-amber-400 leading-none">71</div>
                 <div>
                   <div className="text-white font-bold mb-1">ML Engineer · Stripe</div>
-                  <div className="text-slate-500 text-sm">3 gaps to close before applying</div>
+                  <div className="text-slate-500 text-xl">3 gaps to close before applying</div>
                 </div>
               </div>
               <div className="bg-white/5 rounded-full h-2.5 mb-6 overflow-hidden">
@@ -518,16 +518,16 @@ export default function LandingPage() {
                   { label: "Production ML deployment", sev: "major" },
                   { label: "System design case study", sev: "major" },
                 ].map((g) => (
-                  <div key={g.label} className="flex items-center gap-3 text-sm">
+                  <div key={g.label} className="flex items-center gap-3 text-xl">
                     <span className={`h-2 w-2 rounded-full shrink-0 ${g.sev === "critical" ? "bg-red-500" : "bg-amber-400"}`} />
                     <span className="text-slate-300">{g.label}</span>
-                    <span className={`ml-auto text-xs font-bold ${g.sev === "critical" ? "text-red-400" : "text-amber-400"}`}>{g.sev}</span>
+                    <span className={`ml-auto text-2xl font-bold ${g.sev === "critical" ? "text-red-400" : "text-amber-400"}`}>{g.sev}</span>
                   </div>
                 ))}
               </div>
             </div>
             <div>
-              <div className="inline-flex items-center gap-2 bg-indigo-500/15 border border-indigo-500/30 rounded-full px-4 py-1.5 text-sm font-medium text-indigo-300 mb-5">
+              <div className="inline-flex items-center gap-2 bg-indigo-500/15 border border-indigo-500/30 rounded-full px-4 py-1.5 text-xl font-medium text-indigo-300 mb-5">
                 <Target className="h-3.5 w-3.5" />
                 Viral feature — no login required
               </div>
@@ -535,7 +535,7 @@ export default function LandingPage() {
                 Paste any job description.<br />
                 <span className="text-indigo-400">Know if you&apos;re ready.</span>
               </h2>
-              <p className="text-slate-400 text-base leading-relaxed mb-6">
+              <p className="text-slate-400 text-2xl leading-relaxed mb-6">
                 No guessing. Paste any JD and get your readiness score instantly — with the exact gaps blocking you and the single most impactful thing to do next.
               </p>
               <div className="space-y-3 mb-8">
@@ -544,7 +544,7 @@ export default function LandingPage() {
                   "Personalized if you're signed in",
                   "Shareable — one click to post on LinkedIn",
                 ].map((f) => (
-                  <div key={f} className="flex items-center gap-3 text-sm text-slate-400">
+                  <div key={f} className="flex items-center gap-3 text-xl text-slate-400">
                     <CheckCircle2 className="h-4 w-4 text-indigo-400 shrink-0" />
                     {f}
                   </div>
@@ -563,11 +563,11 @@ export default function LandingPage() {
       {/* Share Cards */}
       <section className="py-20 bg-[#0d1018] border-b border-white/5">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">Your progress = your marketing</p>
+          <p className="text-xl font-bold uppercase tracking-widest text-indigo-400 mb-3">Your progress = your marketing</p>
           <h2 className="text-4xl font-black text-white mb-5">
             Share your readiness. Stay accountable.
           </h2>
-          <p className="text-slate-400 text-base max-w-xl mx-auto mb-10">
+          <p className="text-slate-400 text-2xl max-w-xl mx-auto mb-10">
             Every week, your progress card updates. One click to share on LinkedIn or Twitter. Your network sees your journey — and keeps you moving.
           </p>
           {/* Sample card */}
@@ -576,22 +576,22 @@ export default function LandingPage() {
               <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">
                 <Zap className="h-3.5 w-3.5 text-white" />
               </div>
-              <span className="font-bold text-white text-sm">NinetyDays.ai</span>
+              <span className="font-bold text-white text-xl">NinetyDays.ai</span>
             </div>
-            <div className="inline-flex items-center gap-1.5 bg-indigo-500/15 border border-indigo-500/30 rounded-full px-3 py-1 text-xs font-semibold text-indigo-300 mb-4">
+            <div className="inline-flex items-center gap-1.5 bg-indigo-500/15 border border-indigo-500/30 rounded-full px-3 py-1 text-2xl font-semibold text-indigo-300 mb-4">
               Week 8 of 12 · My 90-day journey
             </div>
             <div className="flex items-end gap-3 mb-2">
               <span className="text-6xl font-black text-emerald-400 leading-none">74</span>
-              <div className="text-slate-400 text-sm mb-1">/ 100<br />readiness</div>
+              <div className="text-slate-400 text-xl mb-1">/ 100<br />readiness</div>
             </div>
             <div className="text-white font-bold mb-4">ML Engineer readiness</div>
             <div className="bg-white/8 rounded-full h-2 overflow-hidden mb-6">
               <div className="h-full rounded-full bg-emerald-400" style={{ width: "74%" }} />
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-slate-500 text-xs">Track your readiness daily</span>
-              <div className="flex items-center gap-1.5 bg-white/10 rounded-lg px-3 py-1.5 text-xs text-white font-medium cursor-pointer">
+              <span className="text-slate-500 text-2xl">Track your readiness daily</span>
+              <div className="flex items-center gap-1.5 bg-white/10 rounded-lg px-3 py-1.5 text-2xl text-white font-medium cursor-pointer">
                 <Share2 className="h-3 w-3" /> Share
               </div>
             </div>
@@ -610,9 +610,9 @@ export default function LandingPage() {
       <section className="py-24 bg-[#0b0e14] text-white">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-14">
-            <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">Built for consistency</p>
+            <p className="text-xl font-bold uppercase tracking-widest text-indigo-400 mb-3">Built for consistency</p>
             <h2 className="text-4xl font-black text-white">See your progress. Stay motivated.</h2>
-            <p className="text-slate-400 mt-4 text-base max-w-xl mx-auto">
+            <p className="text-slate-400 mt-4 text-2xl max-w-xl mx-auto">
               Most career tools give you a report and leave you guessing. NinetyDays keeps you moving every week.
             </p>
           </div>
@@ -654,13 +654,13 @@ export default function LandingPage() {
                   <Icon className="h-5 w-5 text-indigo-400" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white text-lg mb-1">{title}</h3>
-                  <p className="text-sm text-slate-400 leading-relaxed">{desc}</p>
+                  <h3 className="font-bold text-white text-3xl mb-1">{title}</h3>
+                  <p className="text-xl text-slate-400 leading-relaxed">{desc}</p>
                 </div>
                 {preview && (
                   <div className="space-y-2 mt-1">
                     {preview.map((t) => (
-                      <div key={t.label} className="flex items-center gap-2 text-sm">
+                      <div key={t.label} className="flex items-center gap-2 text-xl">
                         {t.done
                           ? <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
                           : <div className="h-4 w-4 rounded-full border-2 border-slate-600 shrink-0" />
@@ -674,11 +674,11 @@ export default function LandingPage() {
                   <div className="space-y-2 mt-1">
                     {milestones.map((m) => (
                       <div key={m.pct} className="flex items-center gap-3">
-                        <span className={`text-xs font-bold w-8 shrink-0 ${m.done ? "text-emerald-400" : "text-slate-500"}`}>{m.pct}%</span>
+                        <span className={`text-2xl font-bold w-8 shrink-0 ${m.done ? "text-emerald-400" : "text-slate-500"}`}>{m.pct}%</span>
                         <div className="flex-1 bg-white/10 rounded-full h-1.5">
                           <div className={`h-1.5 rounded-full ${m.done ? "bg-emerald-400" : "bg-white/20"}`} style={{ width: m.done ? "100%" : "0%" }} />
                         </div>
-                        <span className={`text-xs ${m.done ? "text-slate-400" : "text-slate-600"}`}>{m.label}</span>
+                        <span className={`text-2xl ${m.done ? "text-slate-400" : "text-slate-600"}`}>{m.label}</span>
                       </div>
                     ))}
                   </div>
@@ -686,7 +686,7 @@ export default function LandingPage() {
                 {stats && (
                   <div className="space-y-2 mt-1">
                     {stats.map((s) => (
-                      <div key={s.label} className="flex items-center justify-between text-sm">
+                      <div key={s.label} className="flex items-center justify-between text-xl">
                         <span className="text-slate-400">{s.label}</span>
                         <span className="font-bold text-white">{s.value}</span>
                       </div>
@@ -703,9 +703,9 @@ export default function LandingPage() {
       <section className="py-24 bg-[#0b0e14] border-b border-white/5">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-14">
-            <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">Results</p>
+            <p className="text-xl font-bold uppercase tracking-widest text-indigo-400 mb-3">Results</p>
             <h2 className="text-4xl font-black text-white">Engineers who closed the gap</h2>
-            <p className="text-slate-400 mt-3 text-base">Built on real patterns from engineers stuck in service companies — and who got out.</p>
+            <p className="text-slate-400 mt-3 text-2xl">Built on real patterns from engineers stuck in service companies — and who got out.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {testimonials.map((t) => (
@@ -713,12 +713,12 @@ export default function LandingPage() {
                 <div className="flex items-center gap-4 mb-5">
                   <div className="text-center">
                     <div className="text-2xl font-black text-red-400">{t.score.before}%</div>
-                    <div className="text-xs text-slate-400">before</div>
+                    <div className="text-2xl text-slate-400">before</div>
                   </div>
                   <ArrowRight className="h-4 w-4 text-slate-400 shrink-0" />
                   <div className="text-center">
                     <div className="text-2xl font-black text-emerald-400">{t.score.after}%</div>
-                    <div className="text-xs text-slate-400">after</div>
+                    <div className="text-2xl text-slate-400">after</div>
                   </div>
                   <div className="flex-1 ml-2">
                     {[...Array(5)].map((_, i) => (
@@ -726,10 +726,10 @@ export default function LandingPage() {
                     ))}
                   </div>
                 </div>
-                <p className="text-slate-300 text-sm leading-relaxed mb-5 italic">&ldquo;{t.quote}&rdquo;</p>
+                <p className="text-slate-300 text-xl leading-relaxed mb-5 italic">&ldquo;{t.quote}&rdquo;</p>
                 <div>
-                  <p className="font-bold text-sm text-white">{t.name}</p>
-                  <p className="text-xs text-slate-400 mt-0.5 flex items-center gap-1">
+                  <p className="font-bold text-xl text-white">{t.name}</p>
+                  <p className="text-2xl text-slate-400 mt-0.5 flex items-center gap-1">
                     <ChevronRight className="h-3 w-3 text-indigo-400" />{t.from}
                   </p>
                 </div>
@@ -742,7 +742,7 @@ export default function LandingPage() {
       {/* Feature credibility strip */}
       <section className="py-16 bg-[#0d1018] border-b border-white/5">
         <div className="max-w-4xl mx-auto px-6">
-          <p className="text-center text-sm font-bold uppercase tracking-widest text-slate-400 mb-8">Everything you need to go from &ldquo;confused&rdquo; to &ldquo;interview-ready&rdquo;</p>
+          <p className="text-center text-xl font-bold uppercase tracking-widest text-slate-400 mb-8">Everything you need to go from &ldquo;confused&rdquo; to &ldquo;interview-ready&rdquo;</p>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
             {[
               "AI Mentor — context-aware daily guidance",
@@ -760,7 +760,7 @@ export default function LandingPage() {
               "GitHub profile optimizer",
               "Public portfolio page",
             ].map((f) => (
-              <div key={f} className="flex items-center gap-2.5 text-sm text-slate-300">
+              <div key={f} className="flex items-center gap-2.5 text-xl text-slate-300">
                 <CheckCircle2 className="h-4 w-4 text-indigo-400 shrink-0" />
                 {f}
               </div>
@@ -773,18 +773,18 @@ export default function LandingPage() {
       <section className="py-24 bg-[#0b0e14] border-b border-white/5">
         <div className="max-w-3xl mx-auto px-6">
           <div className="bg-[#161820] rounded-2xl border border-white/10 p-10">
-            <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-6">Why I built this</p>
+            <p className="text-xl font-bold uppercase tracking-widest text-indigo-400 mb-6">Why I built this</p>
             <div className="flex items-start gap-6 mb-8">
               <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shrink-0 shadow-lg shadow-indigo-500/20">
                 <span className="text-white font-black text-xl">G</span>
               </div>
               <div>
-                <p className="text-white font-bold text-lg">The Founder</p>
-                <p className="text-slate-400 text-sm mt-0.5">ex-IT services engineer → product company</p>
+                <p className="text-white font-bold text-3xl">The Founder</p>
+                <p className="text-slate-400 text-xl mt-0.5">ex-IT services engineer → product company</p>
               </div>
             </div>
 
-            <blockquote className="text-lg text-slate-300 leading-relaxed mb-8 border-l-2 border-indigo-500/40 pl-6">
+            <blockquote className="text-3xl text-slate-300 leading-relaxed mb-8 border-l-2 border-indigo-500/40 pl-6">
               &ldquo;I spent 10 years at IT services companies thinking I was building the right skills. Then I applied to product companies — and got rejected. Repeatedly.
               <br /><br />
               40+ applications. 3 first-round interviews. 0 offers. Not because I wasn&apos;t good enough. Because I didn&apos;t know what &ldquo;good enough&rdquo; meant for a product company.
@@ -800,12 +800,12 @@ export default function LandingPage() {
               ].map(({ value, label }) => (
                 <div key={label} className="text-center bg-white/5 rounded-xl p-4">
                   <div className="text-3xl font-black text-indigo-400">{value}</div>
-                  <div className="text-sm text-slate-400 mt-1">{label}</div>
+                  <div className="text-xl text-slate-400 mt-1">{label}</div>
                 </div>
               ))}
             </div>
 
-            <p className="text-slate-300 text-base leading-relaxed">
+            <p className="text-slate-300 text-2xl leading-relaxed">
               I built this for the engineers who are exactly where I was — talented, hard-working, and invisible to the companies they want to join.
               The system works. It worked for me. It&apos;s built from that experience, not from generic career advice.
             </p>
@@ -817,9 +817,9 @@ export default function LandingPage() {
       <section id="pricing" className="py-24 bg-[#0b0e14] border-t border-white/8">
         <div className="max-w-4xl mx-auto px-6">
           <div className="text-center mb-14">
-            <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3">Pricing</p>
+            <p className="text-xl font-bold uppercase tracking-widest text-indigo-400 mb-3">Pricing</p>
             <h2 className="text-4xl font-black text-white">Start free. Upgrade when you&apos;re ready.</h2>
-            <p className="text-slate-400 mt-3 text-base">Early access pricing — locked in forever when you join now.</p>
+            <p className="text-slate-400 mt-3 text-2xl">Early access pricing — locked in forever when you join now.</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
@@ -829,7 +829,7 @@ export default function LandingPage() {
               <div className="mt-4 mb-1">
                 <span className="text-5xl font-black text-white">$0</span>
               </div>
-              <p className="text-slate-400 text-sm mb-8">Forever free · No card needed</p>
+              <p className="text-slate-400 text-xl mb-8">Forever free · No card needed</p>
               <ul className="space-y-3 mb-8">
                 {[
                   "Resume analysis + readiness score",
@@ -839,14 +839,14 @@ export default function LandingPage() {
                   "Rejection risk score",
                   "\"If you apply today\" assessment",
                 ].map((f) => (
-                  <li key={f} className="flex items-start gap-3 text-sm text-slate-300">
+                  <li key={f} className="flex items-start gap-3 text-xl text-slate-300">
                     <CheckCircle2 className="h-4 w-4 text-slate-400 shrink-0 mt-0.5" />
                     {f}
                   </li>
                 ))}
               </ul>
               <Link href="/sign-up">
-                <Button variant="outline" className="w-full h-12 text-base font-semibold rounded-xl border-white/20 bg-white/5 text-white hover:bg-white/10">
+                <Button variant="outline" className="w-full h-12 text-2xl font-semibold rounded-xl border-white/20 bg-white/5 text-white hover:bg-white/10">
                   Get my readiness score — free
                 </Button>
               </Link>
@@ -859,13 +859,13 @@ export default function LandingPage() {
               <div className="relative">
                 <div className="flex items-center justify-between mb-1">
                   <h3 className="text-2xl font-black text-white">Pro</h3>
-                  <span className="bg-amber-400 text-amber-900 text-xs font-black px-3 py-1 rounded-full">Most popular</span>
+                  <span className="bg-amber-400 text-amber-900 text-2xl font-black px-3 py-1 rounded-full">Most popular</span>
                 </div>
                 <div className="mt-3 mb-1 flex items-end gap-2">
                   <span className="text-5xl font-black text-white">$12</span>
-                  <span className="text-white/70 text-base mb-1">/month</span>
+                  <span className="text-white/70 text-2xl mb-1">/month</span>
                 </div>
-                <p className="text-white/60 text-sm mb-8">Or $99/yr — save $45. One role change = 6-figure salary bump.</p>
+                <p className="text-white/60 text-xl mb-8">Or $99/yr — save $45. One role change = 6-figure salary bump.</p>
                 <ul className="space-y-3 mb-8">
                   {[
                     "Everything in Free",
@@ -880,19 +880,19 @@ export default function LandingPage() {
                     "Public portfolio page",
                     "Weekly progress digest email",
                   ].map((f) => (
-                    <li key={f} className="flex items-start gap-3 text-sm text-white/90">
+                    <li key={f} className="flex items-start gap-3 text-xl text-white/90">
                       <CheckCircle2 className="h-4 w-4 text-white/60 shrink-0 mt-0.5" />
                       {f}
                     </li>
                   ))}
                 </ul>
                 <Link href="/sign-up">
-                  <Button className="w-full h-12 text-base font-bold rounded-xl bg-white text-indigo-700 hover:bg-white/90 shadow-lg">
+                  <Button className="w-full h-12 text-2xl font-bold rounded-xl bg-white text-indigo-700 hover:bg-white/90 shadow-lg">
                     Get started — $12/mo
                     <ArrowRight className="h-4 w-4 ml-2" />
                   </Button>
                 </Link>
-                <p className="text-center text-white/40 text-xs mt-3 flex items-center justify-center gap-1.5">
+                <p className="text-center text-white/40 text-2xl mt-3 flex items-center justify-center gap-1.5">
                   <svg className="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.955 11.955 0 013 10c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
                   </svg>
@@ -902,7 +902,7 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <p className="text-center text-slate-400 text-sm mt-8">
+          <p className="text-center text-slate-400 text-xl mt-8">
             One role change = 6-figure salary bump. The $12/mo math writes itself.
           </p>
         </div>
@@ -912,7 +912,7 @@ export default function LandingPage() {
       <section className="bg-[#0b0e14] py-28 relative overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-indigo-600/15 blur-[100px] rounded-full pointer-events-none" />
         <div className="relative max-w-3xl mx-auto px-6 text-center">
-          <p className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-4">You're closer than you think</p>
+          <p className="text-xl font-bold uppercase tracking-widest text-indigo-400 mb-4">You're closer than you think</p>
           <h2 className="text-4xl md:text-5xl font-black text-white leading-tight mb-5">
             You don&apos;t need more courses.
             <br />
@@ -920,7 +920,7 @@ export default function LandingPage() {
               You need direction.
             </span>
           </h2>
-          <p className="text-slate-400 text-base mb-10 leading-relaxed">
+          <p className="text-slate-400 text-2xl mb-10 leading-relaxed">
             Check your score in 20 seconds. Find out exactly what&apos;s blocking you. Free.
           </p>
           <Link href="/score">
@@ -932,7 +932,7 @@ export default function LandingPage() {
               <ArrowRight className="h-6 w-6" />
             </Button>
           </Link>
-          <p className="text-slate-600 text-sm mt-5">No credit card · Paste your resume · Score in 20 seconds</p>
+          <p className="text-slate-600 text-xl mt-5">No credit card · Paste your resume · Score in 20 seconds</p>
         </div>
       </section>
 
@@ -945,12 +945,12 @@ export default function LandingPage() {
             </div>
             <span className="font-bold text-white">NinetyDays</span>
           </div>
-          <div className="flex items-center gap-6 text-sm text-slate-500">
+          <div className="flex items-center gap-6 text-xl text-slate-500">
             <Link href="/sign-in" className="hover:text-slate-300 transition-colors">Sign in</Link>
             <Link href="/sign-up" className="hover:text-slate-300 transition-colors">Sign up</Link>
             <a href="#pricing" className="hover:text-slate-300 transition-colors">Pricing</a>
           </div>
-          <p className="text-sm text-slate-600">© 2026 NinetyDays · Built for engineers worldwide</p>
+          <p className="text-xl text-slate-600">© 2026 NinetyDays · Built for engineers worldwide</p>
         </div>
       </footer>
     </div>

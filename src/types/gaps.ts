@@ -8,6 +8,7 @@ export interface GapItem {
   estimatedHours: number;
   resourceLinks: string[];
   resolved: boolean;
+  impactIfIgnored?: string;
 }
 
 export interface GapReportResult {

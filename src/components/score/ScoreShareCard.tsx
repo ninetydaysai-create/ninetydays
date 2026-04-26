@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { X, Share2, MessageSquare, Briefcase, Copy, CheckCircle2, Zap } from "lucide-react";
+import { X, Share2, MessageSquare, Briefcase, Copy, CheckCircle2, Zap, Flame } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -17,11 +17,16 @@ interface ScoreShareCardProps {
   onClose: () => void;
 }
 
-function buildCopy(variant: "twitter" | "linkedin", score: number, verdict: string, gaps: Gap[]) {
+function buildCopy(variant: "twitter" | "linkedin" | "roast", score: number, verdict: string, gaps: Gap[]) {
   const gapLines = gaps
     .slice(0, 3)
     .map((g) => `• ${g.label} (${g.severity})`)
     .join("\n");
+  const rejectionPct = 100 - score;
+
+  if (variant === "roast") {
+    return `I just got roasted by an AI 🔥\n\n${rejectionPct}% of product companies will reject me.\n\nGaps that are killing me:\n${gapLines}\n\nApparently I need ${score < 40 ? "a lot of work" : score < 60 ? "a few months" : "a few tweaks"} before I'm ready.\n\nCheck how badly YOUR resume gets roasted → ninetydays.ai/score`;
+  }
 
   if (variant === "twitter") {
     return `Just scored my resume on NinetyDays.ai 👇\n\nReadiness score: ${score}/100\n\n${verdict}\n\nGaps holding me back:\n${gapLines}\n\n90-day fix plan available.\n\nCheck yours free → ninetydays.ai/score`;
@@ -31,21 +36,26 @@ function buildCopy(variant: "twitter" | "linkedin", score: number, verdict: stri
 }
 
 export function ScoreShareCard({ score, verdict, topGaps, onClose }: ScoreShareCardProps) {
-  const [tab, setTab] = useState<"twitter" | "linkedin">("twitter");
+  const [tab, setTab] = useState<"twitter" | "linkedin" | "roast">("roast");
   const [copied, setCopied] = useState(false);
+
+  const rejectionPct = 100 - score;
+  const isRoast = tab === "roast";
 
   const scoreColor =
     score >= 70 ? "text-emerald-400" : score >= 50 ? "text-amber-400" : "text-red-400";
 
   const cardGradient =
-    score >= 70
+    isRoast
+      ? "from-red-950/80 via-[#0d1018] to-[#0d1018] border-red-500/40"
+      : score >= 70
       ? "from-emerald-950/80 via-[#0d1018] to-[#0d1018] border-emerald-500/30"
       : score >= 50
       ? "from-amber-950/60 via-[#0d1018] to-[#0d1018] border-amber-500/30"
       : "from-red-950/70 via-[#0d1018] to-[#0d1018] border-red-500/30";
 
   const scoreBorder =
-    score >= 70 ? "border-emerald-500" : score >= 50 ? "border-amber-400" : "border-red-500";
+    isRoast ? "border-red-500" : score >= 70 ? "border-emerald-500" : score >= 50 ? "border-amber-400" : "border-red-500";
 
   const accentColor =
     score >= 70 ? "text-emerald-400" : score >= 50 ? "text-amber-400" : "text-red-400";
@@ -82,7 +92,7 @@ export function ScoreShareCard({ score, verdict, topGaps, onClose }: ScoreShareC
 
         {/* Modal header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-white/8">
-          <p className="text-white font-semibold text-sm">Share your score</p>
+          <p className="text-white font-semibold text-sm">{isRoast ? "Share your roast 🔥" : "Share your score"}</p>
           <button onClick={onClose} className="text-slate-500 hover:text-slate-300 transition-colors">
             <X className="h-4 w-4" />
           </button>
@@ -103,16 +113,33 @@ export function ScoreShareCard({ score, verdict, topGaps, onClose }: ScoreShareC
 
           {/* Big score */}
           <div className="text-center mb-5">
-            <div className={cn(
-              "inline-flex items-center justify-center h-24 w-24 rounded-full border-4 mb-3",
-              scoreBorder
-            )}>
-              <span className={cn("text-4xl font-black tabular-nums", scoreColor)}>{score}</span>
-            </div>
-            <p className="text-slate-400 text-xs font-semibold uppercase tracking-widest">
-              Job Readiness Score
-            </p>
-            <p className="text-slate-300 text-sm mt-1 font-medium">{verdict}</p>
+            {isRoast ? (
+              <>
+                <div className="inline-flex items-center justify-center h-24 w-24 rounded-full border-4 border-red-500 mb-3 bg-red-950/30">
+                  <span className="text-4xl font-black tabular-nums text-red-400">{rejectionPct}%</span>
+                </div>
+                <p className="text-red-400 text-xs font-bold uppercase tracking-widest">
+                  Rejection Rate
+                </p>
+                <p className="text-slate-300 text-sm mt-1 font-medium">
+                  {rejectionPct}% of product companies will reject this resume
+                </p>
+                <p className="text-red-300 text-xs font-bold mt-1.5 tracking-wide">Brutal. But fixable.</p>
+              </>
+            ) : (
+              <>
+                <div className={cn(
+                  "inline-flex items-center justify-center h-24 w-24 rounded-full border-4 mb-3",
+                  scoreBorder
+                )}>
+                  <span className={cn("text-4xl font-black tabular-nums", scoreColor)}>{score}</span>
+                </div>
+                <p className="text-slate-400 text-xs font-semibold uppercase tracking-widest">
+                  Job Readiness Score
+                </p>
+                <p className="text-slate-300 text-sm mt-1 font-medium">{verdict}</p>
+              </>
+            )}
           </div>
 
           {/* Gap bullets */}
@@ -137,14 +164,25 @@ export function ScoreShareCard({ score, verdict, topGaps, onClose }: ScoreShareC
           )}
 
           {/* CTA line */}
-          <div className={cn("text-xs font-bold text-center pt-3 border-t border-white/5", accentColor)}>
-            90-day fix plan available at NinetyDays.ai
+          <div className={cn("text-xs font-bold text-center pt-3 border-t border-white/5", isRoast ? "text-red-400" : accentColor)}>
+            {isRoast ? "Can you do better? → ninetydays.ai/score" : "90-day fix plan available at NinetyDays.ai"}
           </div>
         </div>
 
         {/* Copy variant tabs */}
         <div className="px-5 mt-4">
           <div className="flex gap-2 mb-3">
+            <button
+              onClick={() => setTab("roast")}
+              className={cn(
+                "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors",
+                tab === "roast"
+                  ? "bg-red-900/60 text-red-300 border border-red-500/30"
+                  : "text-slate-500 hover:text-slate-300"
+              )}
+            >
+              <Flame className="h-3 w-3" /> Roast me
+            </button>
             <button
               onClick={() => setTab("twitter")}
               className={cn(
@@ -154,7 +192,7 @@ export function ScoreShareCard({ score, verdict, topGaps, onClose }: ScoreShareC
                   : "text-slate-500 hover:text-slate-300"
               )}
             >
-              <MessageSquare className="h-3 w-3" /> Brutal (Twitter/X)
+              <MessageSquare className="h-3 w-3" /> Twitter/X
             </button>
             <button
               onClick={() => setTab("linkedin")}
@@ -165,7 +203,7 @@ export function ScoreShareCard({ score, verdict, topGaps, onClose }: ScoreShareC
                   : "text-slate-500 hover:text-slate-300"
               )}
             >
-              <Briefcase className="h-3 w-3" /> Softer (LinkedIn)
+              <Briefcase className="h-3 w-3" /> LinkedIn
             </button>
           </div>
 

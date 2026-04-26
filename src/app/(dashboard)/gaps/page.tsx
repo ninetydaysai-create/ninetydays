@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, Target, Clock, Zap, FileText, RefreshCw } from "lucide-react";
+import { ArrowRight, CheckCircle2, Target, Clock, Zap, FileText, RefreshCw, AlertOctagon } from "lucide-react";
 import { GapItem } from "@/types/gaps";
 import GapGenerateButton from "./GapGenerateButton";
 import { RegenerateGapButton } from "./RegenerateGapButton";
@@ -49,6 +49,12 @@ function GapSection({ title, gaps, icon: Icon }: { title: string; gaps: GapItem[
                 <span className="text-xs text-slate-500 flex items-center gap-1"><Clock className="h-3 w-3" /> ~{gap.estimatedHours}h</span>
               </div>
               <p className="text-base text-slate-700 leading-relaxed">{gap.description}</p>
+              {gap.impactIfIgnored && (
+                <div className="mt-2 flex items-start gap-1.5 text-xs text-red-600 font-medium bg-red-50 border border-red-100 rounded-lg px-3 py-2">
+                  <AlertOctagon className="h-3.5 w-3.5 shrink-0 mt-0.5" />
+                  <span>{gap.impactIfIgnored}</span>
+                </div>
+              )}
             </div>
           </div>
         ))}

@@ -182,7 +182,7 @@ If isValidJd is true, score the candidate's readiness. Be brutally honest — mo
     }
   ],
   "strongMatches": ["<specific skill or experience that matches the JD — 2-4 items>"],
-  "topAction": "<single most impactful thing to do right now — specific and direct. Not 'learn system design'. Say 'Build one end-to-end project using microservices and deploy it — without this you will fail the tech screen.'>",
+  "topAction": "<single most impactful thing to do right now — specific and direct. Not 'learn system design'. Say 'Build one end-to-end project using microservices and deploy it — this profile will not survive the tech screen without it.'>",
   "timeToReady": "<realistic — don't be kind. '6-8 weeks of deliberate practice' not '2-3 weeks'>",
 }
 

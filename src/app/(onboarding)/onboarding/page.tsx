@@ -195,6 +195,19 @@ export default function OnboardingStep1() {
         </div>
       )}
 
+      {/* Post-signup reinforcement — confirms the decision, sets immediate expectation */}
+      <div className="mb-4 flex items-start gap-3 bg-indigo-50 border border-indigo-200 rounded-xl px-4 py-3 text-sm text-indigo-700">
+        <div className="h-4 w-4 shrink-0 rounded-full bg-indigo-500 flex items-center justify-center mt-0.5">
+          <svg className="h-2.5 w-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <div>
+          <span className="font-semibold">Building your personalized plan based on your gaps.</span>
+          <span className="text-indigo-500"> Answer 3 quick questions → Week 1 starts immediately.</span>
+        </div>
+      </div>
+
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
         <div className="mb-7">
           <h1 className="text-2xl font-bold text-slate-900">Tell us where you are now</h1>
