@@ -21,6 +21,10 @@ import {
   Brain,
   ChevronRight,
   ScanSearch,
+  Users,
+  ExternalLink,
+  Flame,
+  CheckSquare,
 } from "lucide-react";
 import { GapItem } from "@/types/gaps";
 import { ROLE_LABELS } from "@/lib/constants";
@@ -97,11 +101,25 @@ export default async function DashboardPage() {
   if (!user) redirect("/sign-in");
   if (!user.onboardingDone) redirect("/onboarding");
 
-  // Fetch gap report, resume analysis, and streak data
-  const [gapReport, _latestAnalysis, streakData] = await Promise.all([
+  // Fetch gap report, resume analysis, streak data, and cohort
+  const [gapReport, _latestAnalysis, streakData, cohortMember] = await Promise.all([
     db.gapReport.findFirst({ where: { userId }, orderBy: { createdAt: "desc" } }),
     db.resumeAnalysis.findFirst({ where: { userId }, orderBy: { createdAt: "desc" }, select: { overallScore: true } }),
     getUserStreak(userId),
+    db.cohortMember.findUnique({
+      where: { userId },
+      include: {
+        group: {
+          include: {
+            members: {
+              include: {
+                user: { select: { name: true, gapReports: { orderBy: { createdAt: "desc" }, take: 1, select: { totalGapScore: true } } } },
+              },
+            },
+          },
+        },
+      },
+    }),
   ]);
 
   // Career metrics
@@ -136,12 +154,14 @@ export default async function DashboardPage() {
   const dayOfJourney = roadmap ? differenceInDays(new Date(), new Date(roadmap.startedAt)) + 1 : 0;
 
   const quickActions = [
-    { href: "/resume", label: "Resume Analyzer", desc: "Score + AI rewrite your bullets", icon: FileText },
-    { href: "/gaps", label: "Gap Engine", desc: "See exactly what's blocking you", icon: Target },
-    { href: "/roadmap", label: "90-Day Roadmap", desc: "Your week-by-week action plan", icon: Map },
-    { href: "/job-match", label: "Job Match Score", desc: "Paste any JD — see how well you match", icon: ScanSearch },
-    { href: "/interview", label: "Mock Interview", desc: "AI-scored practice sessions", icon: MessageSquare },
-    { href: "/portfolio", label: "Portfolio", desc: "Build your public recruiter page", icon: Sparkles },
+    { href: "/resume",    label: "Resume Analyzer",   desc: "Score your resume + AI-rewrite weak bullets",        icon: FileText     },
+    { href: "/gaps",      label: "Gap Engine",         desc: "See exactly what's blocking you",                    icon: Target       },
+    { href: "/roadmap",   label: "90-Day Roadmap",     desc: "Your week-by-week action plan",                      icon: Map          },
+    { href: "/job-match", label: "Job Match Score",    desc: "Paste any JD — see your exact match %",              icon: ScanSearch   },
+    { href: "/interview", label: "Mock Interview",     desc: "Record voice answers + get AI feedback",             icon: MessageSquare },
+    { href: "/linkedin",  label: "LinkedIn Grader",    desc: "Score your profile + AI rewrite for recruiters",     icon: ExternalLink },
+    { href: "/cohort",    label: "My Cohort",          desc: "5 engineers, same goal — see each other's progress", icon: Users        },
+    { href: "/portfolio", label: "Portfolio",          desc: "Build your public recruiter page",                   icon: Sparkles     },
   ];
 
   const TARGET_READINESS = 70;
@@ -394,6 +414,63 @@ export default async function DashboardPage() {
         </div>
       )}
 
+      {/* ── Cohort group widget ── */}
+      {cohortMember && (() => {
+        const group = cohortMember.group;
+        const roleLabel = ROLE_LABELS[group.targetRole as TargetRole] ?? group.targetRole.replace(/_/g, " ");
+        const others = group.members.filter((m) => m.userId !== userId);
+        const topMember = [...group.members]
+          .sort((a, b) => (b.user.gapReports[0]?.totalGapScore ?? 0) - (a.user.gapReports[0]?.totalGapScore ?? 0))
+          .find((m) => m.userId !== userId);
+        return (
+          <div className="bg-[#161820] rounded-2xl border border-white/10 p-5">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="h-9 w-9 rounded-xl bg-rose-500/10 flex items-center justify-center shrink-0">
+                  <Users className="h-4 w-4 text-rose-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-white">Your Accountability Group</p>
+                  <p className="text-xs text-slate-500">{group.members.length} member{group.members.length !== 1 ? "s" : ""} · {roleLabel}</p>
+                </div>
+              </div>
+              <Link href="/cohort" className="text-xs font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
+                View group <ArrowRight className="h-3 w-3" />
+              </Link>
+            </div>
+            <div className="flex items-center gap-2 flex-wrap">
+              {group.members.slice(0, 5).map((m, i) => {
+                const colors = ["bg-indigo-500/20 text-indigo-400", "bg-violet-500/20 text-violet-400", "bg-emerald-500/20 text-emerald-400", "bg-amber-500/20 text-amber-400", "bg-rose-500/20 text-rose-400"];
+                const score = m.user.gapReports[0]?.totalGapScore ?? null;
+                const isSelf = m.userId === userId;
+                return (
+                  <div key={m.userId} className={`flex items-center gap-2 px-3 py-2 rounded-xl border ${isSelf ? "border-indigo-500/30 bg-indigo-500/10" : "border-white/5 bg-white/[0.03]"}`}>
+                    <div className={`h-6 w-6 rounded-lg flex items-center justify-center text-[10px] font-black shrink-0 ${colors[i % colors.length]}`}>
+                      {(m.user.name ?? "?")[0]?.toUpperCase()}
+                    </div>
+                    <span className="text-xs font-medium text-slate-300">
+                      {isSelf ? "You" : m.user.name?.split(" ")[0] ?? "Member"}
+                    </span>
+                    {score !== null && (
+                      <span className={`text-xs font-bold ${score >= 70 ? "text-emerald-400" : score >= 40 ? "text-amber-400" : "text-red-400"}`}>{score}%</span>
+                    )}
+                  </div>
+                );
+              })}
+              {group.members.length === 1 && (
+                <p className="text-xs text-slate-500 italic">More members joining this week…</p>
+              )}
+            </div>
+            {topMember && topMember.user.gapReports[0]?.totalGapScore !== undefined && (
+              <p className="text-xs text-slate-500 mt-3 flex items-center gap-1.5">
+                <Flame className="h-3 w-3 text-orange-400" />
+                Top member this week: {topMember.user.name?.split(" ")[0] ?? "teammate"} at {topMember.user.gapReports[0].totalGapScore}% readiness
+              </p>
+            )}
+          </div>
+        );
+      })()}
+
       {/* ── Quick actions ── */}
       <div>
         <div className="flex items-center justify-between mb-5">
@@ -436,7 +513,7 @@ export default async function DashboardPage() {
           <Link href="/settings" className="shrink-0">
             <button className="h-10 px-5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition-colors flex items-center gap-2 shadow-lg shadow-indigo-500/25">
               <Sparkles className="h-4 w-4" />
-              Upgrade to Pro — $9/mo
+              Upgrade to Pro — $19/mo
             </button>
           </Link>
         </div>
