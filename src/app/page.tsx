@@ -862,7 +862,7 @@ export default function LandingPage() {
                   <span className="bg-amber-400 text-amber-900 text-xs font-black px-3 py-1 rounded-full">Most popular</span>
                 </div>
                 <div className="mt-3 mb-1 flex items-end gap-2">
-                  <span className="text-5xl font-black text-white">$19</span>
+                  <span className="text-5xl font-black text-white">$12</span>
                   <span className="text-white/70 text-base mb-1">/month</span>
                 </div>
                 <p className="text-white/60 text-sm mb-8">Or $99/yr — save $45. One role change = 6-figure salary bump.</p>
