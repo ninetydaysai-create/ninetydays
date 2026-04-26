@@ -53,7 +53,7 @@ export async function GET(req: Request) {
       activityLogs: {
         where: {
           createdAt: { gte: weekStart },
-          type: "task_complete",
+          type: "task_completed",
         },
         select: { createdAt: true },
       },
