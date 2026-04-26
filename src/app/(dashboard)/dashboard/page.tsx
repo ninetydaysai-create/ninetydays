@@ -513,7 +513,7 @@ export default async function DashboardPage() {
           <Link href="/settings" className="shrink-0">
             <button className="h-10 px-5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition-colors flex items-center gap-2 shadow-lg shadow-indigo-500/25">
               <Sparkles className="h-4 w-4" />
-              Upgrade to Pro — $19/mo
+              Upgrade to Pro — $12/mo
             </button>
           </Link>
         </div>

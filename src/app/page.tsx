@@ -865,7 +865,7 @@ export default function LandingPage() {
                   <span className="text-5xl font-black text-white">$19</span>
                   <span className="text-white/70 text-base mb-1">/month</span>
                 </div>
-                <p className="text-white/60 text-sm mb-8">Or $149/yr — save $79. One role change = 6-figure salary bump.</p>
+                <p className="text-white/60 text-sm mb-8">Or $99/yr — save $45. One role change = 6-figure salary bump.</p>
                 <ul className="space-y-3 mb-8">
                   {[
                     "Everything in Free",
@@ -888,7 +888,7 @@ export default function LandingPage() {
                 </ul>
                 <Link href="/sign-up">
                   <Button className="w-full h-12 text-base font-bold rounded-xl bg-white text-indigo-700 hover:bg-white/90 shadow-lg">
-                    Get started — $19/mo
+                    Get started — $12/mo
                     <ArrowRight className="h-4 w-4 ml-2" />
                   </Button>
                 </Link>
@@ -903,7 +903,7 @@ export default function LandingPage() {
           </div>
 
           <p className="text-center text-slate-400 text-sm mt-8">
-            One role change = 6-figure salary bump. The $19/mo math writes itself.
+            One role change = 6-figure salary bump. The $12/mo math writes itself.
           </p>
         </div>
       </section>
