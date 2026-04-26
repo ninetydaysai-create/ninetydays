@@ -2,6 +2,8 @@ import { resend, FROM_EMAIL } from "@/lib/resend";
 import { db } from "@/lib/db";
 import { ROLE_LABELS } from "@/lib/constants";
 import { TargetRole } from "@prisma/client";
+import { render } from "@react-email/render";
+import { RoadmapReadyEmail } from "@/emails/RoadmapReadyEmail";
 
 function getJobLinksForRole(targetRole: string): { label: string; url: string }[] {
   const links: Record<string, { label: string; url: string }[]> = {
@@ -98,6 +100,39 @@ export async function triggerReadyToApplyEmail(userId: string): Promise<void> {
         </p>
       </div>
     `,
+  });
+}
+
+export async function triggerRoadmapReadyEmail(
+  userId: string,
+  targetRole: string,
+  weekOneTheme: string
+): Promise<void> {
+  if (!process.env.RESEND_API_KEY || process.env.RESEND_API_KEY === "re_") return;
+
+  const user = await db.user.findUnique({
+    where: { id: userId },
+    select: { email: true, name: true },
+  });
+  if (!user) return;
+
+  const roleLabel = ROLE_LABELS[targetRole as TargetRole] ?? targetRole.replace(/_/g, " ");
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://ninetydays.ai";
+
+  const html = await render(
+    RoadmapReadyEmail({
+      name: user.name ?? "Developer",
+      targetRole: roleLabel,
+      weekOneTheme,
+      roadmapUrl: `${appUrl}/roadmap`,
+    })
+  );
+
+  await resend.emails.send({
+    from: FROM_EMAIL,
+    to: user.email,
+    subject: `Your 90-day ${roleLabel} roadmap is ready — Week 1 starts now`,
+    html,
   });
 }
 

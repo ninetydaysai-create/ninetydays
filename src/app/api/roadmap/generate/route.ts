@@ -11,6 +11,7 @@ import { TargetRole } from "@prisma/client";
 import { assertPlanAllows } from "@/lib/plan-guard";
 import { fetchGitHubSignal } from "@/lib/github-signal";
 import { enrichTaskResources } from "@/lib/resource-links";
+import { triggerRoadmapReadyEmail } from "@/lib/email-triggers";
 
 const TaskSchema = z.object({
   label:        z.string(),
@@ -156,6 +157,9 @@ export async function POST(req: Request) {
   await db.activityLog.create({
     data: { userId, type: "roadmap_generated", metadata: { roadmapId: roadmap.id } },
   });
+
+  // Fire-and-forget — don't block the response
+  triggerRoadmapReadyEmail(userId, targetRole, weeks[0]?.theme ?? "Foundation").catch(() => {});
 
   return NextResponse.json({ roadmapId: roadmap.id });
 }
