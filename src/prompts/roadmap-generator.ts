@@ -1,6 +1,7 @@
 import { TargetRole } from "@prisma/client";
 import { GapReportResult } from "@/types/gaps";
 import { GitHubSignal } from "@/lib/github-signal";
+import { detectServiceCompanyEmployer } from "./service-company";
 
 interface ResumeSignal {
   overallScore: number;
@@ -175,9 +176,9 @@ ${yoe >= 7
         .join(", ")
     : "unknown";
 
-  const hasServiceCompanyPattern =
-    resumeText &&
-    /tcs|infosys|wipro|accenture|cognizant|capgemini|hcl|tech mahindra/i.test(resumeText);
+  const hasServiceCompanyPattern = resumeText
+    ? detectServiceCompanyEmployer(resumeText)
+    : false;
 
   return `You are a senior engineering career coach building a PERSONALIZED 12-week transition plan. This is NOT a generic template — every week and every task must be calibrated to this specific candidate's actual starting point, goals, and constraints.
 
@@ -206,8 +207,8 @@ CANDIDATE SIGNAL (what the resume actually shows):
 - Project complexity score: ${resumeSignal?.projectComplexity ?? "unknown"}/100
 ${hasServiceCompanyPattern ? "- ⚠️ SERVICE COMPANY BACKGROUND DETECTED: Resume shows delivery/outsourcing patterns. Must address product ownership gap explicitly." : ""}
 
-RESUME EXCERPT (actual candidate content — use this to personalize tasks):
-${resumeText ? resumeText.slice(0, 3000) : "Not available"}
+RESUME (full text — reference projects, roles, and technologies by name in task descriptions):
+${resumeText ?? "Not available"}
 ${githubSignalSection(githubSignal ?? null)}
 ---
 
@@ -251,12 +252,22 @@ CALIBRATION RULES — follow these strictly:
    - Phase 2 (Weeks 5-8): Close CRITICAL+WEAK and MAJOR gaps. Build 2-3 real portfolio projects.
    - Phase 3 (Weeks 9-12): Polish + practice. Mock interviews, applications, story refinement.
 
+   GAP COVERAGE — MANDATORY:
+   Every CRITICAL gap from the gap report MUST have at least one task mapped to it (gapLabel set) in Weeks 1-4.
+   Do NOT leave any CRITICAL gap uncovered. If you run out of task slots, remove MINOR tasks first.
+   MAJOR gaps must be covered by Week 8.
+
 5. WEEK THEMES must be specific to THIS candidate:
    ❌ "Python & ML Foundations" (generic)
    ✅ "Build your first RAG pipeline on top of your existing FastAPI service" (specific)
 
-6. TASKS must have concrete deliverables:
-   Every task ends with something that exists: a GitHub repo, a deployed endpoint, a written story, a system design doc.
+6. TASKS must have concrete deliverables AND use this exact description format:
+   CONTEXT: <1 sentence — why this matters given the candidate's specific background>
+   ACTION: <exactly what to do — reference their existing projects/skills where possible>
+   SUCCESS CRITERIA: <how they know this task is done — a tangible artifact or measurable outcome>
+
+   Example (bad): "Learn system design basics"
+   Example (good): "CONTEXT: Your resume shows 6 years of microservices work but no system design interviews. ACTION: Design a URL shortener (like bit.ly) from scratch — write the design doc covering data model, API, caching layer, and failure modes. Then record a 10-min walkthrough. SUCCESS CRITERIA: Design doc committed to GitHub, covers 5+ components, walkthrough explains your tradeoffs."
 
 7. IMPACT SCORE calibration:
    - 9-10: Directly closes a CRITICAL gap
@@ -273,7 +284,13 @@ ${[...gapReport.skillGaps, ...gapReport.projectGaps, ...gapReport.storyGaps]
 
 ---
 
-Return a JSON object: { "weeks": [ ... ] }
+Return a JSON object: { "applyReadyAt": <week number 1-12 when candidate should start applying>, "weeks": [ ... ] }
+
+applyReadyAt guidance:
+- FAANG: Week 10+ (needs both DS&A depth + system design practice)
+- Funded startup: Week 6-8 (portfolio work matters more than grinding)
+- Any company: Week 8-10 (balanced)
+- Adjust earlier/later based on critical gap count and severity
 
 Each week:
 {
@@ -294,5 +311,6 @@ Each week:
   ]
 }
 
-Each week: 3-5 tasks. Return ONLY the JSON object. No markdown. No explanation outside the JSON.`;
+Each week: 3-5 tasks. Return ONLY the JSON object. No markdown. No explanation outside the JSON.
+Task descriptions MUST follow the CONTEXT / ACTION / SUCCESS CRITERIA format from rule 6.`;
 }

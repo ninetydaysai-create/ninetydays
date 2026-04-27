@@ -23,6 +23,7 @@ export async function GET() {
       id: roadmap.id,
       startedAt: roadmap.startedAt,
       totalWeeks: roadmap.weeks.length,
+      applyReadyAt: roadmap.applyReadyAt ?? null,
     },
     weeks: roadmap.weeks,
   });

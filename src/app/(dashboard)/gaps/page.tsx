@@ -6,10 +6,17 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, Target, Clock, Zap, FileText, RefreshCw, AlertOctagon } from "lucide-react";
-import { GapItem } from "@/types/gaps";
+import { ArrowRight, CheckCircle2, Target, Clock, Zap, FileText, RefreshCw, AlertOctagon, MessageSquare, BookOpen, Hammer, FileEdit, RotateCcw } from "lucide-react";
+import { GapItem, FixStrategy } from "@/types/gaps";
 import GapGenerateButton from "./GapGenerateButton";
 import { RegenerateGapButton } from "./RegenerateGapButton";
+
+const fixStrategyMeta: Record<FixStrategy, { label: string; icon: React.ElementType; className: string }> = {
+  learn:    { label: "Learn",    icon: BookOpen,  className: "bg-blue-50 text-blue-700 border-blue-200" },
+  build:    { label: "Build",    icon: Hammer,    className: "bg-indigo-50 text-indigo-700 border-indigo-200" },
+  document: { label: "Document", icon: FileEdit,  className: "bg-amber-50 text-amber-700 border-amber-200" },
+  reframe:  { label: "Reframe",  icon: RotateCcw, className: "bg-purple-50 text-purple-700 border-purple-200" },
+};
 
 function severityDot(s: string) {
   if (s === "critical") return "bg-red-500";
@@ -47,8 +54,23 @@ function GapSection({ title, gaps, icon: Icon }: { title: string; gaps: GapItem[
                 <span className="font-semibold text-slate-900">{gap.label}</span>
                 <Badge variant={severityVariant(gap.severity)} className="text-xs capitalize">{gap.severity}</Badge>
                 <span className="text-xs text-slate-500 flex items-center gap-1"><Clock className="h-3 w-3" /> ~{gap.estimatedHours}h</span>
+                {gap.fixStrategy && (() => {
+                  const meta = fixStrategyMeta[gap.fixStrategy];
+                  const StratIcon = meta.icon;
+                  return (
+                    <span className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full border ${meta.className}`}>
+                      <StratIcon className="h-3 w-3" />{meta.label}
+                    </span>
+                  );
+                })()}
               </div>
               <p className="text-base text-slate-700 leading-relaxed">{gap.description}</p>
+              {gap.interviewQuestion && (
+                <div className="mt-2 flex items-start gap-1.5 text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
+                  <MessageSquare className="h-3.5 w-3.5 shrink-0 mt-0.5 text-slate-400" />
+                  <span><span className="font-semibold text-slate-700">Interview question: </span>{gap.interviewQuestion}</span>
+                </div>
+              )}
               {gap.impactIfIgnored && (
                 <div className="mt-2 flex items-start gap-1.5 text-xs text-red-600 font-medium bg-red-50 border border-red-100 rounded-lg px-3 py-2">
                   <AlertOctagon className="h-3.5 w-3.5 shrink-0 mt-0.5" />
@@ -131,6 +153,12 @@ export default async function GapsPage() {
           <div className="text-base text-slate-300 font-medium">readiness score</div>
         </div>
       </div>
+      {report.summary && (
+        <div className="bg-white border border-slate-200 rounded-2xl px-5 py-4">
+          <p className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-1.5">AI Assessment</p>
+          <p className="text-base text-slate-700 leading-relaxed">{report.summary}</p>
+        </div>
+      )}
       <Card>
         <CardContent className="pt-5 pb-5">
           <div className="flex items-center justify-between mb-2 text-sm">

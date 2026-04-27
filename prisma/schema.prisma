@@ -69,6 +69,7 @@ model User {
   learningStyle          String?     // "projects" | "courses" | "docs" | "mix"
   targetReason           String?     // "growth" | "passion" | "culture" | "relocation"
   githubSignal           Json?
+  githubSignalUpdatedAt  DateTime?              // TTL: refresh if older than 7 days
   referralCode           String?     @unique  // e.g. "gaurav-x3k2"
   referredBy             String?              // userId of the referrer
   referralCount          Int         @default(0)
@@ -160,6 +161,7 @@ model GapReport {
   projectGaps   Json // GapItem[]
   storyGaps     Json // GapItem[]
   totalGapScore Int
+  summary       String?        @db.Text
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
@@ -171,14 +173,15 @@ model GapReport {
 // ─── Roadmap ──────────────────────────────────────────────────────────────────
 
 model Roadmap {
-  id          String     @id @default(cuid())
-  userId      String     @unique
-  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  gapReportId String     @unique
-  gapReport   GapReport  @relation(fields: [gapReportId], references: [id])
-  targetRole  TargetRole
-  startedAt   DateTime   @default(now())
-  createdAt   DateTime   @default(now())
+  id            String     @id @default(cuid())
+  userId        String     @unique
+  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gapReportId   String     @unique
+  gapReport     GapReport  @relation(fields: [gapReportId], references: [id])
+  targetRole    TargetRole
+  applyReadyAt  Int?       // week number when candidate should start applying
+  startedAt     DateTime   @default(now())
+  createdAt     DateTime   @default(now())
 
   weeks RoadmapWeek[]
 

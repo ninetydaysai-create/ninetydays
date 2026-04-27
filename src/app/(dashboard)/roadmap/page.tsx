@@ -50,6 +50,7 @@ interface Roadmap {
   id: string;
   startedAt: string;
   totalWeeks: number;
+  applyReadyAt?: number | null;
 }
 
 interface UserPlan {
@@ -433,6 +434,12 @@ export default function RoadmapPage() {
               <span className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-slate-300">
                 <BookOpen className="h-3 w-3 text-slate-400" />
                 {userPlan.learningStyle === "projects" ? "Project-focused" : userPlan.learningStyle === "courses" ? "Course-focused" : userPlan.learningStyle === "docs" ? "Docs-focused" : "Mixed learning"}
+              </span>
+            )}
+            {roadmap?.applyReadyAt && (
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400">
+                <Target className="h-3 w-3" />
+                Apply from Week {roadmap.applyReadyAt}
               </span>
             )}
           </div>
