@@ -13,7 +13,7 @@ export function Sidebar() {
   const { openUserProfile, signOut } = useClerk();
 
   return (
-    <aside className="hidden md:flex flex-col w-[260px] h-screen sticky top-0 shrink-0 bg-[#0b0e14] text-white overflow-y-auto">
+    <aside className="hidden md:flex flex-col w-[360px] h-screen sticky top-0 shrink-0 bg-[#0b0e14] text-white overflow-y-auto">
       {/* Logo */}
       <div className="px-5 pt-7 pb-6">
         <Link href="/dashboard" className="flex items-center gap-3 group">
@@ -33,17 +33,17 @@ export function Sidebar() {
               key={href}
               href={href}
               className={cn(
-                "flex items-center gap-3 rounded-xl px-3 py-3 text-[0.925rem] font-medium transition-all duration-150 group",
+                "flex items-center gap-3 rounded-xl px-3 py-3 text-[1.85rem] font-medium transition-all duration-150 group",
                 active
                   ? "bg-white/10 text-white"
                   : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
               )}
             >
-              <div className={cn("h-8 w-8 rounded-lg flex items-center justify-center shrink-0 transition-all", active ? "bg-indigo-500/10" : "bg-white/5 group-hover:bg-white/8")}>
-                <Icon className={cn("h-4 w-4", active ? "text-indigo-400" : "text-slate-400 group-hover:text-slate-300")} />
+              <div className={cn("h-12 w-12 rounded-lg flex items-center justify-center shrink-0 transition-all", active ? "bg-indigo-500/10" : "bg-white/5 group-hover:bg-white/8")}>
+                <Icon className={cn("h-7 w-7", active ? "text-indigo-400" : "text-slate-400 group-hover:text-slate-300")} />
               </div>
               <span className="flex-1">{label}</span>
-              {active && <ChevronRight className="h-3.5 w-3.5 text-slate-400 shrink-0" />}
+              {active && <ChevronRight className="h-6 w-6 text-slate-400 shrink-0" />}
             </Link>
           );
         })}
@@ -54,20 +54,20 @@ export function Sidebar() {
         <Link
           href="/settings"
           className={cn(
-            "flex items-center gap-3 rounded-xl px-3 py-3 text-[0.925rem] font-medium transition-all duration-150",
+            "flex items-center gap-3 rounded-xl px-3 py-3 text-[1.85rem] font-medium transition-all duration-150",
             pathname === "/settings"
               ? "bg-white/10 text-white"
               : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
           )}
         >
-          <div className={cn("h-8 w-8 rounded-lg flex items-center justify-center shrink-0", pathname === "/settings" ? "bg-slate-500/10" : "bg-white/5")}>
-            <Settings className={cn("h-4 w-4", pathname === "/settings" ? "text-slate-300" : "text-slate-400")} />
+          <div className={cn("h-12 w-12 rounded-lg flex items-center justify-center shrink-0", pathname === "/settings" ? "bg-slate-500/10" : "bg-white/5")}>
+            <Settings className={cn("h-7 w-7", pathname === "/settings" ? "text-slate-300" : "text-slate-400")} />
           </div>
           Settings
         </Link>
 
-        <div className="flex items-center gap-3 rounded-xl px-3 py-3 text-[0.925rem] font-medium text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all duration-150 cursor-pointer">
-          <div className="h-8 w-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0 relative">
+        <div className="flex items-center gap-3 rounded-xl px-3 py-3 text-[1.85rem] font-medium text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all duration-150 cursor-pointer">
+          <div className="h-12 w-12 rounded-lg bg-white/5 flex items-center justify-center shrink-0 relative">
             <NotificationBell />
           </div>
           <span>Notifications</span>
@@ -78,17 +78,17 @@ export function Sidebar() {
           className="w-full flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-white/5 transition-colors cursor-pointer text-left"
         >
           <UserButton />
-          <span className="text-[0.925rem] text-slate-400 font-medium">Account</span>
+          <span className="text-[1.85rem] text-slate-400 font-medium">Account</span>
         </button>
 
         <button
           onClick={() => signOut({ redirectUrl: "/" })}
           className="w-full flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-red-500/10 transition-colors cursor-pointer text-left group"
         >
-          <div className="h-8 w-8 rounded-lg bg-white/5 group-hover:bg-red-500/10 flex items-center justify-center shrink-0 transition-colors">
-            <LogOut className="h-4 w-4 text-slate-400 group-hover:text-red-400 transition-colors" />
+          <div className="h-12 w-12 rounded-lg bg-white/5 group-hover:bg-red-500/10 flex items-center justify-center shrink-0 transition-colors">
+            <LogOut className="h-7 w-7 text-slate-400 group-hover:text-red-400 transition-colors" />
           </div>
-          <span className="text-[0.925rem] text-slate-400 group-hover:text-red-400 font-medium transition-colors">Sign out</span>
+          <span className="text-[1.85rem] text-slate-400 group-hover:text-red-400 font-medium transition-colors">Sign out</span>
         </button>
       </div>
     </aside>
