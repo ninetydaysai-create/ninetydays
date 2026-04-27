@@ -116,7 +116,7 @@ export default function OutreachPage() {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-white">Cold Outreach Generator</h1>
-        <p className="text-slate-300 mt-1 text-base">
+        <p className="text-slate-300 mt-1 text-xl">
           Paste a JD &rarr; get a personalized recruiter email in seconds
         </p>
       </div>
@@ -136,8 +136,8 @@ export default function OutreachPage() {
             <Mail className="h-5 w-5 text-red-400" />
           </div>
           <div>
-            <p className="font-bold text-white">Paste job description</p>
-            <p className="text-sm text-slate-300">
+            <p className="font-bold text-white text-lg">Paste job description</p>
+            <p className="text-base text-slate-300">
               Include role title, company, and requirements for the most targeted email
             </p>
           </div>
@@ -147,7 +147,7 @@ export default function OutreachPage() {
           value={jdText}
           onChange={(e) => setJdText(e.target.value)}
           placeholder="Paste the full job description here..."
-          className="min-h-[160px] text-sm resize-none rounded-xl border-slate-200 focus:border-red-300"
+          className="min-h-[160px] text-base resize-none rounded-xl border-slate-200 focus:border-red-300"
           disabled={generating}
         />
 
@@ -155,20 +155,20 @@ export default function OutreachPage() {
           value={recruiterName}
           onChange={(e) => setRecruiterName(e.target.value)}
           placeholder="Recruiter / hiring manager name (optional)"
-          className="rounded-xl border-slate-200 text-sm focus:border-red-300"
+          className="rounded-xl border-slate-200 text-base focus:border-red-300"
           disabled={generating}
         />
 
         {/* Tone selector */}
         <div className="space-y-2">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Tone</p>
+          <p className="text-sm font-semibold text-slate-400 uppercase tracking-widest">Tone</p>
           <div className="flex gap-2">
             {TONE_OPTIONS.map(({ value, label }) => (
               <button
                 key={value}
                 onClick={() => setTone(value)}
                 disabled={generating}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all ${
+                className={`px-4 py-1.5 rounded-full text-base font-medium border transition-all ${
                   tone === value
                     ? "bg-red-500 text-white border-red-500 shadow-sm"
                     : "bg-white/5 text-slate-400 border-white/10 hover:border-red-500/30 hover:text-red-400"
@@ -181,14 +181,14 @@ export default function OutreachPage() {
         </div>
 
         {error && (
-          <div className="flex items-center gap-2 text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
+          <div className="flex items-center gap-2 text-base text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
             <AlertTriangle className="h-4 w-4 shrink-0" />
             {error}
           </div>
         )}
 
         <div className="flex items-center justify-between gap-4">
-          <p className="text-xs text-slate-400">
+          <p className="text-sm text-slate-400">
             {jdText.length > 0
               ? `${jdText.length} characters`
               : "Tip: include the full JD for best results"}
@@ -218,11 +218,11 @@ export default function OutreachPage() {
         <div className="space-y-4">
           {/* Subject line */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
-            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">
+            <p className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-2">
               Subject line
             </p>
             <div className="flex items-center justify-between gap-4 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3">
-              <p className="text-sm font-semibold text-slate-900 flex-1">{result.subject}</p>
+              <p className="text-base font-semibold text-slate-900 flex-1">{result.subject}</p>
               <CopyButton text={result.subject} />
             </div>
           </div>
@@ -235,12 +235,12 @@ export default function OutreachPage() {
                 className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-3"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-bold text-slate-900 bg-slate-100 border border-slate-200 px-3 py-1 rounded-full">
+                  <span className="text-base font-bold text-slate-900 bg-slate-100 border border-slate-200 px-3 py-1 rounded-full">
                     {email.variant}
                   </span>
                   <CopyButton text={`Subject: ${result.subject}\n\n${email.content}`} />
                 </div>
-                <p className="text-base text-slate-700 leading-relaxed whitespace-pre-wrap">
+                <p className="text-xl text-slate-700 leading-relaxed whitespace-pre-wrap">
                   {email.content}
                 </p>
               </div>
