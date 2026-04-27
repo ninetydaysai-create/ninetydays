@@ -22,7 +22,7 @@ export function Navbar() {
           <span className="text-sm font-bold">NinetyDays</span>
         </Link>
         <div className="flex items-center gap-2">
-          <NotificationBell />
+          <NotificationBell compact />
           <UserButton />
           <button
             onClick={() => setOpen(true)}

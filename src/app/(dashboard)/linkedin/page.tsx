@@ -41,11 +41,14 @@ export default function LinkedInPage() {
       return;
     }
     setLoading(true);
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 90_000);
     try {
       const res = await fetch("/api/linkedin/optimize", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ headline, summary }),
+        signal: controller.signal,
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
@@ -53,9 +56,14 @@ export default function LinkedInPage() {
         return;
       }
       setResult(await res.json());
-    } catch {
-      toast.error("Network error — please try again.");
+    } catch (e) {
+      if (e instanceof DOMException && e.name === "AbortError") {
+        toast.error("Request timed out — please try again.");
+      } else {
+        toast.error("Network error — please try again.");
+      }
     } finally {
+      clearTimeout(timeout);
       setLoading(false);
     }
   }

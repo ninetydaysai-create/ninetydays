@@ -6,7 +6,11 @@ import { usePathname } from "next/navigation";
 import { Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export function NotificationBell() {
+interface Props {
+  compact?: boolean; // icon-only, for mobile header
+}
+
+export function NotificationBell({ compact = false }: Props) {
   const [unreadCount, setUnreadCount] = useState(0);
   const pathname = usePathname();
   const active = pathname === "/notifications";
@@ -16,7 +20,24 @@ export function NotificationBell() {
       .then((r) => r.json())
       .then((d) => setUnreadCount(d.unreadCount ?? 0))
       .catch(() => {});
-  }, [pathname]); // refetch when navigating away from notifications page
+  }, [pathname]);
+
+  if (compact) {
+    return (
+      <Link
+        href="/notifications"
+        className="relative flex items-center justify-center h-8 w-8 rounded-lg text-muted-foreground hover:text-white hover:bg-white/10 transition-colors"
+        aria-label="Notifications"
+      >
+        <Bell className="h-5 w-5" />
+        {unreadCount > 0 && (
+          <span className="absolute -top-1 -right-1 flex items-center justify-center h-4 min-w-[1rem] px-1 rounded-full bg-red-500 text-[10px] font-bold text-white leading-none">
+            {unreadCount > 99 ? "99+" : unreadCount}
+          </span>
+        )}
+      </Link>
+    );
+  }
 
   return (
     <Link

@@ -76,8 +76,8 @@ export default async function SettingsPage() {
             { label: "Email", value: user.email },
             { label: "Name", value: user.name ?? "—" },
             { label: "Target role", value: user.targetRole?.replace(/_/g, " ") ?? "—" },
-            { label: "Current role", value: user.currentRole ?? "—" },
-            { label: "Experience", value: user.yearsExperience ? `${user.yearsExperience} years` : "—" },
+            { label: "Current role", value: user.currentRole || "—" },
+            { label: "Experience", value: user.yearsExperience != null ? `${user.yearsExperience} years` : "—" },
           ].map(({ label, value }) => (
             <div key={label} className="flex justify-between items-center py-1">
               <span className="text-slate-400">{label}</span>

@@ -107,7 +107,7 @@ export function LinkedInPostGenerator() {
             onChange={(e) => setContext(e.target.value)}
             placeholder="e.g. I finished Week 4 of my NinetyDays roadmap — implemented a caching layer that cut latency by 40%"
             rows={3}
-            className="text-sm bg-slate-50 border-slate-200 focus:bg-white transition-colors resize-none"
+            className="text-sm text-slate-900 bg-slate-50 border-slate-200 focus:bg-white transition-colors resize-none placeholder:text-slate-400"
           />
         </div>
 

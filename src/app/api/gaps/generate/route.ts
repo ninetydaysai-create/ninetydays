@@ -72,7 +72,7 @@ export async function POST(req: Request) {
 
   const user = await db.user.findUnique({
     where: { id: userId },
-    select: { targetRole: true },
+    select: { targetRole: true, yearsExperience: true },
   });
 
   const targetRole = user?.targetRole ?? "product_swe";
@@ -84,7 +84,13 @@ export async function POST(req: Request) {
   const { object } = await generateObject({
     model: defaultModel,
     schema: GapReportSchema,
-    prompt: buildGapEnginePrompt(rawAnalysis, targetRole, benchmark, analysis.resume?.rawText ?? undefined),
+    prompt: buildGapEnginePrompt(
+      rawAnalysis,
+      targetRole,
+      benchmark,
+      analysis.resume?.rawText ?? undefined,
+      user?.yearsExperience ?? undefined,
+    ),
   });
 
   // Enrich each gap with curated resource links from our library

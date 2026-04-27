@@ -9,7 +9,8 @@ export function buildGapEnginePrompt(
     requiredProjects: string[];
     requiredStories: string[];
   },
-  resumeText?: string
+  resumeText?: string,
+  yearsExperience?: number,
 ): string {
   const roleLabel = targetRole.replace(/_/g, " ");
 
@@ -31,36 +32,53 @@ export function buildGapEnginePrompt(
     ? /tcs|infosys|wipro|accenture|cognizant|capgemini|hcl|tech mahindra/i.test(resumeText)
     : false;
 
+  const yoe = yearsExperience ?? null;
+  const seniorityLabel = yoe == null ? "unknown" : yoe >= 10 ? "Staff/Principal level" : yoe >= 7 ? "Senior" : yoe >= 4 ? "Mid-level" : "Junior";
+  const seniorityCalibration = yoe == null ? "" : yoe >= 7
+    ? `\nSENIORITY CALIBRATION (${yoe} yrs experience — ${seniorityLabel}):
+- Do NOT flag foundational skills (data structures, basic cloud, microservices, message queues) as gaps — these are assumed competencies at this level
+- Do NOT flag skills that appear anywhere in skillsFound or signalDepthMap as MODERATE/STRONG
+- Focus gaps on: cross-team impact stories, system design at scale (>1M users), engineering leadership evidence, product ownership at senior level
+- A ${seniorityLabel} engineer who lacks a STAR story about leading/unblocking others is a real gap; lacking basic Docker knowledge is NOT
+- totalGapScore should be 55–80 for strong senior profiles — scores below 40 are only valid if major ownership/leadership signals are completely absent\n`
+    : yoe >= 4
+    ? `\nSENIORITY CALIBRATION (${yoe} yrs experience — ${seniorityLabel}):
+- Do NOT flag skills the candidate clearly has evidence for (appearing in skillsFound or MODERATE/STRONG in signalDepthMap)
+- Focus on: product ownership signals, impact storytelling quality, system design breadth
+- totalGapScore 45–70 is typical for this level\n`
+    : "";
+
   return `You are a senior career advisor who has helped 500+ engineers from service companies (TCS, Infosys, Wipro, Accenture) land roles at product companies like Google, Stripe, Notion, and Series B/C startups.
 
-Your job is to identify ALL gaps between this candidate's actual demonstrated abilities and what the role requires — calibrated against real evidence, not surface keywords.
+Your job is to identify gaps between this candidate's actual demonstrated abilities and what the role requires — calibrated against real evidence, not surface keywords.
 
 TARGET ROLE: ${roleLabel} at a top product company
 
 CANDIDATE PROFILE (from resume signal analysis):
 - Overall resume score: ${analysis.overallScore}/100
+- Years of experience: ${yoe != null ? `${yoe} years (${seniorityLabel})` : "unknown"}
 - Skills with project evidence: ${analysis.skillsFound.join(", ")}
 - STAR stories count: ${analysis.starStoriesCount}
 - Impact evidence score: ${analysis.impactScore}/100
 - Project complexity score: ${analysis.projectComplexity}/100
 - Signal depth score: ${analysis.signalDepthScore ?? analysis.keywordDensityScore ?? "unknown"}/100
-${signalSection}${hasServiceCompany ? "- ⚠️ SERVICE COMPANY BACKGROUND: Resume shows delivery/outsourcing patterns. Product ownership gaps are structurally likely — treat product ownership and impact storytelling as near-certain gaps.\n" : ""}
-
+${signalSection}${hasServiceCompany ? "- ⚠️ SERVICE COMPANY BACKGROUND: Resume shows delivery/outsourcing patterns. Product ownership gaps are structurally likely — treat product ownership and impact storytelling as near-certain gaps.\n" : ""}${seniorityCalibration}
 WHAT ${roleLabel.toUpperCase()} ROLES ACTUALLY REQUIRE:
 - Required skills: ${benchmark.requiredSkills.join(", ")}
 - Required project types: ${benchmark.requiredProjects.join(", ")}
 - Required career stories: ${benchmark.requiredStories.join(", ")}
 
 CRITICAL CALIBRATION RULES — follow exactly:
-1. Use signal depth to determine severity:
-   - Required skill is ABSENT from signalDepthMap → CRITICAL gap (cannot fake this in an interview)
-   - Required skill is WEAK (skills-list only, no project evidence) → MAJOR gap (they need to build, not just study)
-   - Required skill is MODERATE (some project context, no production depth) → MAJOR or MINOR depending on role
+1. NEVER flag a skill that appears in "Skills with project evidence" as a critical gap — the evidence is there.
+2. Use signal depth to determine severity:
+   - Required skill is ABSENT from signalDepthMap AND not in skillsFound → CRITICAL gap
+   - Required skill is WEAK (skills-list only, no project evidence) → MAJOR gap
+   - Required skill is MODERATE (some project context, no production depth) → MAJOR or MINOR
    - Required skill is STRONG → NOT a gap — skip it entirely
-2. Never assign "critical" to something the candidate has clearly demonstrated with evidence
-3. Project gaps: only flag types of projects that are actually absent from the resume — don't duplicate skill gaps
-4. Story gaps: focus on interview stories that are genuinely missing or too weak to survive follow-up questions
-5. totalGapScore must reflect signal depth reality — if core skills are ABSENT, score should be 20-45
+3. Never assign "critical" to something the candidate has clearly demonstrated with evidence
+4. Project gaps: only flag project types genuinely absent from the resume — don't restate skill gaps
+5. Story gaps: focus on interview stories that are genuinely missing or too weak to survive follow-up
+6. totalGapScore must reflect the full picture — a strong senior profile with good skills but weak stories should score 55–70, not 25
 
 Return JSON matching this exact schema:
 {
