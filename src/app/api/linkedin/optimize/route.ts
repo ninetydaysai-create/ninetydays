@@ -10,20 +10,31 @@ import { assertPlanAllows } from "@/lib/plan-guard";
 
 export const maxDuration = 60;
 
+const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, Math.round(n)));
+
 const LinkedInResultSchema = z.object({
   outputHeadline: z.string(),
   outputSummary: z.string(),
   alternatives: z.array(z.string()),
   keywordsAdded: z.array(z.string()),
   keywordsMissing: z.array(z.string()),
-  profileScore: z.number().min(0).max(100),
+  profileScore: z.number(),
   scoreBreakdown: z.object({
-    keywords:     z.number().min(0).max(25),
-    hook:         z.number().min(0).max(25),
-    credibility:  z.number().min(0).max(25),
-    callToAction: z.number().min(0).max(25),
+    keywords:     z.number(),
+    hook:         z.number(),
+    credibility:  z.number(),
+    callToAction: z.number(),
   }),
-});
+}).transform((d) => ({
+  ...d,
+  profileScore: clamp(d.profileScore, 0, 100),
+  scoreBreakdown: {
+    keywords:     clamp(d.scoreBreakdown.keywords, 0, 25),
+    hook:         clamp(d.scoreBreakdown.hook, 0, 25),
+    credibility:  clamp(d.scoreBreakdown.credibility, 0, 25),
+    callToAction: clamp(d.scoreBreakdown.callToAction, 0, 25),
+  },
+}));
 
 export async function POST(req: Request) {
   const { userId } = await auth();
