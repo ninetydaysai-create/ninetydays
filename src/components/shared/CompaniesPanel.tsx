@@ -65,7 +65,7 @@ export function CompaniesPanel({ targetRole, roleLabel }: Props) {
       <div className="flex items-center justify-between mb-4">
         <div>
           <p className="text-sm font-bold text-white">Companies hiring {label}</p>
-          <p className="text-xs text-slate-500 mt-0.5">Open roles right now</p>
+          <p className="text-xs text-slate-400 mt-0.5">Open roles right now</p>
         </div>
         <span className="flex items-center gap-1 text-xs font-semibold text-emerald-400">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -86,13 +86,13 @@ export function CompaniesPanel({ targetRole, roleLabel }: Props) {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-white leading-tight">{c.name}</p>
-              <p className="text-xs text-slate-500">{c.role}</p>
+              <p className="text-xs text-slate-400">{c.role}</p>
             </div>
-            <ExternalLink className="h-3.5 w-3.5 text-slate-600 group-hover:text-slate-400 transition-colors shrink-0" />
+            <ExternalLink className="h-3.5 w-3.5 text-slate-400 group-hover:text-white transition-colors shrink-0" />
           </a>
         ))}
       </div>
-      <p className="text-xs text-slate-600 mt-3 text-center">
+      <p className="text-xs text-slate-400 mt-3 text-center">
         Apply when readiness ≥ 70% for best results
       </p>
     </div>
