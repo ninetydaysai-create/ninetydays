@@ -17,6 +17,8 @@ export interface PlanningContext {
   targetCompanyType: string;  // "faang" | "funded_startup" | "any_product"
   learningStyle: string;      // "projects" | "courses" | "docs" | "mix"
   targetReason: string;       // "growth" | "passion" | "culture" | "relocation"
+  yearsExperience?: number;
+  currentRole?: string;
 }
 
 function classifySignalDepth(
@@ -127,7 +129,23 @@ export function buildRoadmapPrompt(
   githubSignal?: GitHubSignal | null
 ): string {
   const roleLabel = targetRole.replace(/_/g, " ");
-  const { hoursPerWeek, targetTimeline, targetCompanyType, learningStyle, targetReason } = planning;
+  const { hoursPerWeek, targetTimeline, targetCompanyType, learningStyle, targetReason, yearsExperience, currentRole } = planning;
+
+  const yoe = yearsExperience ?? null;
+  const seniorityLabel = yoe == null ? null : yoe >= 10 ? "Staff/Principal" : yoe >= 7 ? "Senior" : yoe >= 4 ? "Mid-level" : "Junior";
+  const senioritySection = yoe != null ? `\nSENIORITY CONTEXT — ${yoe} years experience (${seniorityLabel}):
+${yoe >= 7
+  ? `- This is a senior engineer. Do NOT include beginner tasks (tutorial videos, basic syntax exercises).
+- Week tasks should be at senior level: architecture decisions, system design docs, leading code reviews, writing RFCs.
+- The "gap" isn't knowledge — it's demonstrable product ownership and quantified impact stories.
+- Phase 1 should reframe the narrative (resume bullets, LinkedIn, story crafting), not teach basics.`
+  : yoe >= 4
+  ? `- Mid-level engineer. Some foundational tasks are OK but focus on product ownership and building real things.
+- Prioritize: build portfolio projects that demonstrate impact, write strong STAR stories, practice system design.`
+  : `- Early career engineer. Foundational tasks + guided projects are appropriate.
+- Build real projects from scratch, focus on demonstrating initiative and learning velocity.`}` : "";
+
+  const currentRoleContext = currentRole ? `\nCURRENT ROLE: ${currentRole} — frame the transition narrative from THIS role to ${roleLabel}. Week 1–2 must address the "from delivery/service work to product ownership" shift explicitly if relevant.` : "";
 
   // Build signal depth map for all gaps
   const signalMap: Record<string, string> = {};
@@ -165,6 +183,7 @@ export function buildRoadmapPrompt(
 
 TARGET ROLE: ${roleLabel} at a top product company
 AVAILABLE TIME: ${hoursPerWeek} hours/week
+${currentRoleContext}${senioritySection}
 
 ---
 

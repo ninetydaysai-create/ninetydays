@@ -11,6 +11,8 @@ export function buildGapEnginePrompt(
   },
   resumeText?: string,
   yearsExperience?: number,
+  currentRole?: string,
+  targetCompanyType?: string,
 ): string {
   const roleLabel = targetRole.replace(/_/g, " ");
 
@@ -33,52 +35,81 @@ export function buildGapEnginePrompt(
     : false;
 
   const yoe = yearsExperience ?? null;
-  const seniorityLabel = yoe == null ? "unknown" : yoe >= 10 ? "Staff/Principal level" : yoe >= 7 ? "Senior" : yoe >= 4 ? "Mid-level" : "Junior";
+  const seniorityLabel = yoe == null ? "unknown" : yoe >= 10 ? "Staff/Principal" : yoe >= 7 ? "Senior" : yoe >= 4 ? "Mid-level" : "Junior";
+
+  // Build techYears context — show what's actually strong vs absent
+  const techYears = analysis.techYears ?? {};
+  const techYearsLines = Object.entries(techYears)
+    .sort(([, a], [, b]) => b - a)
+    .map(([tech, yrs]) => `  ${tech}: ${yrs}yr`)
+    .join("\n");
+
+  const companyTypeContext = !targetCompanyType ? "" : targetCompanyType === "faang"
+    ? `\nTARGET COMPANY TYPE: FAANG / Big Tech
+- DS&A gaps are CRITICAL — LeetCode Hard is the bar
+- System design at scale (>10M users) gaps are CRITICAL
+- Behavioral stories using Amazon/Google leadership principles are CRITICAL
+- Product ownership patterns matter but less than algorithmic depth at this company type\n`
+    : targetCompanyType === "funded_startup"
+    ? `\nTARGET COMPANY TYPE: Series B+ Funded Startup
+- Shipping speed and end-to-end ownership are MORE important than algorithmic depth
+- DS&A gaps are MINOR unless the role requires it — focus on product and architecture
+- "Can they build and ship?" is the primary screen — portfolio gaps are CRITICAL
+- Behavioral stories about ownership, driving outcomes, and moving fast are CRITICAL\n`
+    : `\nTARGET COMPANY TYPE: Any Product Company (balanced)
+- Balance between DS&A readiness and product ownership signals
+- Both coding skills and "product sense" stories matter equally\n`;
+
   const seniorityCalibration = yoe == null ? "" : yoe >= 7
-    ? `\nSENIORITY CALIBRATION (${yoe} yrs experience — ${seniorityLabel}):
-- Do NOT flag foundational skills (data structures, basic cloud, microservices, message queues) as gaps — these are assumed competencies at this level
-- Do NOT flag skills that appear anywhere in skillsFound or signalDepthMap as MODERATE/STRONG
-- Focus gaps on: cross-team impact stories, system design at scale (>1M users), engineering leadership evidence, product ownership at senior level
-- A ${seniorityLabel} engineer who lacks a STAR story about leading/unblocking others is a real gap; lacking basic Docker knowledge is NOT
-- totalGapScore should be 55–80 for strong senior profiles — scores below 40 are only valid if major ownership/leadership signals are completely absent\n`
+    ? `\nSENIORITY CALIBRATION — ${yoe} years experience (${seniorityLabel}):
+- NEVER flag skills from the techYears list with ≥2 years as a gap — these are established competencies
+- NEVER flag microservices, cloud, message queues, CI/CD, Docker as critical for ${yoe}-year engineers — assumed
+- DO flag: lack of system design at scale stories, no cross-team/org-wide impact evidence, no 0-to-1 ownership examples, weak leadership narrative
+- DO flag: if impact scores and quantified achievements are thin despite experience — this is the #1 senior rejection cause
+- totalGapScore for strong ${seniorityLabel} profiles: 55–80. Below 45 only if ownership + impact evidence is genuinely absent across all dimensions\n`
     : yoe >= 4
-    ? `\nSENIORITY CALIBRATION (${yoe} yrs experience — ${seniorityLabel}):
-- Do NOT flag skills the candidate clearly has evidence for (appearing in skillsFound or MODERATE/STRONG in signalDepthMap)
-- Focus on: product ownership signals, impact storytelling quality, system design breadth
-- totalGapScore 45–70 is typical for this level\n`
-    : "";
+    ? `\nSENIORITY CALIBRATION — ${yoe} years experience (${seniorityLabel}):
+- NEVER flag skills in skillsFound or with ≥2 years in techYears as critical — they know these
+- Focus on: are impact stories strong enough? Is product ownership evident? Is system design breadth there?
+- totalGapScore 45–70 is typical for mid-level profiles\n`
+    : `\nSENIORITY CALIBRATION — ${yoe} years experience (Junior):
+- Foundational technical gaps are valid at this level — be thorough
+- totalGapScore 25–55 is typical for junior profiles\n`;
 
-  return `You are a senior career advisor who has helped 500+ engineers from service companies (TCS, Infosys, Wipro, Accenture) land roles at product companies like Google, Stripe, Notion, and Series B/C startups.
+  return `You are a senior career advisor who has helped 500+ engineers land roles at product companies like Google, Stripe, Notion, and Series B/C startups.
 
-Your job is to identify gaps between this candidate's actual demonstrated abilities and what the role requires — calibrated against real evidence, not surface keywords.
+Your job is to identify gaps between this candidate's actual demonstrated abilities and what their target role requires — calibrated against their real evidence, experience level, and target company type. NOT a generic gap list.
 
 TARGET ROLE: ${roleLabel} at a top product company
-
-CANDIDATE PROFILE (from resume signal analysis):
-- Overall resume score: ${analysis.overallScore}/100
+${companyTypeContext}
+CANDIDATE PROFILE:
+- Current role: ${currentRole ?? "unknown"}
 - Years of experience: ${yoe != null ? `${yoe} years (${seniorityLabel})` : "unknown"}
+- Overall resume score: ${analysis.overallScore}/100
 - Skills with project evidence: ${analysis.skillsFound.join(", ")}
 - STAR stories count: ${analysis.starStoriesCount}
 - Impact evidence score: ${analysis.impactScore}/100
 - Project complexity score: ${analysis.projectComplexity}/100
-- Signal depth score: ${analysis.signalDepthScore ?? analysis.keywordDensityScore ?? "unknown"}/100
-${signalSection}${hasServiceCompany ? "- ⚠️ SERVICE COMPANY BACKGROUND: Resume shows delivery/outsourcing patterns. Product ownership gaps are structurally likely — treat product ownership and impact storytelling as near-certain gaps.\n" : ""}${seniorityCalibration}
+${hasServiceCompany ? "- ⚠️ SERVICE COMPANY BACKGROUND: Delivery/outsourcing patterns detected. Product ownership and impact storytelling are near-certain gaps.\n" : ""}
+TECHNOLOGY DEPTH (years of hands-on experience per technology):
+${techYearsLines || "  Not available"}
+${signalSection}${seniorityCalibration}
 WHAT ${roleLabel.toUpperCase()} ROLES ACTUALLY REQUIRE:
 - Required skills: ${benchmark.requiredSkills.join(", ")}
 - Required project types: ${benchmark.requiredProjects.join(", ")}
 - Required career stories: ${benchmark.requiredStories.join(", ")}
 
-CRITICAL CALIBRATION RULES — follow exactly:
-1. NEVER flag a skill that appears in "Skills with project evidence" as a critical gap — the evidence is there.
-2. Use signal depth to determine severity:
-   - Required skill is ABSENT from signalDepthMap AND not in skillsFound → CRITICAL gap
-   - Required skill is WEAK (skills-list only, no project evidence) → MAJOR gap
-   - Required skill is MODERATE (some project context, no production depth) → MAJOR or MINOR
-   - Required skill is STRONG → NOT a gap — skip it entirely
-3. Never assign "critical" to something the candidate has clearly demonstrated with evidence
-4. Project gaps: only flag project types genuinely absent from the resume — don't restate skill gaps
-5. Story gaps: focus on interview stories that are genuinely missing or too weak to survive follow-up
-6. totalGapScore must reflect the full picture — a strong senior profile with good skills but weak stories should score 55–70, not 25
+CALIBRATION RULES — follow exactly:
+1. NEVER flag a skill with ≥2 years in techYears or appearing in skillsFound as CRITICAL — evidence exists
+2. NEVER flag foundational skills (microservices, REST APIs, Docker, cloud basics) for engineers with ≥7 years experience
+3. Signal depth rules:
+   - ABSENT (not in signalDepthMap AND not in skillsFound AND 0 years in techYears) → CRITICAL
+   - WEAK (mentioned but no project evidence) → MAJOR
+   - MODERATE (some evidence, not production-depth) → MAJOR or MINOR
+   - STRONG → skip entirely, not a gap
+4. Gap descriptions must reference the candidate's actual background — e.g. "Despite X years of Java, system design stories at scale are absent"
+5. Story gaps: only flag stories that would genuinely fail in a ${roleLabel} behavioral interview
+6. totalGapScore reflects reality — a senior with deep tech skills but weak impact stories should score 55–70, not 25
 
 Return JSON matching this exact schema:
 {

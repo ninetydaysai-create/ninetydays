@@ -52,14 +52,16 @@ export async function POST(req: Request) {
   const user = await db.user.findUnique({
     where: { id: userId },
     select: {
-      targetRole: true,
-      hoursPerWeek: true,
-      targetTimeline: true,
+      targetRole:        true,
+      hoursPerWeek:      true,
+      targetTimeline:    true,
       targetCompanyType: true,
-      learningStyle: true,
-      targetReason: true,
-      githubUrl: true,
-      githubSignal: true,
+      learningStyle:     true,
+      targetReason:      true,
+      yearsExperience:   true,
+      currentRole:       true,
+      githubUrl:         true,
+      githubSignal:      true,
     },
   });
 
@@ -71,6 +73,8 @@ export async function POST(req: Request) {
     targetCompanyType:  user?.targetCompanyType    ?? "any_product",
     learningStyle:      user?.learningStyle        ?? "mix",
     targetReason:       user?.targetReason         ?? "growth",
+    yearsExperience:    user?.yearsExperience      ?? undefined,
+    currentRole:        user?.currentRole          ?? undefined,
   };
 
   // Fetch GitHub signal — use cached value if available, otherwise fetch live

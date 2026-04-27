@@ -72,13 +72,18 @@ export async function POST(req: Request) {
 
   const user = await db.user.findUnique({
     where: { id: userId },
-    select: { targetRole: true, yearsExperience: true },
+    select: {
+      targetRole:        true,
+      yearsExperience:   true,
+      currentRole:       true,
+      targetCompanyType: true,
+    },
   });
 
   const targetRole = user?.targetRole ?? "product_swe";
   const benchmark = DEFAULT_BENCHMARKS[targetRole] ?? DEFAULT_BENCHMARKS["product_swe"];
 
-  // rawAnalysis contains signalDepthMap from the new analyzer
+  // rawAnalysis contains signalDepthMap + techYears from the analyzer
   const rawAnalysis = analysis.rawAnalysis as unknown as ResumeAnalysisResult;
 
   const { object } = await generateObject({
@@ -90,6 +95,8 @@ export async function POST(req: Request) {
       benchmark,
       analysis.resume?.rawText ?? undefined,
       user?.yearsExperience ?? undefined,
+      user?.currentRole ?? undefined,
+      user?.targetCompanyType ?? undefined,
     ),
   });
 
