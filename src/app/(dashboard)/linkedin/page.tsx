@@ -41,19 +41,23 @@ export default function LinkedInPage() {
       return;
     }
     setLoading(true);
-    const res = await fetch("/api/linkedin/optimize", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ headline, summary }),
-    });
-    if (!res.ok) {
-      const err = await res.json();
-      toast.error(err.error ?? "Optimization failed");
+    try {
+      const res = await fetch("/api/linkedin/optimize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ headline, summary }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        toast.error(err.error ?? "Optimization failed — please try again.");
+        return;
+      }
+      setResult(await res.json());
+    } catch {
+      toast.error("Network error — please try again.");
+    } finally {
       setLoading(false);
-      return;
     }
-    setResult(await res.json());
-    setLoading(false);
   }
 
   function copy(text: string, label: string) {

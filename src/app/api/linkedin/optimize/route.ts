@@ -8,6 +8,8 @@ import { buildLinkedInOptimizationPrompt } from "@/prompts/linkedin-optimizer";
 import { ResumeAnalysisResult } from "@/types/resume";
 import { assertPlanAllows } from "@/lib/plan-guard";
 
+export const maxDuration = 60;
+
 const LinkedInResultSchema = z.object({
   outputHeadline: z.string(),
   outputSummary: z.string(),
@@ -49,18 +51,25 @@ export async function POST(req: Request) {
   const signalDepthMap = rawAnalysis?.signalDepthMap;
   const skillsWithEvidence = (latestAnalysis?.skillsFound as string[]) ?? [];
 
-  const { object } = await generateObject({
-    model: defaultModel,
-    schema: LinkedInResultSchema,
-    prompt: buildLinkedInOptimizationPrompt(
-      headline,
-      summary ?? "",
-      user?.targetRole ?? "product_swe",
-      jobDescriptions,
-      signalDepthMap as Record<string, string> | undefined,
-      skillsWithEvidence
-    ),
-  });
+  let object;
+  try {
+    const result = await generateObject({
+      model: defaultModel,
+      schema: LinkedInResultSchema,
+      prompt: buildLinkedInOptimizationPrompt(
+        headline,
+        summary ?? "",
+        user?.targetRole ?? "product_swe",
+        jobDescriptions,
+        signalDepthMap as Record<string, string> | undefined,
+        skillsWithEvidence
+      ),
+    });
+    object = result.object;
+  } catch (err) {
+    console.error("[linkedin/optimize] generateObject failed:", err);
+    return NextResponse.json({ error: "AI generation failed — please try again." }, { status: 500 });
+  }
 
   await db.linkedinOptimization.create({
     data: {
