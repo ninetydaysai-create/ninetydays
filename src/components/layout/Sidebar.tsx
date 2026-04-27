@@ -66,12 +66,7 @@ export function Sidebar() {
           Settings
         </Link>
 
-        <div className="flex items-center gap-3 rounded-xl px-3 py-3 text-[1.15rem] font-medium text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all duration-150 cursor-pointer">
-          <div className="h-10 w-10 rounded-lg bg-white/5 flex items-center justify-center shrink-0 relative">
-            <NotificationBell />
-          </div>
-          <span>Notifications</span>
-        </div>
+        <NotificationBell />
 
         <button
           onClick={() => openUserProfile()}

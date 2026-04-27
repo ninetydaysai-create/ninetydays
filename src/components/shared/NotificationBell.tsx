@@ -20,7 +20,6 @@ export function NotificationBell() {
   const [loading, setLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Close on outside click
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
@@ -53,9 +52,7 @@ export function NotificationBell() {
   function handleOpen() {
     const next = !open;
     setOpen(next);
-    if (next) {
-      fetchNotifications();
-    }
+    if (next) fetchNotifications();
   }
 
   async function handleMarkAllRead() {
@@ -69,24 +66,26 @@ export function NotificationBell() {
 
   return (
     <div ref={containerRef} className="relative">
-      {/* Bell button */}
+      {/* Full-row trigger button */}
       <button
         onClick={handleOpen}
-        className="relative flex items-center justify-center h-8 w-8 rounded-lg text-slate-400 hover:text-slate-200 transition-colors"
+        className="w-full flex items-center gap-3 rounded-xl px-3 py-3 text-[1.15rem] font-medium text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all duration-150"
         aria-label="Notifications"
       >
-        <Bell className="h-4 w-4" />
-        {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 flex items-center justify-center h-4 min-w-[1rem] px-1 rounded-full bg-red-500 text-[10px] font-bold text-white leading-none">
-            {unreadCount > 99 ? "99+" : unreadCount}
-          </span>
-        )}
+        <div className="h-10 w-10 rounded-lg bg-white/5 flex items-center justify-center shrink-0 relative">
+          <Bell className="h-5 w-5" />
+          {unreadCount > 0 && (
+            <span className="absolute -top-1 -right-1 flex items-center justify-center h-4 min-w-[1rem] px-1 rounded-full bg-red-500 text-[10px] font-bold text-white leading-none">
+              {unreadCount > 99 ? "99+" : unreadCount}
+            </span>
+          )}
+        </div>
+        <span>Notifications</span>
       </button>
 
       {/* Dropdown panel */}
       {open && (
-        <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl border border-slate-200 shadow-xl z-50">
-          {/* Header */}
+        <div className="absolute left-0 mt-2 w-80 bg-white rounded-2xl border border-slate-200 shadow-xl z-50">
           <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
             <span className="text-sm font-semibold text-slate-800">Notifications</span>
             {unreadCount > 0 && (
@@ -99,7 +98,6 @@ export function NotificationBell() {
             )}
           </div>
 
-          {/* Notification list */}
           <div className="max-h-[360px] overflow-y-auto divide-y divide-slate-100">
             {loading ? (
               <div className="flex items-center justify-center py-10 text-sm text-slate-400">
