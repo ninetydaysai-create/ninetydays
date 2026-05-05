@@ -366,7 +366,7 @@ export default function LandingPage() {
 
           <div className="grid md:grid-cols-4 gap-6">
             {[
-              { step: "01", title: "Upload resume", desc: "PDF upload. AI scores it 0–100 against your target role in 60 seconds.", color: "from-blue-500 to-indigo-500" },
+              { step: "01", title: "Upload resume", desc: "PDF upload. AI scores it 0–100 against your target role. Takes about a minute.", color: "from-blue-500 to-indigo-500" },
               { step: "02", title: "See your gaps", desc: "Skill gaps, project gaps, story gaps — each with severity, hours to close, and why it matters.", color: "from-indigo-500 to-indigo-600" },
               { step: "03", title: "Get your plan", desc: "12-week roadmap built from your gaps. Every task mapped to a specific blocker in your profile.", color: "from-indigo-600 to-indigo-700" },
               { step: "04", title: "Execute & track", desc: "Check off tasks. Practice interviews. Watch readiness climb. Apply when you hit 70%.", color: "from-indigo-700 to-blue-700" },

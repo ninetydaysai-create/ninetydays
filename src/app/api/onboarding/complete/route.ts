@@ -4,12 +4,21 @@ import { db } from "@/lib/db";
 import { syncUser } from "@/lib/sync-user";
 import { TargetRole } from "@prisma/client";
 
+const VALID_TARGET_ROLES = Object.values(TargetRole) as string[];
+
 export async function POST(req: Request) {
   const { userId } = await auth();
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   await syncUser(userId);
 
   const { targetRole, targetReason } = await req.json();
+
+  if (!targetRole || !VALID_TARGET_ROLES.includes(targetRole)) {
+    return NextResponse.json(
+      { error: `Invalid target role. Must be one of: ${VALID_TARGET_ROLES.join(", ")}` },
+      { status: 400 }
+    );
+  }
 
   await db.user.update({
     where: { id: userId },

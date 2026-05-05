@@ -155,6 +155,19 @@ export async function POST(req: Request) {
     );
   }
 
+  // Guard against abnormally long resumes (embedded tables, multi-page appendices, etc.)
+  // 20 000 chars ≈ 5 000 tokens — well above any real resume, safely within Claude context
+  if (rawText.trim().length > 20_000) {
+    return NextResponse.json(
+      {
+        error:
+          "Your resume file contains too much text to analyze (likely has embedded tables or appendices). " +
+          "Please trim it to 2–3 pages and try again.",
+      },
+      { status: 422 }
+    );
+  }
+
   const fileUrl = `data:${ext === ".pdf" ? "application/pdf" : "application/vnd.openxmlformats-officedocument.wordprocessingml.document"};name=${encodeURIComponent(file.name)};size=${file.size}`;
 
   let resume;

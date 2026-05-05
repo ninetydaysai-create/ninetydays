@@ -6,6 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Loader2, Pencil, Check, Sliders } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+const ROLE_OPTIONS = [
+  { value: "product_swe",   label: "Product SWE",       sub: "FAANG / product cos" },
+  { value: "staff_eng",     label: "Staff Engineer",     sub: "Tech leadership" },
+  { value: "ml_eng",        label: "ML Engineer",        sub: "ML / AI systems" },
+  { value: "ai_pm",         label: "AI Product Manager", sub: "AI product roles" },
+  { value: "data_scientist",label: "Data Scientist",     sub: "Data / analytics" },
+] as const;
+
 const HOURS_OPTIONS    = [5, 10, 15, 20] as const;
 const TIMELINE_OPTIONS = [
   { value: "3_months",  label: "3 months",  sub: "Aggressive sprint" },
@@ -30,6 +38,7 @@ const REASON_OPTIONS = [
   { value: "relocation", label: "Location / remote" },
 ] as const;
 
+const ROLE_LABELS:     Record<string, string> = { product_swe: "Product SWE", staff_eng: "Staff Engineer", ml_eng: "ML Engineer", ai_pm: "AI Product Manager", data_scientist: "Data Scientist" };
 const TIMELINE_LABELS: Record<string, string> = { "3_months": "3 months", "6_months": "6 months", "12_months": "12 months" };
 const COMPANY_LABELS:  Record<string, string> = { faang: "FAANG / Big Tech", funded_startup: "Series B+ Startup", any_product: "Any Product Co" };
 const STYLE_LABELS:    Record<string, string> = { projects: "Building projects", courses: "Video courses", docs: "Docs & books", mix: "Mix of all" };
@@ -37,6 +46,7 @@ const REASON_LABELS:   Record<string, string> = { growth: "Growth & earnings", p
 
 interface Props {
   initial: {
+    targetRole:        string | null;
     hoursPerWeek:      number | null;
     targetTimeline:    string | null;
     targetCompanyType: string | null;
@@ -98,6 +108,7 @@ function SmallCards<T extends string>({
 export function PlanPreferencesCard({ initial }: Props) {
   const [editing,          setEditing]          = useState(false);
   const [saving,           setSaving]           = useState(false);
+  const [targetRole,       setTargetRole]       = useState(initial.targetRole       ?? "product_swe");
   const [hoursPerWeek,     setHoursPerWeek]     = useState(initial.hoursPerWeek     ?? 10);
   const [targetTimeline,   setTargetTimeline]   = useState(initial.targetTimeline   ?? "6_months");
   const [targetCompanyType,setTargetCompanyType]= useState(initial.targetCompanyType ?? "any_product");
@@ -109,7 +120,7 @@ export function PlanPreferencesCard({ initial }: Props) {
     await fetch("/api/settings/profile", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ hoursPerWeek, targetTimeline, targetCompanyType, learningStyle, targetReason }),
+      body: JSON.stringify({ targetRole, hoursPerWeek, targetTimeline, targetCompanyType, learningStyle, targetReason }),
     });
     setSaving(false);
     setEditing(false);
@@ -135,6 +146,7 @@ export function PlanPreferencesCard({ initial }: Props) {
         <CardContent>
           <div className="grid grid-cols-2 gap-x-8 gap-y-3">
             {[
+              { label: "Target role",     value: ROLE_LABELS[targetRole]            ?? targetRole          },
               { label: "Hours / week",    value: `${hoursPerWeek}h`                                       },
               { label: "Timeline",        value: TIMELINE_LABELS[targetTimeline]    ?? targetTimeline      },
               { label: "Target company",  value: COMPANY_LABELS[targetCompanyType]  ?? targetCompanyType   },
@@ -162,6 +174,30 @@ export function PlanPreferencesCard({ initial }: Props) {
         <CardDescription>Changes take effect the next time you regenerate your roadmap.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-5">
+
+        <div>
+          <span className={LABEL}>Target role</span>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            {ROLE_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => setTargetRole(opt.value)}
+                className={cn(
+                  "rounded-xl border-2 p-3 text-left transition-all",
+                  targetRole === opt.value
+                    ? "border-primary bg-primary/10"
+                    : "border-white/10 hover:border-white/25"
+                )}
+              >
+                <p className={cn("text-sm font-semibold leading-snug", targetRole === opt.value ? "text-primary" : "text-slate-200")}>
+                  {opt.label}
+                </p>
+                <p className="text-xs text-slate-400 mt-0.5">{opt.sub}</p>
+              </button>
+            ))}
+          </div>
+        </div>
 
         <div>
           <span className={LABEL}>Hours available per week</span>

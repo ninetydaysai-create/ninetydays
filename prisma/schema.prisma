@@ -111,6 +111,7 @@ model Resume {
 
   analyses ResumeAnalysis[]
 
+  @@index([userId])
   @@map("resumes")
 }
 
@@ -129,11 +130,12 @@ model ResumeAnalysis {
   weakBullets         Json // { original: string, rewrite: string }[]
   roleMatchScores     Json // { role: TargetRole, score: number }[]
   rawAnalysis         Json
-  model               String   @default("gpt-4o")
+  model               String   @default("claude-sonnet-4-6")
   createdAt           DateTime @default(now())
 
   gapReport GapReport?
 
+  @@index([userId])
   @@map("resume_analyses")
 }
 
@@ -167,6 +169,7 @@ model GapReport {
 
   roadmap Roadmap?
 
+  @@index([userId])
   @@map("gap_reports")
 }
 
@@ -278,6 +281,7 @@ model InterviewSession {
   startedAt      DateTime      @default(now())
   completedAt    DateTime?
 
+  @@index([userId])
   @@map("interview_sessions")
 }
 
@@ -305,6 +309,7 @@ model LinkedinOptimization {
   alternatives   Json // string[]
   createdAt      DateTime @default(now())
 
+  @@index([userId])
   @@map("linkedin_optimizations")
 }
 
@@ -317,6 +322,7 @@ model GithubOptimization {
   pushedToGitHub Boolean  @default(false)
   createdAt      DateTime @default(now())
 
+  @@index([userId])
   @@map("github_optimizations")
 }
 
@@ -340,6 +346,7 @@ model JobApplication {
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
+  @@index([userId])
   @@map("job_applications")
 }
 
@@ -355,6 +362,7 @@ model Notification {
   read      Boolean  @default(false)
   createdAt DateTime @default(now())
 
+  @@index([userId])
   @@map("notifications")
 }
 

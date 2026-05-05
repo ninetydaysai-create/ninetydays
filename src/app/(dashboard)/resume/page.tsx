@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useElapsedTime, formatElapsed } from "@/hooks/useElapsedTime";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -192,6 +193,8 @@ export default function ResumePage() {
   }
 
   const busy = uploadStep === "uploading" || uploadStep === "analyzing";
+  const analyzing = uploadStep === "analyzing";
+  const elapsed = useElapsedTime(analyzing);
   const analyzedResumeIds = new Set(analyses.map((a) => a.resume.id));
   const unanalyzed = resumes.filter((r) => !analyzedResumeIds.has(r.id));
 
@@ -384,7 +387,7 @@ export default function ResumePage() {
               Analyze another resume
             </Button>
           </div>
-          <p className="text-center text-sm text-slate-400">Takes 30 seconds · Personalized to your resume</p>
+          <p className="text-center text-sm text-slate-400">Takes ~60 seconds · Personalized to your resume</p>
         </div>
       ) : (
         <div className="bg-[#161820] rounded-2xl border border-white/10 p-7 shadow-sm">
@@ -399,9 +402,19 @@ export default function ResumePage() {
             <input id="resume-file" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" className="hidden" onChange={handleFileChange} disabled={busy} />
           </label>
           {busy && (
-            <div className="flex items-center gap-2 text-sm mb-4 px-4 py-3 rounded-lg bg-indigo-50 text-indigo-700">
-              <Loader2 className="h-4 w-4 animate-spin" />
-              {uploadStep === "uploading" ? "Uploading..." : "Analyzing with AI — this takes ~30 seconds..."}
+            <div className="flex flex-col gap-1 mb-4 px-4 py-3 rounded-lg bg-indigo-50 text-indigo-700">
+              <div className="flex items-center justify-between text-sm font-medium">
+                <div className="flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin shrink-0" />
+                  {uploadStep === "uploading" ? "Uploading your resume..." : "Analyzing with AI — reading every line of your resume…"}
+                </div>
+                {analyzing && (
+                  <span className="text-xs font-mono text-indigo-500 tabular-nums">{formatElapsed(elapsed)}</span>
+                )}
+              </div>
+              {analyzing && (
+                <p className="text-xs text-indigo-600 ml-6">Usually 60–90s. Don&apos;t close this tab.</p>
+              )}
             </div>
           )}
           <Button className="w-full h-11 gap-2 font-semibold" disabled={!file || busy} onClick={handleUploadAndAnalyze}>

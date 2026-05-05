@@ -1,12 +1,18 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { syncUser } from "@/lib/sync-user";
 import { fastModel } from "@/lib/ai";
 import { generateText } from "ai";
+import { assertPlanAllows } from "@/lib/plan-guard";
 
 export async function POST(req: Request) {
   const { userId } = await auth();
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  await syncUser(userId);
+
+  const _planGuard = await assertPlanAllows(userId, "portfolio_bio");
+  if (_planGuard) return _planGuard;
 
   const user = await db.user.findUnique({
     where: { id: userId },
@@ -49,6 +55,10 @@ Return only the bio text. No quotes. No label.`;
   const { text } = await generateText({
     model: fastModel,
     prompt,
+  });
+
+  await db.activityLog.create({
+    data: { userId, type: "portfolio_bio_generated" },
   });
 
   return NextResponse.json({ bio: text.trim() });

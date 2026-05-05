@@ -57,12 +57,16 @@ export async function POST(req: Request) {
 
   const start = Date.now();
   let object: z.infer<typeof ResumeAnalysisSchema>;
+  let inputTokens = 0, outputTokens = 0;
   try {
-    ({ object } = await generateObject({
+    const result = await generateObject({
       model: defaultModel,
       schema: ResumeAnalysisSchema,
       prompt: buildResumeAnalysisPrompt(resume.rawText, user?.targetRole ?? "product_swe"),
-    }));
+    });
+    object = result.object;
+    inputTokens  = result.usage.inputTokens  ?? 0;
+    outputTokens = result.usage.outputTokens ?? 0;
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error("AI analysis error:", msg);
@@ -102,9 +106,9 @@ export async function POST(req: Request) {
     data: {
       userId,
       module: "resume",
-      model: "gpt-4o",
-      promptTokens: 0,
-      completionTokens: 0,
+      model: "claude-sonnet-4-6",
+      promptTokens: inputTokens,
+      completionTokens: outputTokens,
       latencyMs: Date.now() - start,
     },
   });

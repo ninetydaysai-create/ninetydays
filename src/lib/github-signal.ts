@@ -5,6 +5,8 @@ export interface GitHubSignal {
   topRepos: { name: string; description: string; stars: number; language: string }[];
 }
 
+const FETCH_TIMEOUT_MS = 5_000;
+
 export async function fetchGitHubSignal(githubUrl: string): Promise<GitHubSignal | null> {
   const match = githubUrl.match(/github\.com\/([^/?#]+)/);
   if (!match) return null;
@@ -18,11 +20,21 @@ export async function fetchGitHubSignal(githubUrl: string): Promise<GitHubSignal
     headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
   }
 
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+
   try {
     const res = await fetch(
       `https://api.github.com/users/${username}/repos?sort=updated&per_page=20&type=owner`,
-      { headers, next: { revalidate: 3600 } }
+      { headers, signal: controller.signal, next: { revalidate: 3600 } }
     );
+
+    // Rate-limited or auth failure — return null silently so roadmap still generates
+    if (res.status === 403 || res.status === 429) {
+      console.warn(`[github-signal] rate limited for ${username} (HTTP ${res.status})`);
+      return null;
+    }
+
     if (!res.ok) return null;
 
     const repos = (await res.json()) as Array<{
@@ -46,7 +58,12 @@ export async function fetchGitHubSignal(githubUrl: string): Promise<GitHubSignal
       }));
 
     return { username, publicRepos: own.length, topLanguages: languages, topRepos };
-  } catch {
+  } catch (err) {
+    if (err instanceof Error && err.name === "AbortError") {
+      console.warn(`[github-signal] fetch timed out after ${FETCH_TIMEOUT_MS}ms for ${username}`);
+    }
     return null;
+  } finally {
+    clearTimeout(timer);
   }
 }

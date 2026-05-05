@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Upload, FileText, ArrowRight, CheckCircle2, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { useElapsedTime, formatElapsed } from "@/hooks/useElapsedTime";
 
 type Step = "idle" | "uploading" | "analyzing" | "done";
 
@@ -12,6 +13,7 @@ export default function OnboardingUpload() {
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [step, setStep] = useState<Step>("idle");
+  const elapsed = useElapsedTime(step === "analyzing");
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
@@ -68,7 +70,7 @@ export default function OnboardingUpload() {
   const statusLabel = {
     idle: null,
     uploading: "Uploading your resume...",
-    analyzing: "Analyzing with AI — this takes ~15 seconds...",
+    analyzing: "Analyzing with AI — this takes ~60 seconds...",
     done: "Analysis complete! Redirecting...",
   }[step];
 
@@ -133,13 +135,23 @@ export default function OnboardingUpload() {
 
         {/* Status */}
         {statusLabel && (
-          <div className={`flex items-center gap-2 text-sm mb-5 px-4 py-3 rounded-lg ${step === "done" ? "bg-emerald-50 text-emerald-700" : "bg-indigo-50 text-indigo-700"}`}>
-            {step === "done" ? (
-              <CheckCircle2 className="h-4 w-4 shrink-0" />
-            ) : (
-              <Loader2 className="h-4 w-4 animate-spin shrink-0" />
+          <div className={`flex flex-col gap-1 text-sm mb-5 px-4 py-3 rounded-lg ${step === "done" ? "bg-emerald-50 text-emerald-700" : "bg-indigo-50 text-indigo-700"}`}>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                {step === "done" ? (
+                  <CheckCircle2 className="h-4 w-4 shrink-0" />
+                ) : (
+                  <Loader2 className="h-4 w-4 animate-spin shrink-0" />
+                )}
+                {statusLabel}
+              </div>
+              {step === "analyzing" && (
+                <span className="text-xs font-mono tabular-nums text-indigo-500">{formatElapsed(elapsed)}</span>
+              )}
+            </div>
+            {step === "analyzing" && (
+              <p className="text-xs text-indigo-600 ml-6">Usually 60–90s. Don&apos;t close this tab.</p>
             )}
-            {statusLabel}
           </div>
         )}
 

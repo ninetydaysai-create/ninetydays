@@ -63,7 +63,10 @@ export async function POST(req: Request) {
   });
   if (todayCount >= dailyLimit) {
     return NextResponse.json(
-      { error: `Daily mentor limit reached (${dailyLimit} messages/day). ${plan === "FREE" ? "Upgrade to PRO for 100 messages/day." : "Resets at midnight."}` },
+      {
+        error: `Daily mentor limit reached (${dailyLimit} messages/day). ${plan === "FREE" ? "Upgrade to PRO for 100 messages/day." : "Resets at midnight."}`,
+        upgradeRequired: plan === "FREE",
+      },
       { status: 429 }
     );
   }

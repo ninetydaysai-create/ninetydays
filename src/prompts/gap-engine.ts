@@ -2,6 +2,8 @@ import { TargetRole } from "@prisma/client";
 import { ResumeAnalysisResult } from "@/types/resume";
 import { detectServiceCompanyEmployer } from "./service-company";
 
+const MAX_RESUME_CHARS = 15_000;
+
 export function buildGapEnginePrompt(
   analysis: ResumeAnalysisResult,
   targetRole: TargetRole,
@@ -25,16 +27,27 @@ export function buildGapEnginePrompt(
       }\n`
     : "";
 
-  const hasServiceCompany = resumeText ? detectServiceCompanyEmployer(resumeText) : false;
+  const safeResumeText = resumeText && resumeText.length > MAX_RESUME_CHARS
+    ? resumeText.slice(0, MAX_RESUME_CHARS) + "\n[truncated]"
+    : resumeText;
+  const hasServiceCompany = safeResumeText ? detectServiceCompanyEmployer(safeResumeText) : false;
 
   const yoe = yearsExperience ?? null;
   const seniorityLabel = yoe == null ? "unknown" : yoe >= 10 ? "Staff/Principal" : yoe >= 7 ? "Senior" : yoe >= 4 ? "Mid-level" : "Junior";
 
   const techYears = analysis.techYears ?? {};
-  const techYearsLines = Object.entries(techYears)
-    .sort(([, a], [, b]) => b - a)
-    .map(([tech, yrs]) => `  ${tech}: ${yrs}yr`)
-    .join("\n");
+  const topTech = Object.entries(techYears).sort(([, a], [, b]) => b - a);
+  const techYearsLines = topTech.map(([tech, yrs]) => `  ${tech}: ${yrs}yr`).join("\n");
+
+  // Extract concrete anchors from the candidate's actual data for use in format examples
+  const topTechName = topTech[0]?.[0] ?? "their primary technology";
+  const topTechYears = topTech[0]?.[1] ?? yoe ?? "X";
+  const companyName = currentRole && currentRole.includes(" at ")
+    ? currentRole.split(" at ").pop()!
+    : "their current company";
+  const skillsStr = analysis.skillsFound.length > 0
+    ? `${topTechName} (and ${analysis.skillsFound.length} other skills with evidence)`
+    : topTechName;
 
   const companyTypeContext = !targetCompanyType ? "" : targetCompanyType === "faang"
     ? `\nTARGET COMPANY TYPE: FAANG / Big Tech
@@ -107,7 +120,7 @@ export function buildGapEnginePrompt(
 
   return `You are a senior career advisor who has helped 500+ engineers land roles at product companies like Google, Stripe, Notion, and Series B/C startups.
 
-Your job is to identify gaps between this candidate's actual demonstrated abilities and what their target role requires — calibrated against their real evidence, experience level, and target company type. NOT a generic gap list. Every gap must reference the candidate's actual background.
+Your job: identify CONCRETE, SPECIFIC gaps between this candidate's actual demonstrated abilities and what their target role requires. Every single output field must reference THIS candidate's actual resume — their companies, technologies, projects, and bullet points. Generic output is rejected.
 
 TARGET ROLE: ${roleLabel} at a top product company
 ${companyTypeContext}
@@ -115,7 +128,7 @@ CANDIDATE PROFILE:
 - Current role: ${currentRole ?? "unknown"}
 - Years of experience: ${yoe != null ? `${yoe} years (${seniorityLabel})` : "unknown"}
 - Overall resume score: ${analysis.overallScore}/100
-- Skills with project evidence: ${analysis.skillsFound.join(", ")}
+- Skills with project evidence: ${analysis.skillsFound.join(", ") || "none identified"}
 - STAR stories count: ${analysis.starStoriesCount}
 - Impact evidence score: ${analysis.impactScore}/100
 - Project complexity score: ${analysis.projectComplexity}/100
@@ -125,8 +138,8 @@ ${techYearsLines || "  Not available"}
 ${signalSection}${seniorityCalibration}
 ${roleRequirements}
 
-RESUME TEXT (full content — reference this when describing gaps):
-${resumeText ?? "Not available"}
+RESUME TEXT (full content — you MUST quote or paraphrase specific lines when writing gap descriptions):
+${safeResumeText ?? "Not available"}
 
 ---
 
@@ -141,25 +154,55 @@ CALIBRATION RULES — follow exactly:
 4. For senior engineers (≥7 yrs): most gaps are "reframe" or "document" — the skills exist, the portfolio/narrative is wrong
 5. fixStrategy selection guide:
    - "learn": genuinely absent skill, needs tutorials + study
-   - "build": knows it conceptually but no shipped project evidence → build something
+   - "build": knows it conceptually but no shipped project evidence → build something new
    - "document": has the work/experience but it's not written, tracked, or visible → write it up
-   - "reframe": has the skill AND the work, but it's framed as task-taker not as owner → rewrite bullets/stories
-6. interviewQuestion: write the EXACT question a ${roleLabel} interviewer asks that this candidate would currently stumble on. Be specific. e.g. "Walk me through how you'd design a system that handles 1M requests/second with < 100ms p99 latency" not "describe a challenge"
-7. Gap descriptions must reference actual candidate content from the resume — e.g. "Despite ${yoe ?? "X"} years of Java, system design stories at scale are absent"
-8. totalGapScore reflects reality — a senior with deep tech skills but weak impact stories should score 55–70, not 25
+   - "reframe": has the skill AND the work, but framed as task-taker not owner → rewrite bullets/stories
+6. totalGapScore reflects reality — a senior with deep tech skills but weak impact stories should score 55–70, not 25
 
-Return JSON matching this exact schema:
+---
+
+⚠️ CONCRETE PERSONALIZATION — NON-NEGOTIABLE RULES FOR EVERY FIELD:
+
+RULE A — description:
+Must open with THIS candidate's specific situation. Name their actual company, role, or technology.
+❌ REJECTED: "You lack system design experience."
+❌ REJECTED: "System design is important for product engineers."
+✅ REQUIRED: "Your ${topTechYears} years of ${topTechName} at ${companyName} show strong implementation depth, but every project description is scoped to assigned modules — there is zero evidence of choosing a database, designing a data model, or reasoning about scale tradeoffs. ${roleLabel} interviewers probe this in the first 20 minutes."
+✅ REQUIRED: "Despite ${analysis.starStoriesCount} STAR-structured bullets in your resume, none include an outcome larger than the assigned ticket — no cross-team work, no scale, no business impact number. ${roleLabel} roles at product companies screen for this specifically."
+
+RULE B — interviewQuestion:
+Must be the question THIS candidate would personally stumble on given their specific background. Reference their claimed experience.
+❌ REJECTED: "Design a distributed system."
+❌ REJECTED: "Tell me about a challenge you faced."
+✅ REQUIRED: "You listed ${topTechYears} years of ${topTechName} — walk me through the most complex system you designed end-to-end, including your data model, how you handled failures, and what you would change now."
+✅ REQUIRED: "Your resume mentions [specific bullet/project from their resume] — how did you decide on the architecture, and what would you do differently to handle 10x the load?"
+
+RULE C — impactIfIgnored:
+Must describe the concrete failure scenario for THIS candidate, not a generic outcome.
+❌ REJECTED: "You might fail the technical screen."
+❌ REJECTED: "This gap will hurt your chances."
+✅ REQUIRED: "When you describe [specific project/role from their resume], the interviewer asks a follow-up about scale — you'll be unable to discuss anything beyond the tools you used, and the call ends there."
+✅ REQUIRED: "Your resume score of ${analysis.overallScore}/100 already signals weak ownership to recruiters; skipping this means your resume stays in the bottom 40% of the funnel."
+
+RULE D — summary:
+Must name this candidate's specific strongest asset and specific biggest gap. No generic career advice.
+❌ REJECTED: "You have good technical skills but need to improve your soft skills."
+✅ REQUIRED: "Your ${topTechYears} years of ${skillsStr} gives you a solid foundation, but ${analysis.impactScore < 30 ? "only " + analysis.impactScore + "% of your bullets have quantified impact" : "your STAR story count of " + analysis.starStoriesCount + " is below the bar"} — this alone will screen you out at ${targetCompanyType === "faang" ? "FAANG" : "product company"} pre-screens. Close the [single biggest gap] first: that's the one action that moves you from the rejection pile to the interview queue."
+
+---
+
+Return JSON matching this exact schema. Every description/interviewQuestion/impactIfIgnored MUST reference this candidate's actual resume content:
 {
   "skillGaps": [
     {
       "id": "<8-char alphanumeric id>",
-      "label": "<skill name>",
-      "description": "<why this matters for ${roleLabel} AND what signal is missing — reference resume content>",
+      "label": "<specific skill name — not generic categories>",
+      "description": "<RULE A applies — open with their specific company/role/tech, explain exactly what's missing and why it matters for ${roleLabel}>",
       "severity": "<critical|major|minor>",
-      "estimatedHours": <realistic hours from current signal level to working proficiency>,
-      "impactIfIgnored": "<one sentence: exactly what happens in their next interview if they skip this>",
+      "estimatedHours": <realistic hours from their current signal level to working proficiency>,
+      "impactIfIgnored": "<RULE C applies — concrete failure scenario specific to their resume>",
       "fixStrategy": "<learn|build|document|reframe>",
-      "interviewQuestion": "<the exact question they'd stumble on without fixing this gap>",
+      "interviewQuestion": "<RULE B applies — exact question referencing their specific background>",
       "resourceLinks": [],
       "resolved": false
     }
@@ -167,13 +210,13 @@ Return JSON matching this exact schema:
   "projectGaps": [
     {
       "id": "<8-char alphanumeric id>",
-      "label": "<project type>",
-      "description": "<what building this signals to a ${roleLabel} hiring manager — specific credibility gap>",
+      "label": "<specific project type — e.g. 'RAG pipeline on top of existing API' not 'ML project'>",
+      "description": "<RULE A applies — name their actual existing projects/tech and explain the credibility gap>",
       "severity": "<critical|major|minor>",
-      "estimatedHours": <hours to build a credible, shippable version>,
-      "impactIfIgnored": "<one sentence: what a recruiter thinks when they see this gap>",
+      "estimatedHours": <hours to build a credible, shippable version from their current starting point>,
+      "impactIfIgnored": "<RULE C applies — what a hiring manager specifically thinks when they see this gap given this resume>",
       "fixStrategy": "<learn|build|document|reframe>",
-      "interviewQuestion": "<the exact question or portfolio request they'd fail without this>",
+      "interviewQuestion": "<RULE B applies — the exact portfolio question or show-me request they'd fail>",
       "resourceLinks": [],
       "resolved": false
     }
@@ -181,19 +224,19 @@ Return JSON matching this exact schema:
   "storyGaps": [
     {
       "id": "<8-char alphanumeric id>",
-      "label": "<story type>",
-      "description": "<why this story matters in ${roleLabel} interviews — and exactly why theirs is insufficient>",
+      "label": "<specific story type — e.g. 'Cross-team conflict resolution story' not 'leadership story'>",
+      "description": "<RULE A applies — reference specific bullets or roles in their resume that are insufficient and why>",
       "severity": "<critical|major|minor>",
-      "estimatedHours": <hours to craft, write, and practice to interview-ready level>,
-      "impactIfIgnored": "<one sentence: what happens in the behavioral round without this story>",
+      "estimatedHours": <hours to craft, write, and practice this specific story to interview-ready level>,
+      "impactIfIgnored": "<RULE C applies — exact behavioral question they'd fail at and the consequence>",
       "fixStrategy": "<learn|build|document|reframe>",
-      "interviewQuestion": "<the exact behavioral question they'd fail without this story>",
+      "interviewQuestion": "<RULE B applies — the exact behavioral question they'd stumble on given their resume>",
       "resourceLinks": [],
       "resolved": false
     }
   ],
-  "totalGapScore": <0-100, higher = closer to role-ready. Base on evidence depth, not keyword coverage.>,
-  "summary": "<2-3 sentences: honest current standing, the single biggest gap to close first, and the one action that would most move the needle>"
+  "totalGapScore": <0-100, higher = closer to role-ready. Calibrate against real evidence depth, not keyword coverage.>,
+  "summary": "<RULE D applies — name their specific strongest asset and biggest gap, give one concrete first action>"
 }
 
 totalGapScore calibration:
@@ -202,6 +245,8 @@ totalGapScore calibration:
 - 40-59: Significant gaps, 2-3 months of real project work required
 - 20-39: Service company background with major product ownership gaps
 - 0-19: Very early stage — foundational gaps across all dimensions
+
+FINAL CHECK before returning: re-read every description, interviewQuestion, and impactIfIgnored. If any of them could apply to a different candidate without changing a word — rewrite it to be specific to this person's resume.
 
 Return ONLY valid JSON. No markdown fences.`;
 }

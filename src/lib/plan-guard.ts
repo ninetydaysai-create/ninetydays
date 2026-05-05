@@ -13,7 +13,9 @@ type PlanFeature =
   | "outreach"
   | "bullet_rewrite"
   | "linkedin_optimization"
-  | "cover_letter";
+  | "cover_letter"
+  | "github_optimization"
+  | "portfolio_bio";
 
 interface PlanGuardResult {
   allowed: boolean;
@@ -165,6 +167,34 @@ export async function checkPlanLimit(
         reason: "Cold Outreach Generator is a Pro feature. Upgrade to generate personalized recruiter emails.",
         upgradeRequired: true,
       };
+    }
+
+    case "github_optimization": {
+      const count = await db.githubOptimization.count({
+        where: { userId, createdAt: { gte: startOfMonth() } },
+      });
+      if (count >= limits.githubOptimizationsPerMonth) {
+        return {
+          allowed: false,
+          reason: `${plan === Plan.PRO ? "Pro" : "Free"} plan allows ${limits.githubOptimizationsPerMonth} GitHub README optimizations/month. ${plan === Plan.FREE ? "Upgrade to Pro for more." : "Resets next month."}`,
+          upgradeRequired: plan === Plan.FREE,
+        };
+      }
+      return { allowed: true };
+    }
+
+    case "portfolio_bio": {
+      const count = await db.activityLog.count({
+        where: { userId, type: "portfolio_bio_generated", createdAt: { gte: startOfMonth() } },
+      });
+      if (count >= limits.portfolioBioPerMonth) {
+        return {
+          allowed: false,
+          reason: `${plan === Plan.PRO ? "Pro" : "Free"} plan allows ${limits.portfolioBioPerMonth} portfolio bio generations/month. ${plan === Plan.FREE ? "Upgrade to Pro for more." : "Resets next month."}`,
+          upgradeRequired: plan === Plan.FREE,
+        };
+      }
+      return { allowed: true };
     }
 
     default:

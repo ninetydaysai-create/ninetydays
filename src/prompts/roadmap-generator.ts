@@ -10,6 +10,7 @@ interface ResumeSignal {
   starStoriesCount: number;
   impactScore: number;
   projectComplexity: number;
+  signalDepthMap?: Record<string, string>; // per-skill depth from resume analysis
 }
 
 export interface PlanningContext {
@@ -26,25 +27,52 @@ function classifySignalDepth(
   gapLabel: string,
   resumeText: string,
   techYears: Record<string, number>,
-  skillsFound: string[]
+  skillsFound: string[],
+  signalDepthMap?: Record<string, string>,
 ): "ABSENT" | "WEAK" | "MODERATE" {
   const label = gapLabel.toLowerCase();
+
+  // Check stored signal depth map first — more accurate than text heuristics
+  if (signalDepthMap) {
+    const match = Object.entries(signalDepthMap).find(([skill]) => {
+      const s = skill.toLowerCase();
+      return s === label || label.includes(s) || s.includes(label.split(" ")[0]);
+    });
+    if (match) {
+      const depth = match[1];
+      if (depth === "STRONG" || depth === "MODERATE") return "MODERATE";
+      if (depth === "WEAK") return "WEAK";
+    }
+  }
+
   const text = resumeText.toLowerCase();
+  const keyword = label.split(" ")[0].toLowerCase();
 
   const techMatch = Object.entries(techYears).find(([tech]) =>
-    label.includes(tech.toLowerCase()) || tech.toLowerCase().includes(label.split(" ")[0])
+    label.includes(tech.toLowerCase()) || tech.toLowerCase().includes(keyword)
   );
   if (techMatch && techMatch[1] >= 2) return "MODERATE";
 
   const inSkills = skillsFound.some(
-    (s) => s.toLowerCase().includes(label.split(" ")[0]) || label.includes(s.toLowerCase())
+    (s) => s.toLowerCase().includes(keyword) || label.includes(s.toLowerCase())
   );
 
-  const mentionCount = (text.match(new RegExp(label.split(" ")[0], "g")) ?? []).length;
-  const hasProjectContext =
-    text.includes("built") || text.includes("developed") || text.includes("deployed") || text.includes("implemented");
+  // Check for keyword co-occurring with project-action verbs in nearby lines (±2 lines)
+  const lines = text.split("\n");
+  const projectVerbs = /built|developed|deployed|implemented|designed|shipped|created/;
+  let hasNearbyProjectContext = false;
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].includes(keyword)) {
+      const window = lines.slice(Math.max(0, i - 2), Math.min(lines.length, i + 3));
+      if (window.some((l) => projectVerbs.test(l))) {
+        hasNearbyProjectContext = true;
+        break;
+      }
+    }
+  }
 
-  if (inSkills && mentionCount >= 3 && hasProjectContext) return "MODERATE";
+  const mentionCount = (text.match(new RegExp(keyword, "g")) ?? []).length;
+  if (inSkills && mentionCount >= 2 && hasNearbyProjectContext) return "MODERATE";
   if (inSkills || mentionCount >= 1) return "WEAK";
   return "ABSENT";
 }
@@ -116,10 +144,12 @@ GITHUB PROFILE SIGNAL:
 - Top repos:
 ${repoList}
 
-INSTRUCTION: Reference specific repo names and domains in task descriptions where relevant.
-Example: instead of "Build a REST API" → "Add authentication and rate limiting to your ${signal.topRepos[0]?.name ?? "existing"} project".
+INSTRUCTION: Reference specific repo names in task descriptions.
+Example: instead of "Build a REST API" → "Add rate limiting and auth to your ${signal.topRepos[0]?.name ?? "existing"} project".
 `;
 }
+
+const MAX_RESUME_CHARS = 15_000;
 
 export function buildRoadmapPrompt(
   gapReport: GapReportResult,
@@ -134,29 +164,50 @@ export function buildRoadmapPrompt(
 
   const yoe = yearsExperience ?? null;
   const seniorityLabel = yoe == null ? null : yoe >= 10 ? "Staff/Principal" : yoe >= 7 ? "Senior" : yoe >= 4 ? "Mid-level" : "Junior";
+
+  // Extract concrete anchors from the candidate's actual data for use in format examples
+  const topTech = resumeSignal
+    ? Object.entries(resumeSignal.techYears).sort(([, a], [, b]) => b - a)
+    : [];
+  const topTechName = topTech[0]?.[0] ?? "their primary language";
+  const topTechYears = topTech[0]?.[1] ?? yoe ?? "X";
+  const companyName = currentRole && currentRole.includes(" at ")
+    ? currentRole.split(" at ").pop()!
+    : "their current company";
+  const firstGapLabel = gapReport.skillGaps[0]?.label ?? gapReport.projectGaps[0]?.label ?? "their top gap";
+  const firstCriticalGap = [...gapReport.skillGaps, ...gapReport.projectGaps, ...gapReport.storyGaps]
+    .find(g => g.severity === "critical")?.label ?? firstGapLabel;
+
   const senioritySection = yoe != null ? `\nSENIORITY CONTEXT — ${yoe} years experience (${seniorityLabel}):
 ${yoe >= 7
-  ? `- This is a senior engineer. Do NOT include beginner tasks (tutorial videos, basic syntax exercises).
-- Week tasks should be at senior level: architecture decisions, system design docs, leading code reviews, writing RFCs.
-- The "gap" isn't knowledge — it's demonstrable product ownership and quantified impact stories.
-- Phase 1 should reframe the narrative (resume bullets, LinkedIn, story crafting), not teach basics.`
+  ? `- This is a senior engineer. Do NOT include beginner tasks (tutorial videos, basic syntax exercises, "learn X from scratch").
+- Every task must be at senior level: architecture decisions, system design docs, writing RFCs, reframing ownership narrative.
+- The gap isn't knowledge — it's demonstrable product ownership and quantified impact stories.
+- Phase 1 must reframe the narrative (resume rewrites, LinkedIn, story crafting), NOT teach fundamentals.`
   : yoe >= 4
   ? `- Mid-level engineer. Some foundational tasks are OK but focus on product ownership and building real things.
-- Prioritize: build portfolio projects that demonstrate impact, write strong STAR stories, practice system design.`
+- Prioritize: portfolio projects that demonstrate impact, strong STAR stories, system design practice.`
   : `- Early career engineer. Foundational tasks + guided projects are appropriate.
-- Build real projects from scratch, focus on demonstrating initiative and learning velocity.`}` : "";
+- Build real projects from scratch, demonstrate initiative and learning velocity.`}` : "";
 
-  const currentRoleContext = currentRole ? `\nCURRENT ROLE: ${currentRole} — frame the transition narrative from THIS role to ${roleLabel}. Week 1–2 must address the "from delivery/service work to product ownership" shift explicitly if relevant.` : "";
+  const currentRoleContext = currentRole
+    ? `\nCURRENT ROLE: ${currentRole} — the transition narrative goes FROM this specific role TO ${roleLabel}. Week 1–2 must explicitly address what changes when moving from ${companyName} to a product company.`
+    : "";
+
+  const safeResumeText = resumeText && resumeText.length > MAX_RESUME_CHARS
+    ? resumeText.slice(0, MAX_RESUME_CHARS) + "\n[truncated]"
+    : resumeText;
 
   // Build signal depth map for all gaps
   const signalMap: Record<string, string> = {};
-  if (resumeText && resumeSignal) {
+  if (safeResumeText && resumeSignal) {
     [...gapReport.skillGaps, ...gapReport.projectGaps, ...gapReport.storyGaps].forEach((gap) => {
       signalMap[gap.label] = classifySignalDepth(
         gap.label,
-        resumeText,
+        safeResumeText,
         resumeSignal.techYears,
-        resumeSignal.skillsFound
+        resumeSignal.skillsFound,
+        resumeSignal.signalDepthMap,
       );
     });
   }
@@ -176,11 +227,11 @@ ${yoe >= 7
         .join(", ")
     : "unknown";
 
-  const hasServiceCompanyPattern = resumeText
-    ? detectServiceCompanyEmployer(resumeText)
+  const hasServiceCompanyPattern = safeResumeText
+    ? detectServiceCompanyEmployer(safeResumeText)
     : false;
 
-  return `You are a senior engineering career coach building a PERSONALIZED 12-week transition plan. This is NOT a generic template — every week and every task must be calibrated to this specific candidate's actual starting point, goals, and constraints.
+  return `You are a senior engineering career coach building a PERSONALIZED 12-week transition plan for one specific candidate. This is NOT a template. Every week theme, task description, and deliverable must be written as if you know this person's resume by heart — naming their actual companies, projects, technologies, and gaps. Generic output is not acceptable.
 
 TARGET ROLE: ${roleLabel} at a top product company
 AVAILABLE TIME: ${hoursPerWeek} hours/week
@@ -205,19 +256,17 @@ CANDIDATE SIGNAL (what the resume actually shows):
 - STAR stories written: ${resumeSignal?.starStoriesCount ?? "unknown"}
 - Impact evidence quality: ${resumeSignal?.impactScore ?? "unknown"}/100
 - Project complexity score: ${resumeSignal?.projectComplexity ?? "unknown"}/100
-${hasServiceCompanyPattern ? "- ⚠️ SERVICE COMPANY BACKGROUND DETECTED: Resume shows delivery/outsourcing patterns. Must address product ownership gap explicitly." : ""}
+${hasServiceCompanyPattern ? "- ⚠️ SERVICE COMPANY BACKGROUND DETECTED: delivery/outsourcing patterns found. Must address product ownership gap explicitly in Weeks 1-2." : ""}
 
-RESUME (full text — reference projects, roles, and technologies by name in task descriptions):
-${resumeText ?? "Not available"}
+RESUME (full text — read every line. Name specific projects, companies, and technologies from this resume in your tasks):
+${safeResumeText ?? "Not available"}
 ${githubSignalSection(githubSignal ?? null)}
 ---
 
-GAP ANALYSIS WITH SIGNAL DEPTH:
-
-Each gap is tagged with signal depth from the resume:
-- ABSENT: Not mentioned at all — start from fundamentals
-- WEAK: Listed as skill or buzzword but no project evidence — skip basics, go straight to building
-- MODERATE: Has some evidence but not production-depth — extend/deepen existing work
+GAP ANALYSIS WITH SIGNAL DEPTH (starting point for each gap area):
+- ABSENT: not mentioned at all → candidate needs conceptual intro before building
+- WEAK: listed as a skill but no project evidence → skip tutorials, assign a project immediately
+- MODERATE: some evidence but not production-depth → skip beginner content, extend/deepen existing work
 
 SKILL GAPS:
 ${formatGapsWithDepth(gapReport.skillGaps)}
@@ -230,50 +279,61 @@ ${formatGapsWithDepth(gapReport.storyGaps)}
 
 ---
 
-CALIBRATION RULES — follow these strictly:
+⚠️ CONCRETE PERSONALIZATION — MANDATORY RULES FOR EVERY OUTPUT FIELD:
 
-1. SIGNAL DEPTH DETERMINES STARTING POINT:
-   - ABSENT → include conceptual intro + hands-on build (can't assume anything)
-   - WEAK → skip tutorials, start with a project immediately (they know the syntax)
-   - MODERATE → skip beginner projects, go straight to production-level extension
-   Do NOT assign "learn Python basics" to someone with Python (4yr) in their profile.
+RULE 1 — WEEK THEME must name this candidate's specific technology, project, or transition:
+❌ REJECTED: "System Design Fundamentals"
+❌ REJECTED: "Python & ML Foundations"
+❌ REJECTED: "Backend Development"
+✅ REQUIRED: "Design your ${companyName} experience at scale — write the system design doc that was never written"
+✅ REQUIRED: "Close the ${firstCriticalGap} gap: build the project your ${topTechName} experience is missing"
+✅ REQUIRED: "Reframe ${topTechYears} years of ${topTechName} work into ownership language for ${roleLabel} screens"
 
-2. REFERENCE ACTUAL RESUME CONTENT:
-   Where possible, reference the candidate's existing projects by name or domain and suggest extending them.
-   Example: If resume shows FastAPI work → "Add an LLM endpoint to your existing API service" not "Build an API from scratch".
+RULE 2 — DELIVERABLE must be a specific artifact using their actual stack:
+❌ REJECTED: "A design document"
+❌ REJECTED: "Completed LeetCode practice"
+✅ REQUIRED: "A GitHub-committed system design doc for a [specific feature from their resume] scaled to 10M users"
+✅ REQUIRED: "Three rewritten resume bullets from your ${companyName} tenure, each with a measurable outcome"
 
-3. SERVICE COMPANY REFRAMING (if detected):
-   ${hasServiceCompanyPattern
-     ? `Week 1-2 MUST include: Rewrite 3 resume bullets from delivery language to ownership language. Convert "worked on X" to "designed and built X that achieved Y". This is mandatory — it's the #1 rejection cause.`
-     : "Not applicable."}
+RULE 3 — TASK DESCRIPTION must use this EXACT format, with each section grounded in their resume:
 
-4. PHASE STRUCTURE — derive from gap distribution and timeline urgency:
-   - Phase 1 (Weeks 1-4): Close CRITICAL+ABSENT gaps. Build foundations the candidate actually lacks.
-   - Phase 2 (Weeks 5-8): Close CRITICAL+WEAK and MAJOR gaps. Build 2-3 real portfolio projects.
-   - Phase 3 (Weeks 9-12): Polish + practice. Mock interviews, applications, story refinement.
+CONTEXT: <1 sentence starting with their actual role/company/tech — why this task matters GIVEN their specific background>
+ACTION: <exactly what to do — name their existing projects, technologies, and companies. Never say "build a project from scratch" if they already have relevant work — say "extend/add to [their actual project]">
+SUCCESS CRITERIA: <concrete, measurable artifact — name the technology, repo, or doc. Never vague outcomes like "understand X better">
 
-   GAP COVERAGE — MANDATORY:
-   Every CRITICAL gap from the gap report MUST have at least one task mapped to it (gapLabel set) in Weeks 1-4.
-   Do NOT leave any CRITICAL gap uncovered. If you run out of task slots, remove MINOR tasks first.
-   MAJOR gaps must be covered by Week 8.
+Examples using THIS candidate's background:
+❌ BAD — could apply to anyone:
+  CONTEXT: System design is important for software engineers.
+  ACTION: Study system design concepts and practice designing systems.
+  SUCCESS CRITERIA: Feel comfortable with system design questions.
 
-5. WEEK THEMES must be specific to THIS candidate:
-   ❌ "Python & ML Foundations" (generic)
-   ✅ "Build your first RAG pipeline on top of your existing FastAPI service" (specific)
+✅ GOOD — specific to this person:
+  CONTEXT: Your ${topTechYears} years of ${topTechName} at ${companyName} show strong implementation skill but zero evidence of architecture decisions — ${roleLabel} interviewers ask this in the first round.
+  ACTION: Take the most complex feature you built at ${companyName} and write the design doc that should have existed — data model, API contract, how you'd handle 10x load, what you'd do differently now.
+  SUCCESS CRITERIA: A markdown design doc committed to GitHub covering: schema diagram, 3 API endpoints with request/response, caching strategy, and one failure mode + mitigation.
 
-6. TASKS must have concrete deliverables AND use this exact description format:
-   CONTEXT: <1 sentence — why this matters given the candidate's specific background>
-   ACTION: <exactly what to do — reference their existing projects/skills where possible>
-   SUCCESS CRITERIA: <how they know this task is done — a tangible artifact or measurable outcome>
+RULE 4 — SIGNAL DEPTH DETERMINES STARTING POINT:
+- ABSENT → include conceptual foundation then build. Never skip explanation for ABSENT gaps.
+- WEAK → skip tutorials entirely. Assign a real project on Day 1 of the week. They know the concept.
+- MODERATE → skip beginner projects. Extend existing work to production depth. Reference their actual code.
 
-   Example (bad): "Learn system design basics"
-   Example (good): "CONTEXT: Your resume shows 6 years of microservices work but no system design interviews. ACTION: Design a URL shortener (like bit.ly) from scratch — write the design doc covering data model, API, caching layer, and failure modes. Then record a 10-min walkthrough. SUCCESS CRITERIA: Design doc committed to GitHub, covers 5+ components, walkthrough explains your tradeoffs."
+RULE 5 — SERVICE COMPANY REFRAMING (if applicable):
+${hasServiceCompanyPattern
+  ? `Week 1–2 MUST include: Take 3 specific bullets from their resume that use delivery language ("worked on", "contributed to", "part of the team") and rewrite each as ownership language ("designed and built X that achieved Y"). This is the #1 rejection cause and must come first.`
+  : "Not applicable for this candidate."}
 
-7. IMPACT SCORE calibration:
-   - 9-10: Directly closes a CRITICAL gap
-   - 7-8: Closes MAJOR gap or directly improves interview performance
-   - 5-6: Portfolio polish or MINOR gap
-   - 1-4: Supporting/optional task
+RULE 6 — PHASE STRUCTURE:
+- Phase 1 (Weeks 1–4): Close every CRITICAL+ABSENT gap. If service company background, start with narrative reframing.
+- Phase 2 (Weeks 5–8): Close CRITICAL+WEAK and all MAJOR gaps. Build 2–3 real portfolio projects.
+- Phase 3 (Weeks 9–12): Mock interviews, application polish, behavioral story practice.
+
+  CRITICAL gaps MUST have a task in Weeks 1–4. MAJOR gaps MUST be covered by Week 8.
+  If task slots run out, remove MINOR tasks first. Never leave a CRITICAL gap without coverage.
+
+RULE 7 — whyItMatters must be interview-specific:
+Must say exactly why this task matters for a ${roleLabel} interview — what the interviewer asks, what happens without it.
+❌ REJECTED: "This skill is important for product engineers."
+✅ REQUIRED: "Without this, when asked about [specific thing from their resume], you'll be unable to go deeper than tool names — the interviewer ends the screen."
 
 ---
 
@@ -284,33 +344,34 @@ ${[...gapReport.skillGaps, ...gapReport.projectGaps, ...gapReport.storyGaps]
 
 ---
 
-Return a JSON object: { "applyReadyAt": <week number 1-12 when candidate should start applying>, "weeks": [ ... ] }
+Return a JSON object: { "applyReadyAt": <week 1-12 when candidate should start applying>, "weeks": [ ... ] }
 
 applyReadyAt guidance:
-- FAANG: Week 10+ (needs both DS&A depth + system design practice)
-- Funded startup: Week 6-8 (portfolio work matters more than grinding)
+- FAANG: Week 10+ (needs DS&A depth + system design practice)
+- Funded startup: Week 6-8 (portfolio matters more)
 - Any company: Week 8-10 (balanced)
-- Adjust earlier/later based on critical gap count and severity
+- Adjust based on critical gap count and severity
 
-Each week:
+Each week must follow this exact shape:
 {
   "weekNumber": <1-12>,
-  "theme": "<specific, personalized theme — NOT generic>",
-  "estimatedHours": <max ${hoursPerWeek}>,
-  "deliverable": "<one concrete artifact they must produce to mark this week done>",
+  "theme": "<RULE 1 — specific to THIS candidate, names their tech/company/project>",
+  "estimatedHours": <integer, max ${hoursPerWeek}>,
+  "deliverable": "<RULE 2 — one concrete artifact with specific tech/doc/repo name>",
   "tasks": [
     {
-      "label": "<specific task name>",
-      "description": "<exactly what to do — reference their background where possible>",
-      "whyItMatters": "<one sentence: why this closes a real gap, cite interview data if possible>",
+      "label": "<specific task name that names their tech or project>",
+      "description": "<RULE 3 — CONTEXT / ACTION / SUCCESS CRITERIA format, every line references their resume>",
+      "whyItMatters": "<RULE 7 — interview-specific reason, not generic career advice>",
       "resourceUrls": ["<real free URL — docs, YouTube, GitHub, HuggingFace, papers>"],
       "hours": <integer>,
-      "impactScore": <1-10>,
-      "gapLabel": "<exact label from the GAP LABELS list above, or omit if this task doesn't directly close a gap>"
+      "impactScore": <1-10: 9-10=closes CRITICAL gap, 7-8=closes MAJOR gap, 5-6=MINOR polish, 1-4=optional>,
+      "gapLabel": "<exact label from GAP LABELS above, or omit if no direct gap mapping>"
     }
   ]
 }
 
-Each week: 3-5 tasks. Return ONLY the JSON object. No markdown. No explanation outside the JSON.
-Task descriptions MUST follow the CONTEXT / ACTION / SUCCESS CRITERIA format from rule 6.`;
+3-5 tasks per week. Return ONLY the JSON object. No markdown. No text outside the JSON.
+
+FINAL CHECK before returning: read every theme, deliverable, and task CONTEXT sentence. If any of them could have been written for a different person's resume without changing a word — rewrite it to name this candidate's specific background.`;
 }

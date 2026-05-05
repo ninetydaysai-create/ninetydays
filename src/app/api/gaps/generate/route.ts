@@ -9,7 +9,7 @@ import { buildGapEnginePrompt } from "@/prompts/gap-engine";
 import { ResumeAnalysisResult } from "@/types/resume";
 import { enrichGapsWithLinks } from "@/lib/resource-links";
 
-export const maxDuration = 60;
+export const maxDuration = 120;
 
 const GapItemSchema = z.object({
   id:                z.string(),

@@ -269,6 +269,7 @@ export default async function SettingsPage() {
       {/* Plan preferences */}
       <PlanPreferencesCard
         initial={{
+          targetRole:        user.targetRole         ?? null,
           hoursPerWeek:      user.hoursPerWeek      ?? null,
           targetTimeline:    user.targetTimeline     ?? null,
           targetCompanyType: user.targetCompanyType  ?? null,

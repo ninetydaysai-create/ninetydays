@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useElapsedTime, formatElapsed } from "@/hooks/useElapsedTime";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -157,6 +158,7 @@ export default function RoadmapPage() {
   const [loading, setLoading] = useState(true);
   const [toggling, setToggling] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
+  const elapsed = useElapsedTime(generating);
   const [readinessBump, setReadinessBump] = useState<{ label: string; prev: number; next: number } | null>(null);
   const [expandedWeeks, setExpandedWeeks] = useState<Set<string>>(new Set());
   const [weekCompleteBanner, setWeekCompleteBanner] = useState<{ weekNumber: number } | null>(null);
@@ -319,20 +321,24 @@ export default function RoadmapPage() {
 
             {/* Loading steps when generating */}
             {generating ? (
-              <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-xl px-5 py-4 max-w-xs mx-auto space-y-2 text-left mt-2">
-                <p className="text-sm font-semibold text-indigo-300 mb-3">Building your hiring roadmap…</p>
+              <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-xl px-5 py-5 max-w-sm mx-auto space-y-3 text-left mt-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold text-indigo-300">Building your 12-week hiring plan…</p>
+                  <span className="text-xs font-mono tabular-nums text-indigo-400">{formatElapsed(elapsed)}</span>
+                </div>
                 {[
-                  { label: "Analyzing your gaps", done: true },
-                  { label: "Mapping learning plan", done: true },
-                  { label: "Creating weekly tasks", done: false },
+                  { label: "Reading your resume and gap report", done: true },
+                  { label: "Mapping each gap to specific tasks", done: true },
+                  { label: "Writing 12 weeks of personalized work", done: false },
                 ].map(({ label, done }) => (
                   <div key={label} className="flex items-center gap-2 text-sm">
                     {done
                       ? <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
                       : <Loader2 className="h-4 w-4 animate-spin text-indigo-400 shrink-0" />}
-                    <span className={done ? "text-slate-300" : "text-indigo-400"}>{label}</span>
+                    <span className={done ? "text-slate-300" : "text-indigo-300 font-medium"}>{label}</span>
                   </div>
                 ))}
+                <p className="text-xs text-slate-500 pt-1 border-t border-white/5">This is the slowest step — the AI is writing a full personalized plan. Don&apos;t close this tab.</p>
               </div>
             ) : (
               <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">

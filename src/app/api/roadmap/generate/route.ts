@@ -13,7 +13,7 @@ import { fetchGitHubSignal } from "@/lib/github-signal";
 import { enrichTaskResources } from "@/lib/resource-links";
 import { triggerRoadmapReadyEmail } from "@/lib/email-triggers";
 
-export const maxDuration = 60;
+export const maxDuration = 120;
 
 // 7-day TTL for cached GitHub signal
 const GITHUB_SIGNAL_TTL_MS = 7 * 24 * 60 * 60 * 1000;
@@ -140,6 +140,7 @@ export async function POST(req: Request) {
   });
 
   const resumeText = analysis?.resume?.rawText ?? undefined;
+  const rawAnalysis = analysis?.rawAnalysis as { signalDepthMap?: Record<string, string> } | null;
   const resumeSignal = analysis
     ? {
         overallScore:      analysis.overallScore,
@@ -148,6 +149,7 @@ export async function POST(req: Request) {
         starStoriesCount:  analysis.starStoriesCount,
         impactScore:       analysis.impactScore,
         projectComplexity: analysis.projectComplexity,
+        signalDepthMap:    rawAnalysis?.signalDepthMap,
       }
     : undefined;
 

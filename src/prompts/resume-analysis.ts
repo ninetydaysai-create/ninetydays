@@ -1,8 +1,13 @@
 import { TargetRole } from "@prisma/client";
 
+const MAX_RESUME_CHARS = 15_000;
+
 export function buildResumeAnalysisPrompt(resumeText: string, targetRole: TargetRole): string {
   const roleLabel = targetRole.replace(/_/g, " ");
-  const hasServiceCompany = /tcs|infosys|wipro|accenture|cognizant|capgemini|hcl|tech mahindra/i.test(resumeText);
+  const safeText = resumeText.length > MAX_RESUME_CHARS
+    ? resumeText.slice(0, MAX_RESUME_CHARS) + "\n\n[truncated — original exceeded safe prompt length]"
+    : resumeText;
+  const hasServiceCompany = /tcs|infosys|wipro|accenture|cognizant|capgemini|hcl|tech mahindra/i.test(safeText);
 
   return `You are a senior engineering hiring manager at a top-tier product company (Google, Stripe, Notion, Figma, Linear, Meta).
 You have reviewed 10,000+ resumes. Evaluate this candidate for a ${roleLabel} role with the same lens you'd use before deciding to pass them to a phone screen.
@@ -24,7 +29,7 @@ Apply strict scrutiny:
 ` : ""}
 RESUME:
 ---
-${resumeText}
+${safeText}
 ---
 
 Return a JSON object with EXACTLY this schema:

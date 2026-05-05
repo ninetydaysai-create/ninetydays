@@ -1,13 +1,19 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { syncUser } from "@/lib/sync-user";
 import { defaultModel } from "@/lib/ai";
 import { generateText } from "ai";
 import { buildGithubReadmePrompt } from "@/prompts/linkedin-optimizer";
+import { assertPlanAllows } from "@/lib/plan-guard";
 
 export async function POST(req: Request) {
   const { userId } = await auth();
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  await syncUser(userId);
+
+  const _planGuard = await assertPlanAllows(userId, "github_optimization");
+  if (_planGuard) return _planGuard;
 
   const { currentReadme = "" } = await req.json();
 

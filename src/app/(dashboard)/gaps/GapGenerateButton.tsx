@@ -5,10 +5,12 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
+import { useElapsedTime, formatElapsed } from "@/hooks/useElapsedTime";
 
 export default function GapGenerateButton({ analysisId }: { analysisId: string }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const elapsed = useElapsedTime(loading);
 
   async function handleGenerate() {
     setLoading(true);
@@ -27,8 +29,15 @@ export default function GapGenerateButton({ analysisId }: { analysisId: string }
   }
 
   return (
-    <Button className="gap-2 h-11" onClick={handleGenerate} disabled={loading}>
-      {loading ? <><Loader2 className="h-4 w-4 animate-spin" />Generating...</> : <><Sparkles className="h-4 w-4" />Generate my gap report</>}
-    </Button>
+    <div className="flex flex-col items-start gap-1.5">
+      <Button className="gap-2 h-11" onClick={handleGenerate} disabled={loading}>
+        {loading
+          ? <><Loader2 className="h-4 w-4 animate-spin" />Analyzing gaps… <span className="font-mono tabular-nums ml-1">({formatElapsed(elapsed)})</span></>
+          : <><Sparkles className="h-4 w-4" />Generate my gap report</>}
+      </Button>
+      {loading && (
+        <p className="text-xs text-slate-400 ml-1">Usually 60–90s. Don&apos;t close this tab.</p>
+      )}
+    </div>
   );
 }
