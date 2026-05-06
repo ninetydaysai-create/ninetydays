@@ -285,7 +285,7 @@ export default function InterviewPage() {
                     <p className="text-xl text-slate-300 mb-4">{config.description}</p>
                     <Button
                       size="sm"
-                      className="w-full gap-2"
+                      className="w-full gap-2 text-base"
                       disabled={!!starting}
                       onClick={(e) => { e.stopPropagation(); startSession(type, selectedCompany ?? undefined); }}
                     >
@@ -360,7 +360,7 @@ export default function InterviewPage() {
                       <Button
                         size="sm"
                         variant="outline"
-                        className="gap-2"
+                        className="gap-2 text-base"
                         onClick={() => router.push(`/interview`)}
                       >
                         Practice {cfg.label} again →
