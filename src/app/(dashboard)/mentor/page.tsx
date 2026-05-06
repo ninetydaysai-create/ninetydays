@@ -125,8 +125,8 @@ export default function MentorPage() {
             <Bot className="h-5 w-5 text-white" />
           </div>
           <div>
-            <h1 className="text-lg font-bold text-white">AI Mentor</h1>
-            <p className="text-xs text-slate-400">Knows your resume, gaps, and roadmap · Guides you daily</p>
+            <h1 className="text-xl font-bold text-white">AI Mentor</h1>
+            <p className="text-sm text-slate-400">Knows your resume, gaps, and roadmap · Guides you daily</p>
           </div>
         </div>
         {messages.length > 0 && (
@@ -134,7 +134,7 @@ export default function MentorPage() {
             variant="ghost"
             size="sm"
             onClick={clearHistory}
-            className="text-slate-400 hover:text-red-500 gap-1.5"
+            className="text-base text-slate-400 hover:text-red-500 gap-1.5"
           >
             <Trash2 className="h-3.5 w-3.5" />
             Clear
@@ -156,8 +156,8 @@ export default function MentorPage() {
               <Sparkles className="h-8 w-8 text-white" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-white mb-2">Your personal career mentor</h2>
-              <p className="text-slate-400 text-base max-w-sm mx-auto leading-relaxed">
+              <h2 className="text-2xl font-bold text-white mb-2">Your personal career mentor</h2>
+              <p className="text-slate-400 text-xl max-w-sm mx-auto leading-relaxed">
                 I know your resume, your gaps, and where you are in your roadmap. Ask me anything — or start with one of these:
               </p>
             </div>
@@ -166,7 +166,7 @@ export default function MentorPage() {
                 <button
                   key={s}
                   onClick={() => sendMessage(s)}
-                  className="bg-white/5 hover:bg-indigo-500/10 border border-white/10 hover:border-indigo-500/30 rounded-xl px-4 py-2 text-sm text-slate-400 hover:text-indigo-400 font-medium transition-all"
+                  className="bg-white/5 hover:bg-indigo-500/10 border border-white/10 hover:border-indigo-500/30 rounded-xl px-4 py-2 text-base text-slate-400 hover:text-indigo-400 font-medium transition-all"
                 >
                   {s}
                 </button>
@@ -195,7 +195,7 @@ export default function MentorPage() {
 
             {/* Bubble */}
             <div className={cn(
-              "rounded-2xl px-4 py-3 max-w-[75%] text-sm leading-relaxed",
+              "rounded-2xl px-4 py-3 max-w-[75%] text-base leading-relaxed",
               msg.role === "assistant"
                 ? "bg-white border border-slate-200 text-slate-700 shadow-sm"
                 : "bg-indigo-600 text-white"
@@ -223,7 +223,7 @@ export default function MentorPage() {
             onKeyDown={handleKeyDown}
             placeholder="Ask your mentor anything... (Enter to send, Shift+Enter for new line)"
             rows={1}
-            className="resize-none min-h-[44px] max-h-[160px] overflow-y-auto text-sm rounded-xl border-slate-200 focus-visible:ring-indigo-500"
+            className="resize-none min-h-[44px] max-h-[160px] overflow-y-auto text-base rounded-xl border-slate-200 focus-visible:ring-indigo-500"
             style={{ height: "auto" }}
             onInput={(e) => {
               const t = e.currentTarget;
@@ -242,7 +242,7 @@ export default function MentorPage() {
             }
           </Button>
         </div>
-        <p className="text-center text-xs text-slate-400 mt-2">
+        <p className="text-center text-sm text-slate-400 mt-2">
           Mentor knows your resume · gaps · roadmap progress
         </p>
       </div>
