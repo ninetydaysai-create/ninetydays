@@ -65,7 +65,7 @@ export default function NotificationsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Notifications</h1>
+          <h1 className="text-4xl font-bold text-white">Notifications</h1>
           <p className="text-slate-400 mt-1">
             {unreadCount > 0 ? `${unreadCount} unread` : "All caught up"}
           </p>
@@ -76,7 +76,7 @@ export default function NotificationsPage() {
             size="sm"
             onClick={markAllRead}
             disabled={markingRead}
-            className="gap-2 border-white/10 text-slate-300 hover:text-white hover:bg-white/5"
+            className="gap-2 border-white/10 text-slate-300 hover:text-white hover:bg-white/5 text-base"
           >
             <CheckCheck className="h-4 w-4" />
             Mark all read
@@ -98,7 +98,7 @@ export default function NotificationsPage() {
           </div>
           <div className="text-center">
             <p className="font-semibold text-slate-400">No notifications yet</p>
-            <p className="text-sm text-slate-600 mt-1">We&apos;ll notify you about billing, milestones, and when you&apos;re falling behind.</p>
+            <p className="text-base text-slate-600 mt-1">We&apos;ll notify you about billing, milestones, and when you&apos;re falling behind.</p>
           </div>
         </div>
       ) : (
@@ -126,8 +126,8 @@ export default function NotificationsPage() {
                       <span className="h-2 w-2 rounded-full bg-indigo-400 shrink-0 mt-1.5" />
                     )}
                   </div>
-                  <p className="text-sm text-slate-400 mt-0.5 leading-relaxed">{n.body}</p>
-                  <p className="text-xs text-slate-600 mt-1.5">
+                  <p className="text-base text-slate-400 mt-0.5 leading-relaxed">{n.body}</p>
+                  <p className="text-sm text-slate-600 mt-1.5">
                     {formatDistanceToNow(new Date(n.createdAt), { addSuffix: true })}
                   </p>
                 </div>

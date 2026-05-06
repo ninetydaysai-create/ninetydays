@@ -66,13 +66,13 @@ function AddJobDialog({ onClose, onAdded }: { onClose: () => void; onAdded: (job
       <Card className="w-full max-w-md" onClick={(e) => e.stopPropagation()}>
         <CardContent className="pt-6 pb-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-slate-900">Add Job</h2>
+            <h2 className="text-2xl font-semibold text-slate-900">Add Job</h2>
             <Button variant="ghost" size="icon" onClick={onClose}><X className="h-4 w-4" /></Button>
           </div>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label className="text-sm font-medium text-slate-700">Company *</Label>
+                <Label className="text-base font-medium text-slate-700">Company *</Label>
                 <Input
                   value={form.company}
                   onChange={(e) => setForm({ ...form, company: e.target.value })}
@@ -82,7 +82,7 @@ function AddJobDialog({ onClose, onAdded }: { onClose: () => void; onAdded: (job
                 />
               </div>
               <div className="space-y-1.5">
-                <Label className="text-sm font-medium text-slate-700">Role *</Label>
+                <Label className="text-base font-medium text-slate-700">Role *</Label>
                 <Input
                   value={form.roleTitle}
                   onChange={(e) => setForm({ ...form, roleTitle: e.target.value })}
@@ -93,7 +93,7 @@ function AddJobDialog({ onClose, onAdded }: { onClose: () => void; onAdded: (job
               </div>
             </div>
             <div className="space-y-1.5">
-              <Label className="text-sm font-medium text-slate-700">Job URL</Label>
+              <Label className="text-base font-medium text-slate-700">Job URL</Label>
               <Input
                 value={form.jobUrl}
                 onChange={(e) => setForm({ ...form, jobUrl: e.target.value })}
@@ -104,7 +104,7 @@ function AddJobDialog({ onClose, onAdded }: { onClose: () => void; onAdded: (job
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label className="text-sm font-medium text-slate-700">Salary (optional)</Label>
+                <Label className="text-base font-medium text-slate-700">Salary (optional)</Label>
                 <Input
                   value={form.salary}
                   onChange={(e) => setForm({ ...form, salary: e.target.value })}
@@ -113,7 +113,7 @@ function AddJobDialog({ onClose, onAdded }: { onClose: () => void; onAdded: (job
                 />
               </div>
               <div className="space-y-1.5">
-                <Label className="text-sm font-medium text-slate-700">Location</Label>
+                <Label className="text-base font-medium text-slate-700">Location</Label>
                 <Input
                   value={form.location}
                   onChange={(e) => setForm({ ...form, location: e.target.value })}
@@ -123,12 +123,12 @@ function AddJobDialog({ onClose, onAdded }: { onClose: () => void; onAdded: (job
               </div>
             </div>
             <div className="space-y-1.5">
-              <Label className="text-sm font-medium text-slate-700">Job Description (optional)</Label>
+              <Label className="text-base font-medium text-slate-700">Job Description (optional)</Label>
               <textarea
                 value={form.rawJd}
                 onChange={(e) => setForm({ ...form, rawJd: e.target.value })}
                 placeholder="Paste the full job description here to enable AI match scoring..."
-                className="w-full min-h-[100px] text-sm text-slate-900 border border-slate-300 rounded-md px-3 py-2 bg-white placeholder:text-slate-400 resize-y"
+                className="w-full min-h-[100px] text-base text-slate-900 border border-slate-300 rounded-md px-3 py-2 bg-white placeholder:text-slate-400 resize-y"
               />
             </div>
             <Separator />
@@ -165,10 +165,10 @@ function OutcomeModal({
           <div className={`h-14 w-14 rounded-2xl mx-auto mb-3 flex items-center justify-center ${isOffer ? "bg-emerald-500/15" : "bg-slate-500/15"}`}>
             {isOffer ? <Trophy className="h-7 w-7 text-emerald-400" /> : <TrendingUp className="h-7 w-7 text-slate-400" />}
           </div>
-          <h2 className="text-xl font-bold text-white">
+          <h2 className="text-2xl font-bold text-white">
             {isOffer ? `You got the offer at ${company}!` : "Every rejection is data"}
           </h2>
-          <p className="text-slate-400 text-sm mt-1.5 leading-relaxed">
+          <p className="text-slate-400 text-base mt-1.5 leading-relaxed">
             {isOffer
               ? "Congrats! Share what clicked — this helps you repeat it."
               : `You didn't get this one at ${company}. That's okay. What did you learn?`}
@@ -182,7 +182,7 @@ function OutcomeModal({
               ? "e.g. The system design prep on NinetyDays really helped. They loved my distributed systems project..."
               : "e.g. I struggled with the behavioral questions. Need more STAR story practice..."}
             rows={3}
-            className="w-full text-sm text-white bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 resize-none placeholder:text-slate-500 focus:outline-none focus:border-white/20"
+            className="w-full text-base text-white bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 resize-none placeholder:text-slate-500 focus:outline-none focus:border-white/20"
           />
           <div className="flex gap-2">
             <Button variant="ghost" className="flex-1 text-slate-400" onClick={onSkip}>Skip</Button>
@@ -304,8 +304,8 @@ export default function JobsPage() {
 
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Job Tracker</h1>
-          <p className="text-slate-300 mt-1.5 text-base leading-relaxed">
+          <h1 className="text-4xl font-bold">Job Tracker</h1>
+          <p className="text-slate-300 mt-1.5 text-xl leading-relaxed">
             {jobs.length} application{jobs.length !== 1 ? "s" : ""} tracked
           </p>
         </div>
@@ -322,8 +322,8 @@ export default function JobsPage() {
               <Kanban className="h-8 w-8 text-slate-400" />
             </div>
             <div>
-              <p className="text-lg font-semibold">No applications tracked yet</p>
-              <p className="text-slate-300 mt-1 text-base">
+              <p className="text-xl font-semibold">No applications tracked yet</p>
+              <p className="text-slate-300 mt-1 text-xl">
                 Add jobs you&apos;re interested in and track them through each stage.
               </p>
             </div>
@@ -340,24 +340,24 @@ export default function JobsPage() {
             {grouped.filter((col) => col.jobs.length > 0).map((col) => (
               <div key={col.status}>
                 <div className="flex items-center gap-2 mb-3">
-                  <span className={`text-xs font-semibold px-2 py-1 rounded-full ${col.color}`}>
+                  <span className={`text-sm font-semibold px-2 py-1 rounded-full ${col.color}`}>
                     {col.label}
                   </span>
-                  <span className="text-xs text-slate-400">{col.jobs.length}</span>
+                  <span className="text-sm text-slate-400">{col.jobs.length}</span>
                 </div>
                 <div className="space-y-2">
                   {col.jobs.map((job) => (
                     <Card key={job.id} className="hover:shadow-md transition-shadow">
                       <CardContent className="pt-3 pb-3 px-3">
-                        <p className="font-semibold text-sm leading-tight">{job.company}</p>
-                        <p className="text-sm text-slate-300 mt-0.5 leading-tight">{job.roleTitle}</p>
-                        {job.location && <p className="text-sm text-slate-300 mt-1">{job.location}</p>}
-                        {job.salary && <p className="text-xs font-medium text-primary mt-1">{job.salary}</p>}
+                        <p className="font-semibold text-base leading-tight">{job.company}</p>
+                        <p className="text-base text-slate-300 mt-0.5 leading-tight">{job.roleTitle}</p>
+                        {job.location && <p className="text-base text-slate-300 mt-1">{job.location}</p>}
+                        {job.salary && <p className="text-sm font-medium text-primary mt-1">{job.salary}</p>}
                         {job.appliedAt && (
-                          <p className="text-xs text-slate-400 mt-1">Applied {format(new Date(job.appliedAt), "MMM d")}</p>
+                          <p className="text-sm text-slate-400 mt-1">Applied {format(new Date(job.appliedAt), "MMM d")}</p>
                         )}
                         {job.keywordMatchPct !== null && job.keywordMatchPct !== undefined && (
-                          <span className={`inline-block text-xs font-bold px-2 py-0.5 rounded-full mt-1.5 ${
+                          <span className={`inline-block text-sm font-bold px-2 py-0.5 rounded-full mt-1.5 ${
                             job.keywordMatchPct >= 70 ? "bg-emerald-500/15 text-emerald-400" :
                             job.keywordMatchPct >= 50 ? "bg-amber-500/15 text-amber-400" :
                             "bg-red-500/15 text-red-400"
@@ -369,7 +369,7 @@ export default function JobsPage() {
                           <button
                             onClick={(e) => { e.stopPropagation(); checkJobMatch(job); }}
                             disabled={matchingJobId === job.id}
-                            className="text-xs text-indigo-500 hover:text-indigo-700 font-medium flex items-center gap-1 mt-1.5"
+                            className="text-sm text-indigo-500 hover:text-indigo-700 font-medium flex items-center gap-1 mt-1.5"
                           >
                             {matchingJobId === job.id ? <><Loader2 className="h-3 w-3 animate-spin" />Analyzing...</> : "Check match →"}
                           </button>
@@ -385,7 +385,7 @@ export default function JobsPage() {
                           <select
                             value={job.status}
                             onChange={(e) => moveJob(job.id, e.target.value as JobStatus)}
-                            className="text-xs border rounded px-1 py-0.5 bg-background flex-1 min-w-0"
+                            className="text-sm border rounded px-1 py-0.5 bg-background flex-1 min-w-0"
                           >
                             {COLUMNS.map((c) => (
                               <option key={c.status} value={c.status}>{c.label}</option>
@@ -406,30 +406,30 @@ export default function JobsPage() {
               {grouped.map((col) => (
                 <div key={col.status} className="w-56 shrink-0">
                   <div className="flex items-center gap-2 mb-3">
-                    <span className={`text-xs font-semibold px-2 py-1 rounded-full ${col.color}`}>
+                    <span className={`text-sm font-semibold px-2 py-1 rounded-full ${col.color}`}>
                       {col.label}
                     </span>
-                    <span className="text-xs text-slate-400">{col.jobs.length}</span>
+                    <span className="text-sm text-slate-400">{col.jobs.length}</span>
                   </div>
                   <div className="space-y-2">
                     {col.jobs.map((job) => (
                       <Card key={job.id} className="hover:shadow-md transition-shadow">
                         <CardContent className="pt-3 pb-3 px-3">
-                          <p className="font-semibold text-sm leading-tight">{job.company}</p>
-                          <p className="text-sm text-slate-300 mt-0.5 leading-tight">{job.roleTitle}</p>
+                          <p className="font-semibold text-base leading-tight">{job.company}</p>
+                          <p className="text-base text-slate-300 mt-0.5 leading-tight">{job.roleTitle}</p>
                           {job.location && (
-                            <p className="text-sm text-slate-300 mt-1">{job.location}</p>
+                            <p className="text-base text-slate-300 mt-1">{job.location}</p>
                           )}
                           {job.salary && (
-                            <p className="text-xs font-medium text-primary mt-1">{job.salary}</p>
+                            <p className="text-sm font-medium text-primary mt-1">{job.salary}</p>
                           )}
                           {job.appliedAt && (
-                            <p className="text-xs text-slate-400 mt-1">
+                            <p className="text-sm text-slate-400 mt-1">
                               Applied {format(new Date(job.appliedAt), "MMM d")}
                             </p>
                           )}
                           {job.keywordMatchPct !== null && job.keywordMatchPct !== undefined && (
-                            <span className={`inline-block text-xs font-bold px-2 py-0.5 rounded-full mt-1.5 ${
+                            <span className={`inline-block text-sm font-bold px-2 py-0.5 rounded-full mt-1.5 ${
                               job.keywordMatchPct >= 70 ? "bg-emerald-500/15 text-emerald-400" :
                               job.keywordMatchPct >= 50 ? "bg-amber-500/15 text-amber-400" :
                               "bg-red-500/15 text-red-400"
@@ -441,7 +441,7 @@ export default function JobsPage() {
                             <button
                               onClick={(e) => { e.stopPropagation(); checkJobMatch(job); }}
                               disabled={matchingJobId === job.id}
-                              className="text-xs text-indigo-500 hover:text-indigo-700 font-medium flex items-center gap-1 mt-1.5"
+                              className="text-sm text-indigo-500 hover:text-indigo-700 font-medium flex items-center gap-1 mt-1.5"
                             >
                               {matchingJobId === job.id ? <><Loader2 className="h-3 w-3 animate-spin" />Analyzing...</> : "Check match →"}
                             </button>
@@ -457,7 +457,7 @@ export default function JobsPage() {
                             <select
                               value={job.status}
                               onChange={(e) => moveJob(job.id, e.target.value as JobStatus)}
-                              className="text-xs border rounded px-1 py-0.5 bg-background flex-1 min-w-0"
+                              className="text-sm border rounded px-1 py-0.5 bg-background flex-1 min-w-0"
                             >
                               {COLUMNS.map((c) => (
                                 <option key={c.status} value={c.status}>{c.label}</option>
@@ -469,7 +469,7 @@ export default function JobsPage() {
                     ))}
                     {col.jobs.length === 0 && (
                       <div className="border-2 border-dashed rounded-lg h-20 flex items-center justify-center">
-                        <p className="text-xs text-slate-400">Empty</p>
+                        <p className="text-sm text-slate-400">Empty</p>
                       </div>
                     )}
                   </div>

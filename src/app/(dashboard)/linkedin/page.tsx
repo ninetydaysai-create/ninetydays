@@ -82,8 +82,8 @@ export default function LinkedInPage() {
             <ExternalLink className="h-6 w-6 text-white" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-white">LinkedIn Optimizer</h1>
-            <p className="text-slate-300 text-sm mt-0.5">AI rewrites your headline and About section for product company hiring</p>
+            <h1 className="text-3xl font-bold text-white">LinkedIn Optimizer</h1>
+            <p className="text-slate-300 text-base mt-0.5">AI rewrites your headline and About section for product company hiring</p>
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
@@ -93,8 +93,8 @@ export default function LinkedInPage() {
                 <Icon className="h-4 w-4 text-[#0077b5]" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-white">{title}</p>
-                <p className="text-sm text-slate-300 mt-0.5 leading-relaxed">{desc}</p>
+                <p className="text-base font-semibold text-white">{title}</p>
+                <p className="text-base text-slate-300 mt-0.5 leading-relaxed">{desc}</p>
               </div>
             </div>
           ))}
@@ -103,27 +103,27 @@ export default function LinkedInPage() {
 
       {/* Input */}
       <div className="bg-[#161820] rounded-2xl border border-white/10 p-8 shadow-sm">
-        <h2 className="text-lg font-bold text-white mb-1">Your current LinkedIn profile</h2>
-        <p className="text-slate-300 text-base mb-6">Paste what you currently have. The AI will improve it for product company recruiters.</p>
+        <h2 className="text-xl font-bold text-white mb-1">Your current LinkedIn profile</h2>
+        <p className="text-slate-300 text-xl mb-6">Paste what you currently have. The AI will improve it for product company recruiters.</p>
         <div className="space-y-5">
           <div className="space-y-2">
-            <Label className="text-sm font-semibold text-slate-300">Current headline <span className="text-red-400">*</span></Label>
+            <Label className="text-base font-semibold text-slate-300">Current headline <span className="text-red-400">*</span></Label>
             <Textarea
               value={headline}
               onChange={(e) => setHeadline(e.target.value)}
               placeholder="e.g. Senior Software Engineer at TCS | Java | Spring Boot | 7 Years Experience"
               rows={2}
-              className="text-sm bg-white/5 border-white/10 focus:bg-white/8 transition-colors resize-none"
+              className="text-base bg-white/5 border-white/10 focus:bg-white/8 transition-colors resize-none"
             />
           </div>
           <div className="space-y-2">
-            <Label className="text-sm font-semibold text-slate-300">Current About section <span className="text-slate-400 font-normal">(optional)</span></Label>
+            <Label className="text-base font-semibold text-slate-300">Current About section <span className="text-slate-400 font-normal">(optional)</span></Label>
             <Textarea
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
               placeholder="Paste your current LinkedIn summary / About section here..."
               rows={7}
-              className="text-sm bg-white/5 border-white/10 focus:bg-white/8 transition-colors resize-none"
+              className="text-base bg-white/5 border-white/10 focus:bg-white/8 transition-colors resize-none"
             />
           </div>
           <Button
@@ -151,7 +151,7 @@ export default function LinkedInPage() {
         <div className="space-y-4">
           <div className="flex items-center gap-2 text-emerald-400">
             <CheckCircle2 className="h-5 w-5" />
-            <span className="font-semibold text-sm">Your optimized profile is ready — copy and paste into LinkedIn</span>
+            <span className="font-semibold text-base">Your optimized profile is ready — copy and paste into LinkedIn</span>
           </div>
 
           {/* Score card */}
@@ -168,17 +168,17 @@ export default function LinkedInPage() {
             ];
             return (
               <div className={`rounded-2xl border p-6 ${ringBg}`}>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-4">Your current LinkedIn score</p>
+                <p className="text-sm font-bold text-slate-400 uppercase tracking-wide mb-4">Your current LinkedIn score</p>
                 <div className="flex items-center gap-6">
                   <div className="shrink-0 text-center">
-                    <div className={`text-5xl font-black ${ring}`}>{s}</div>
-                    <div className={`text-xs font-bold mt-1 ${ring}`}>{label}</div>
-                    <div className="text-xs text-slate-500 mt-0.5">out of 100</div>
+                    <div className={`text-6xl font-black ${ring}`}>{s}</div>
+                    <div className={`text-sm font-bold mt-1 ${ring}`}>{label}</div>
+                    <div className="text-sm text-slate-500 mt-0.5">out of 100</div>
                   </div>
                   <div className="flex-1 space-y-2.5">
                     {dims.map((d) => (
                       <div key={d.key}>
-                        <div className="flex justify-between text-xs mb-1">
+                        <div className="flex justify-between text-sm mb-1">
                           <span className="text-slate-300 font-medium">{d.key}</span>
                           <span className="text-slate-400">{d.val}/25</span>
                         </div>
@@ -192,7 +192,7 @@ export default function LinkedInPage() {
                     ))}
                   </div>
                 </div>
-                <p className="text-xs text-slate-500 mt-4">Scroll down to see your optimized version ↓</p>
+                <p className="text-sm text-slate-500 mt-4">Scroll down to see your optimized version ↓</p>
               </div>
             );
           })()}
@@ -200,19 +200,19 @@ export default function LinkedInPage() {
           {/* Headline */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
-              <h3 className="font-bold text-slate-900 text-sm uppercase tracking-wide">Optimized Headline</h3>
-              <Button size="sm" variant="ghost" className="gap-1.5 text-xs" onClick={() => copy(result.outputHeadline, "Headline")}>
+              <h3 className="font-bold text-slate-900 text-base uppercase tracking-wide">Optimized Headline</h3>
+              <Button size="sm" variant="ghost" className="gap-1.5 text-sm" onClick={() => copy(result.outputHeadline, "Headline")}>
                 <Copy className="h-3 w-3" /> Copy
               </Button>
             </div>
             <div className="px-6 py-5">
-              <p className="text-base font-semibold text-slate-900">{result.outputHeadline}</p>
+              <p className="text-xl font-semibold text-slate-900">{result.outputHeadline}</p>
               {result.alternatives.length > 0 && (
                 <div className="mt-4 space-y-2">
-                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Alternatives</p>
+                  <p className="text-sm font-semibold text-slate-500 uppercase tracking-wide">Alternatives</p>
                   {result.alternatives.map((alt, i) => (
                     <div key={i} className="flex items-center justify-between gap-3 bg-slate-50 border border-slate-200 rounded-lg px-4 py-3">
-                      <span className="text-sm text-slate-700">{alt}</span>
+                      <span className="text-base text-slate-700">{alt}</span>
                       <button className="shrink-0 text-slate-500 hover:text-slate-700 transition-colors" onClick={() => copy(alt, "Alternative")}>
                         <Copy className="h-3.5 w-3.5" />
                       </button>
@@ -226,23 +226,23 @@ export default function LinkedInPage() {
           {/* Summary */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
-              <h3 className="font-bold text-slate-900 text-sm uppercase tracking-wide">Optimized About Section</h3>
-              <Button size="sm" variant="ghost" className="gap-1.5 text-xs" onClick={() => copy(result.outputSummary, "About section")}>
+              <h3 className="font-bold text-slate-900 text-base uppercase tracking-wide">Optimized About Section</h3>
+              <Button size="sm" variant="ghost" className="gap-1.5 text-sm" onClick={() => copy(result.outputSummary, "About section")}>
                 <Copy className="h-3 w-3" /> Copy
               </Button>
             </div>
             <div className="px-6 py-5">
-              <p className="text-base text-slate-700 whitespace-pre-wrap leading-relaxed">{result.outputSummary}</p>
+              <p className="text-xl text-slate-700 whitespace-pre-wrap leading-relaxed">{result.outputSummary}</p>
             </div>
           </div>
 
           {/* Keywords */}
           {result.keywordsAdded.length > 0 && (
             <div className="bg-emerald-50 rounded-2xl border border-emerald-100 px-6 py-5">
-              <p className="text-xs font-bold text-emerald-700 uppercase tracking-wide mb-3">Keywords added to improve visibility</p>
+              <p className="text-sm font-bold text-emerald-700 uppercase tracking-wide mb-3">Keywords added to improve visibility</p>
               <div className="flex flex-wrap gap-2">
                 {result.keywordsAdded.map((kw) => (
-                  <Badge key={kw} className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 border-0 text-xs">{kw}</Badge>
+                  <Badge key={kw} className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 border-0 text-sm">{kw}</Badge>
                 ))}
               </div>
             </div>
@@ -258,8 +258,8 @@ export default function LinkedInPage() {
             <PenLine className="h-5 w-5 text-indigo-400" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-white">Post Generator</h2>
-            <p className="text-slate-300 text-sm">Turn your career wins into 3 ready-to-post LinkedIn updates</p>
+            <h2 className="text-2xl font-bold text-white">Post Generator</h2>
+            <p className="text-slate-300 text-base">Turn your career wins into 3 ready-to-post LinkedIn updates</p>
           </div>
         </div>
         <LinkedInPostGenerator />

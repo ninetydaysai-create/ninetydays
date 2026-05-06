@@ -62,14 +62,14 @@ export default async function SettingsPage() {
   return (
     <div className="max-w-2xl mx-auto space-y-8">
       <div>
-        <h1 className="text-4xl font-bold">Settings</h1>
-        <p className="text-slate-300 mt-2 text-base">Manage your account and subscription.</p>
+        <h1 className="text-5xl font-bold">Settings</h1>
+        <p className="text-slate-300 mt-2 text-xl">Manage your account and subscription.</p>
       </div>
 
       {/* Account */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Account details</CardTitle>
+          <CardTitle className="text-xl">Account details</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {[
@@ -111,16 +111,16 @@ export default async function SettingsPage() {
           <CardHeader>
             <div className="flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-primary" />
-              <CardTitle className="text-lg">Upgrade to Pro</CardTitle>
+              <CardTitle className="text-xl">Upgrade to Pro</CardTitle>
             </div>
-            <CardDescription className="text-base">
+            <CardDescription className="text-xl">
               Unlock everything you need to land your product company role.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {proFeatures.map((f) => (
-                <div key={f} className="flex items-center gap-2.5 text-sm">
+                <div key={f} className="flex items-center gap-2.5 text-base">
                   <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />
                   <span>{f}</span>
                 </div>
@@ -134,15 +134,15 @@ export default async function SettingsPage() {
               {/* Sprint — one-time */}
               <div className="rounded-xl border border-border p-5 space-y-3">
                 <div>
-                  <p className="text-xs font-bold text-indigo-400 uppercase tracking-wide">90-Day Sprint</p>
+                  <p className="text-sm font-bold text-indigo-400 uppercase tracking-wide">90-Day Sprint</p>
                   <div className="mt-1">
-                    <span className="text-2xl font-bold">{sprint.display}</span>
+                    <span className="text-3xl font-bold">{sprint.display}</span>
                   </div>
-                  <p className="text-sm text-slate-300 mt-1">{sprint.note}</p>
+                  <p className="text-base text-slate-300 mt-1">{sprint.note}</p>
                 </div>
                 <form action="/api/checkout" method="POST">
                   <input type="hidden" name="plan" value="sprint" />
-                  <Button type="submit" variant="outline" className="w-full h-9 font-semibold text-sm">
+                  <Button type="submit" variant="outline" className="w-full h-9 font-semibold text-base">
                     Get Sprint
                   </Button>
                 </form>
@@ -151,15 +151,15 @@ export default async function SettingsPage() {
               {/* Monthly */}
               <div className="rounded-xl border border-border p-5 space-y-3">
                 <div>
-                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wide">Monthly</p>
+                  <p className="text-sm font-bold text-slate-400 uppercase tracking-wide">Monthly</p>
                   <div className="mt-1">
-                    <span className="text-2xl font-bold">{monthly.display}</span>
+                    <span className="text-3xl font-bold">{monthly.display}</span>
                   </div>
-                  <p className="text-sm text-slate-300 mt-1">{monthly.note}</p>
+                  <p className="text-base text-slate-300 mt-1">{monthly.note}</p>
                 </div>
                 <form action="/api/checkout" method="POST">
                   <input type="hidden" name="plan" value="monthly" />
-                  <Button type="submit" variant="outline" className="w-full h-9 font-semibold text-sm">
+                  <Button type="submit" variant="outline" className="w-full h-9 font-semibold text-base">
                     Start monthly
                   </Button>
                 </form>
@@ -168,23 +168,23 @@ export default async function SettingsPage() {
               {/* Annual — recommended */}
               <div className="rounded-xl border-2 border-primary p-5 space-y-3 relative">
                 {annual.badge && (
-                  <span className="absolute -top-3 left-4 bg-primary text-white text-xs font-bold px-3 py-0.5 rounded-full">
+                  <span className="absolute -top-3 left-4 bg-primary text-white text-sm font-bold px-3 py-0.5 rounded-full">
                     {annual.badge}
                   </span>
                 )}
                 <div>
-                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wide">Annual</p>
+                  <p className="text-sm font-bold text-slate-400 uppercase tracking-wide">Annual</p>
                   <div className="mt-1 flex items-end gap-1.5">
-                    <span className="text-2xl font-bold">{annual.subDisplay ?? annual.display}</span>
+                    <span className="text-3xl font-bold">{annual.subDisplay ?? annual.display}</span>
                     {annual.subDisplay && (
-                      <span className="text-slate-400 text-xs mb-0.5">/mo</span>
+                      <span className="text-slate-400 text-sm mb-0.5">/mo</span>
                     )}
                   </div>
-                  <p className="text-xs text-emerald-400 font-medium mt-1">{annual.display} · {annual.note}</p>
+                  <p className="text-sm text-emerald-400 font-medium mt-1">{annual.display} · {annual.note}</p>
                 </div>
                 <form action="/api/checkout" method="POST">
                   <input type="hidden" name="plan" value="annual" />
-                  <Button type="submit" className="w-full h-9 font-semibold text-sm">
+                  <Button type="submit" className="w-full h-9 font-semibold text-base">
                     Best value
                   </Button>
                 </form>
@@ -197,8 +197,8 @@ export default async function SettingsPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.955 11.955 0 013 10c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
               </svg>
               <div>
-                <p className="text-sm font-semibold text-emerald-400">30-day money-back guarantee</p>
-                <p className="text-sm text-slate-300 mt-0.5">
+                <p className="text-base font-semibold text-emerald-400">30-day money-back guarantee</p>
+                <p className="text-base text-slate-300 mt-0.5">
                   Complete your profile and generate your roadmap. If you don&apos;t find value within 30 days, email us for a full refund — no questions asked.
                 </p>
               </div>
@@ -209,12 +209,12 @@ export default async function SettingsPage() {
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <Users className="h-4 w-4 text-indigo-500" />
-                  <p className="font-semibold text-sm">Team plan — coming soon</p>
+                  <p className="font-semibold text-base">Team plan — coming soon</p>
                 </div>
-                <p className="text-sm text-slate-300">5 seats · $29/mo · Perfect for bootcamps, college placement cells, and study groups</p>
+                <p className="text-base text-slate-300">5 seats · $29/mo · Perfect for bootcamps, college placement cells, and study groups</p>
               </div>
               <a href="mailto:team@ninetydays.ai?subject=Team Plan Interest" target="_blank" rel="noopener noreferrer">
-                <Button variant="outline" size="sm" className="shrink-0">Join waitlist</Button>
+                <Button variant="outline" size="sm" className="shrink-0 text-base">Join waitlist</Button>
               </a>
             </div>
           </CardContent>
@@ -224,7 +224,7 @@ export default async function SettingsPage() {
           <CardHeader>
             <div className="flex items-center gap-2">
               <Crown className="h-5 w-5 text-yellow-500" />
-              <CardTitle className="text-lg">
+              <CardTitle className="text-xl">
                 {isSprint ? "90-Day Sprint" : "Pro subscription"}
               </CardTitle>
             </div>
@@ -238,19 +238,19 @@ export default async function SettingsPage() {
             {isSprint ? (
               // Sprint users: offer to convert to subscription before expiry
               <div className="space-y-3">
-                <p className="text-base text-slate-300">
+                <p className="text-xl text-slate-300">
                   Continue your progress with a full subscription when your sprint ends.
                 </p>
                 <div className="grid grid-cols-2 gap-3">
                   <form action="/api/checkout" method="POST">
                     <input type="hidden" name="plan" value="monthly" />
-                    <Button type="submit" variant="outline" className="w-full h-9 text-sm font-semibold">
+                    <Button type="submit" variant="outline" className="w-full h-9 text-base font-semibold">
                       {monthly.display} — monthly
                     </Button>
                   </form>
                   <form action="/api/checkout" method="POST">
                     <input type="hidden" name="plan" value="annual" />
-                    <Button type="submit" className="w-full h-9 text-sm font-semibold">
+                    <Button type="submit" className="w-full h-9 text-base font-semibold">
                       {annual.display} — best value
                     </Button>
                   </form>
@@ -283,7 +283,7 @@ export default async function SettingsPage() {
         <CardHeader>
           <div className="flex items-center gap-2">
             <Users className="h-5 w-5 text-indigo-500" />
-            <CardTitle className="text-lg">Refer a friend</CardTitle>
+            <CardTitle className="text-xl">Refer a friend</CardTitle>
           </div>
           <CardDescription>
             Share your link — each friend who joins and upgrades earns you 1 free month.

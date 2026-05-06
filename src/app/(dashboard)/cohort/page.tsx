@@ -31,9 +31,9 @@ const AVATAR_COLORS = [
 ];
 
 function ReadinessRing({ score }: { score: number | null }) {
-  if (score === null) return <span className="text-xs text-slate-500">No data yet</span>;
+  if (score === null) return <span className="text-sm text-slate-500">No data yet</span>;
   const color = score >= 70 ? "text-emerald-400" : score >= 40 ? "text-amber-400" : "text-red-400";
-  return <span className={`text-lg font-black ${color}`}>{score}<span className="text-xs font-semibold text-slate-500">%</span></span>;
+  return <span className={`text-xl font-black ${color}`}>{score}<span className="text-sm font-semibold text-slate-500">%</span></span>;
 }
 
 export default function CohortPage() {
@@ -74,8 +74,8 @@ export default function CohortPage() {
     return (
       <div className="max-w-2xl mx-auto text-center py-20 space-y-3">
         <Users className="h-12 w-12 text-slate-500 mx-auto" />
-        <p className="text-lg font-semibold text-white">Complete onboarding to join a cohort</p>
-        <p className="text-slate-400 text-sm">Set your target role first, then your accountability group will be assigned.</p>
+        <p className="text-xl font-semibold text-white">Complete onboarding to join a cohort</p>
+        <p className="text-slate-400 text-base">Set your target role first, then your accountability group will be assigned.</p>
       </div>
     );
   }
@@ -94,13 +94,13 @@ export default function CohortPage() {
             <Users className="h-5 w-5 text-rose-400" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-white">Your Accountability Group</h1>
-            <p className="text-slate-400 text-sm">5 engineers · same role · Week {group.weekSlot}</p>
+            <h1 className="text-2xl font-bold text-white">Your Accountability Group</h1>
+            <p className="text-slate-400 text-base">5 engineers · same role · Week {group.weekSlot}</p>
           </div>
         </div>
         <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10">
           <span className="h-1.5 w-1.5 rounded-full bg-rose-400" />
-          <span className="text-xs font-semibold text-slate-300">{roleLabel}</span>
+          <span className="text-sm font-semibold text-slate-300">{roleLabel}</span>
         </div>
       </div>
 
@@ -110,8 +110,8 @@ export default function CohortPage() {
           <div className="h-14 w-14 rounded-full bg-indigo-500/10 flex items-center justify-center mx-auto">
             <Users className="h-6 w-6 text-indigo-400" />
           </div>
-          <p className="text-white font-semibold text-lg">Your group is forming</p>
-          <p className="text-slate-400 text-sm max-w-xs mx-auto leading-relaxed">
+          <p className="text-white font-semibold text-xl">Your group is forming</p>
+          <p className="text-slate-400 text-base max-w-xs mx-auto leading-relaxed">
             Other {roleLabel} engineers will be matched to your group as they join this week.
             Check back soon.
           </p>
@@ -119,7 +119,7 @@ export default function CohortPage() {
       ) : (
         /* Member cards */
         <div className="space-y-3">
-          <p className="text-xs font-bold text-slate-500 uppercase tracking-wide px-1">Group members — ranked by readiness</p>
+          <p className="text-sm font-bold text-slate-500 uppercase tracking-wide px-1">Group members — ranked by readiness</p>
           {sorted.map((m, i) => {
             const isSelf = m.userId === self;
             const colorClass = AVATAR_COLORS[i % AVATAR_COLORS.length];
@@ -130,10 +130,10 @@ export default function CohortPage() {
               >
                 {/* Rank + avatar */}
                 <div className="flex items-center gap-3 shrink-0">
-                  <span className="text-xs font-bold text-slate-500 w-4 text-center">
+                  <span className="text-sm font-bold text-slate-500 w-4 text-center">
                     {i === 0 ? <Trophy className="h-3.5 w-3.5 text-amber-400 inline" /> : `#${i + 1}`}
                   </span>
-                  <div className={`h-10 w-10 rounded-xl flex items-center justify-center text-sm font-black shrink-0 ${colorClass}`}>
+                  <div className={`h-10 w-10 rounded-xl flex items-center justify-center text-base font-black shrink-0 ${colorClass}`}>
                     {m.initial}
                   </div>
                 </div>
@@ -141,10 +141,10 @@ export default function CohortPage() {
                 {/* Name + self badge */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <p className="text-sm font-semibold text-white truncate">{m.displayName}</p>
+                    <p className="text-base font-semibold text-white truncate">{m.displayName}</p>
                     {isSelf && <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-400 border border-indigo-500/20 shrink-0">You</span>}
                   </div>
-                  <p className="text-xs text-slate-500 mt-0.5">Joined week {group.weekSlot}</p>
+                  <p className="text-sm text-slate-500 mt-0.5">Joined week {group.weekSlot}</p>
                 </div>
 
                 {/* Stats */}
@@ -156,14 +156,14 @@ export default function CohortPage() {
                   <div className="text-center">
                     <div className="flex items-center gap-0.5">
                       <Flame className={`h-4 w-4 ${m.streak > 0 ? "text-orange-400" : "text-slate-600"}`} />
-                      <span className={`text-base font-black ${m.streak > 0 ? "text-orange-400" : "text-slate-600"}`}>{m.streak}</span>
+                      <span className={`text-xl font-black ${m.streak > 0 ? "text-orange-400" : "text-slate-600"}`}>{m.streak}</span>
                     </div>
                     <p className="text-[10px] text-slate-500 mt-0.5">Streak</p>
                   </div>
                   <div className="text-center">
                     <div className="flex items-center gap-0.5">
                       <CheckSquare className={`h-4 w-4 ${m.tasksThisWeek > 0 ? "text-emerald-400" : "text-slate-600"}`} />
-                      <span className={`text-base font-black ${m.tasksThisWeek > 0 ? "text-emerald-400" : "text-slate-600"}`}>{m.tasksThisWeek}</span>
+                      <span className={`text-xl font-black ${m.tasksThisWeek > 0 ? "text-emerald-400" : "text-slate-600"}`}>{m.tasksThisWeek}</span>
                     </div>
                     <p className="text-[10px] text-slate-500 mt-0.5">This week</p>
                   </div>
@@ -176,19 +176,19 @@ export default function CohortPage() {
 
       {/* Weekly check-in */}
       <div className="bg-[#161820] rounded-2xl border border-white/10 p-5">
-        <p className="text-sm font-bold text-white mb-1">Weekly check-in</p>
-        <p className="text-xs text-slate-500 mb-3">What did you work on this week? Your group will see this soon.</p>
+        <p className="text-base font-bold text-white mb-1">Weekly check-in</p>
+        <p className="text-sm text-slate-500 mb-3">What did you work on this week? Your group will see this soon.</p>
         <textarea
           value={checkin}
           onChange={(e) => setCheckin(e.target.value)}
           placeholder="e.g. Finished Week 3 tasks, did 2 mock interviews, fixed my resume bullet points..."
           rows={3}
-          className="w-full text-sm text-white bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 resize-none placeholder:text-slate-500 focus:outline-none focus:border-white/20"
+          className="w-full text-base text-white bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 resize-none placeholder:text-slate-500 focus:outline-none focus:border-white/20"
         />
         <button
           onClick={postCheckin}
           disabled={posting || !checkin.trim()}
-          className="mt-2 px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-400 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors flex items-center gap-2"
+          className="mt-2 px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-400 disabled:opacity-40 disabled:cursor-not-allowed text-white text-base font-semibold transition-colors flex items-center gap-2"
         >
           {posting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : null}
           Post check-in

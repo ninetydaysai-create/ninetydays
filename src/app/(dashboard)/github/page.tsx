@@ -47,8 +47,8 @@ export default function GitHubPage() {
             <GitFork className="h-6 w-6 text-white" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-white">GitHub Profile Optimizer</h1>
-            <p className="text-slate-300 text-sm mt-0.5">AI rewrites your README to impress product company recruiters</p>
+            <h1 className="text-3xl font-bold text-white">GitHub Profile Optimizer</h1>
+            <p className="text-slate-300 text-base mt-0.5">AI rewrites your README to impress product company recruiters</p>
           </div>
         </div>
 
@@ -59,8 +59,8 @@ export default function GitHubPage() {
                 <Icon className="h-4 w-4 text-indigo-400" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-white">{title}</p>
-                <p className="text-sm text-slate-300 mt-0.5 leading-relaxed">{desc}</p>
+                <p className="text-base font-semibold text-white">{title}</p>
+                <p className="text-base text-slate-300 mt-0.5 leading-relaxed">{desc}</p>
               </div>
             </div>
           ))}
@@ -69,16 +69,16 @@ export default function GitHubPage() {
 
       {/* Input */}
       <div className="bg-[#161820] rounded-2xl border border-white/10 p-8 shadow-sm">
-        <h2 className="text-lg font-bold text-white mb-1">Paste your current README</h2>
-        <p className="text-slate-300 text-base mb-6">Leave blank to generate a professional README from scratch based on your profile.</p>
+        <h2 className="text-xl font-bold text-white mb-1">Paste your current README</h2>
+        <p className="text-slate-300 text-xl mb-6">Leave blank to generate a professional README from scratch based on your profile.</p>
         <div className="space-y-2">
-          <Label className="text-sm font-semibold text-slate-300">README.md content</Label>
+          <Label className="text-base font-semibold text-slate-300">README.md content</Label>
           <Textarea
             value={currentReadme}
             onChange={(e) => setCurrentReadme(e.target.value)}
             placeholder="# Hi, I'm Gaurav 👋&#10;&#10;Paste your current GitHub profile README here, or leave empty to generate from scratch..."
             rows={10}
-            className="font-mono text-sm bg-white/5 border-white/10 resize-none focus:bg-white/8 transition-colors"
+            className="font-mono text-base bg-white/5 border-white/10 resize-none focus:bg-white/8 transition-colors"
           />
         </div>
         <Button
@@ -106,13 +106,13 @@ export default function GitHubPage() {
           <div className="flex items-center justify-between px-8 py-5 border-b border-slate-200">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="h-5 w-5 text-emerald-600" />
-              <h2 className="text-base font-bold text-slate-900">Your optimized README is ready</h2>
+              <h2 className="text-xl font-bold text-slate-900">Your optimized README is ready</h2>
             </div>
             <div className="flex items-center gap-2">
               <Button
                 size="sm"
                 variant="outline"
-                className="rounded-lg text-xs font-semibold"
+                className="rounded-lg text-sm font-semibold"
                 onClick={() => setPreview(!preview)}
               >
                 <Eye className="h-3 w-3 mr-1" />
@@ -120,7 +120,7 @@ export default function GitHubPage() {
               </Button>
               <Button
                 size="sm"
-                className="rounded-lg text-xs font-semibold bg-slate-900 hover:bg-slate-800"
+                className="rounded-lg text-sm font-semibold bg-slate-900 hover:bg-slate-800"
                 onClick={() => {
                   navigator.clipboard.writeText(result);
                   toast.success("README copied to clipboard");
@@ -133,7 +133,7 @@ export default function GitHubPage() {
           </div>
           <div className="p-8">
             {preview ? (
-              <div className="prose prose-slate max-w-none text-sm">
+              <div className="prose prose-slate max-w-none text-base">
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>{result}</ReactMarkdown>
               </div>
             ) : (
@@ -141,7 +141,7 @@ export default function GitHubPage() {
                 value={result}
                 onChange={(e) => setResult(e.target.value)}
                 rows={24}
-                className="font-mono text-sm bg-slate-50 border-slate-200 resize-none w-full text-slate-700"
+                className="font-mono text-base bg-slate-50 border-slate-200 resize-none w-full text-slate-700"
               />
             )}
           </div>

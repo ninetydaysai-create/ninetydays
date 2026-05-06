@@ -39,7 +39,7 @@ function CopyButton({ text, className }: { text: string; className?: string }) {
     <Button
       variant="outline"
       size="sm"
-      className={`gap-1.5 h-9 text-sm ${className ?? ""}`}
+      className={`gap-1.5 h-9 text-base ${className ?? ""}`}
       onClick={handleCopy}
     >
       {copied ? (
@@ -103,8 +103,8 @@ export default function CoverLetterPage() {
     <div className="max-w-3xl mx-auto space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-white">Cover Letter Generator</h1>
-        <p className="text-slate-400 mt-1 text-base">
+        <h1 className="text-4xl font-bold text-white">Cover Letter Generator</h1>
+        <p className="text-slate-400 mt-1 text-xl">
           Paste a job description and get a tailored, non-generic cover letter in seconds.
         </p>
       </div>
@@ -117,7 +117,7 @@ export default function CoverLetterPage() {
           </div>
           <div>
             <p className="font-bold text-white">Paste job description</p>
-            <p className="text-xs text-slate-400">
+            <p className="text-sm text-slate-400">
               The more detail you include, the more targeted your letter will be
             </p>
           </div>
@@ -127,20 +127,20 @@ export default function CoverLetterPage() {
           value={jdText}
           onChange={(e) => setJdText(e.target.value)}
           placeholder="Paste the full job description here..."
-          className="min-h-[160px] text-sm resize-none rounded-xl border-slate-200 focus:border-indigo-300"
+          className="min-h-[160px] text-base resize-none rounded-xl border-slate-200 focus:border-indigo-300"
           disabled={generating}
         />
 
         {/* Tone selector */}
         <div className="space-y-2">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Tone</p>
+          <p className="text-sm font-semibold text-slate-400 uppercase tracking-widest">Tone</p>
           <div className="flex gap-2 flex-wrap">
             {TONE_OPTIONS.map(({ value, label }) => (
               <button
                 key={value}
                 onClick={() => setTone(value)}
                 disabled={generating}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all ${
+                className={`px-4 py-1.5 rounded-full text-base font-medium border transition-all ${
                   tone === value
                     ? "bg-indigo-500 text-white border-indigo-500 shadow-sm"
                     : "bg-white/5 text-slate-400 border-white/10 hover:border-indigo-500/30 hover:text-indigo-400"
@@ -153,14 +153,14 @@ export default function CoverLetterPage() {
         </div>
 
         {error && (
-          <div className="flex items-center gap-2 text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
+          <div className="flex items-center gap-2 text-base text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
             <AlertTriangle className="h-4 w-4 shrink-0" />
             {error}
           </div>
         )}
 
         <div className="flex items-center justify-between gap-4">
-          <p className="text-xs text-slate-400">
+          <p className="text-sm text-slate-400">
             {jdText.length > 0
               ? `${jdText.length} characters`
               : "Tip: include the full JD for best results"}
@@ -190,11 +190,11 @@ export default function CoverLetterPage() {
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-5">
           {/* Key highlights */}
           <div className="bg-indigo-50 rounded-xl border border-indigo-100 p-4 space-y-2">
-            <p className="text-xs font-bold text-indigo-600 uppercase tracking-widest mb-3">
+            <p className="text-sm font-bold text-indigo-600 uppercase tracking-widest mb-3">
               Key highlights
             </p>
             {result.highlights.map((highlight, i) => (
-              <div key={i} className="flex items-start gap-2 text-sm text-indigo-700">
+              <div key={i} className="flex items-start gap-2 text-base text-indigo-700">
                 <CheckCircle2 className="h-4 w-4 text-indigo-500 shrink-0 mt-0.5" />
                 {highlight}
               </div>
@@ -203,11 +203,11 @@ export default function CoverLetterPage() {
 
           {/* Letter */}
           <div>
-            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">
+            <p className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-3">
               Your cover letter
             </p>
             <div className="bg-slate-50 rounded-xl border border-slate-200 px-5 py-5">
-              <p className="text-base text-slate-700 leading-relaxed whitespace-pre-wrap">
+              <p className="text-xl text-slate-700 leading-relaxed whitespace-pre-wrap">
                 {result.coverLetter}
               </p>
             </div>
@@ -219,7 +219,7 @@ export default function CoverLetterPage() {
             <Button
               variant="ghost"
               size="sm"
-              className="gap-1.5 h-9 text-sm text-slate-500"
+              className="gap-1.5 h-9 text-base text-slate-500"
               onClick={regenerate}
               disabled={generating}
             >
