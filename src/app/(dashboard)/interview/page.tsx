@@ -49,20 +49,20 @@ const typeConfig: Record<InterviewType, { label: string; description: string; ic
 
 function ScorecardView({ scorecard }: { scorecard: unknown }) {
   if (!scorecard || typeof scorecard !== "object") {
-    return <p className="text-sm text-slate-400">No scorecard available for this session.</p>;
+    return <p className="text-base text-slate-400">No scorecard available for this session.</p>;
   }
   const sc = scorecard as Record<string, unknown>;
   return (
-    <div className="space-y-3 text-sm">
+    <div className="space-y-3 text-base">
       {!!sc.feedback && (
         <div className="bg-white/5 rounded-xl p-4 border border-white/8">
-          <p className="font-bold text-slate-300 text-xs uppercase tracking-widest mb-2">Overall feedback</p>
+          <p className="font-bold text-slate-300 text-sm uppercase tracking-widest mb-2">Overall feedback</p>
           <p className="text-slate-300 leading-relaxed">{String(sc.feedback)}</p>
         </div>
       )}
       {Array.isArray(sc.strengths) && sc.strengths.length > 0 && (
         <div>
-          <p className="font-bold text-slate-300 text-xs uppercase tracking-widest mb-2">Strengths</p>
+          <p className="font-bold text-slate-300 text-sm uppercase tracking-widest mb-2">Strengths</p>
           <ul className="space-y-1">
             {sc.strengths.map((s: unknown, i: number) => (
               <li key={i} className="flex items-start gap-2 text-slate-300">
@@ -74,7 +74,7 @@ function ScorecardView({ scorecard }: { scorecard: unknown }) {
       )}
       {Array.isArray(sc.improvements) && sc.improvements.length > 0 && (
         <div>
-          <p className="font-bold text-slate-300 text-xs uppercase tracking-widest mb-2">To improve</p>
+          <p className="font-bold text-slate-300 text-sm uppercase tracking-widest mb-2">To improve</p>
           <ul className="space-y-1">
             {sc.improvements.map((s: unknown, i: number) => (
               <li key={i} className="flex items-start gap-2 text-slate-300">
@@ -86,7 +86,7 @@ function ScorecardView({ scorecard }: { scorecard: unknown }) {
       )}
       {/* Fallback: render all keys */}
       {!sc.feedback && !sc.strengths && !sc.improvements && (
-        <pre className="text-xs text-slate-400 bg-white/5 rounded-lg p-3 overflow-auto">{JSON.stringify(sc, null, 2)}</pre>
+        <pre className="text-sm text-slate-400 bg-white/5 rounded-lg p-3 overflow-auto">{JSON.stringify(sc, null, 2)}</pre>
       )}
     </div>
   );
@@ -179,8 +179,8 @@ export default function InterviewPage() {
       )}
 
       <div>
-        <h1 className="text-3xl font-bold">Interview Prep</h1>
-        <p className="text-slate-300 mt-2 text-base leading-relaxed">
+        <h1 className="text-4xl font-bold">Interview Prep</h1>
+        <p className="text-slate-300 mt-2 text-xl leading-relaxed">
           AI mock interviews. Get scored with detailed feedback after each session.
         </p>
       </div>
@@ -190,25 +190,25 @@ export default function InterviewPage() {
         <div className="grid grid-cols-3 gap-4">
           <Card>
             <CardContent className="pt-6 text-center">
-              <div className="text-3xl font-bold">{sessions.length}</div>
-              <div className="text-sm text-slate-300 mt-1">Sessions done</div>
+              <div className="text-4xl font-bold">{sessions.length}</div>
+              <div className="text-base text-slate-300 mt-1">Sessions done</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="pt-6 text-center">
               <div className="flex items-center justify-center gap-1.5">
                 <Trophy className="h-5 w-5 text-yellow-500" />
-                <div className="text-3xl font-bold">{avg ?? "—"}</div>
+                <div className="text-4xl font-bold">{avg ?? "—"}</div>
               </div>
-              <div className="text-sm text-slate-300 mt-1">Avg score</div>
+              <div className="text-base text-slate-300 mt-1">Avg score</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="pt-6 text-center">
-              <div className="text-3xl font-bold">
+              <div className="text-4xl font-bold">
                 {scores.length ? Math.max(...scores) : "—"}
               </div>
-              <div className="text-sm text-slate-300 mt-1">Best score</div>
+              <div className="text-base text-slate-300 mt-1">Best score</div>
             </CardContent>
           </Card>
         </div>
@@ -216,19 +216,19 @@ export default function InterviewPage() {
 
       {/* Start new session */}
       <div className="space-y-5">
-        <h2 className="text-xl font-semibold">Start a mock interview</h2>
+        <h2 className="text-2xl font-semibold">Start a mock interview</h2>
 
         {/* Company selector */}
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <Building2 className="h-4 w-4 text-slate-400" />
-            <span className="text-sm font-medium text-slate-300">Optimize for a company</span>
-            <span className="text-xs text-slate-400">(optional)</span>
+            <span className="text-base font-medium text-slate-300">Optimize for a company</span>
+            <span className="text-sm text-slate-400">(optional)</span>
           </div>
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setSelectedCompany(null)}
-              className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-all ${
+              className={`px-3 py-1.5 rounded-full text-base font-medium border transition-all ${
                 selectedCompany === null
                   ? "bg-white/15 text-white border-white/20"
                   : "bg-white/5 text-slate-400 border-white/10 hover:border-white/20"
@@ -240,7 +240,7 @@ export default function InterviewPage() {
               <button
                 key={company.id}
                 onClick={() => setSelectedCompany(selectedCompany === company.id ? null : company.id)}
-                className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-all ${
+                className={`px-3 py-1.5 rounded-full text-base font-medium border transition-all ${
                   selectedCompany === company.id
                     ? "bg-primary text-white border-primary"
                     : "bg-white/5 text-slate-400 border-white/10 hover:border-primary/50 hover:text-primary"
@@ -251,11 +251,11 @@ export default function InterviewPage() {
             ))}
           </div>
           {selectedCompany && (
-            <div className="flex items-center gap-2 text-sm text-primary font-medium">
-              <span className="inline-flex items-center gap-1.5 bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-semibold">
+            <div className="flex items-center gap-2 text-base text-primary font-medium">
+              <span className="inline-flex items-center gap-1.5 bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-semibold">
                 Optimized for {COMPANIES.find(c => c.id === selectedCompany)?.name}
               </span>
-              <span className="text-slate-400 text-xs font-normal">— questions and evaluation will reflect their actual interview bar</span>
+              <span className="text-slate-400 text-sm font-normal">— questions and evaluation will reflect their actual interview bar</span>
             </div>
           )}
         </div>
@@ -279,10 +279,10 @@ export default function InterviewPage() {
                       </div>
                       <ArrowRight className="h-4 w-4 text-slate-400 group-hover:text-primary transition-colors mt-1" />
                     </div>
-                    <CardTitle className="text-base">{config.label}</CardTitle>
+                    <CardTitle className="text-xl">{config.label}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-base text-slate-300 mb-4">{config.description}</p>
+                    <p className="text-xl text-slate-300 mb-4">{config.description}</p>
                     <Button
                       size="sm"
                       className="w-full gap-2"
@@ -312,7 +312,7 @@ export default function InterviewPage() {
       {/* Past sessions with scorecard */}
       {!loading && completedSessions.length > 0 && (
         <div className="space-y-4">
-          <h2 className="text-xl font-bold text-white">Past sessions</h2>
+          <h2 className="text-2xl font-bold text-white">Past sessions</h2>
           <div className="space-y-3">
             {completedSessions.map(session => {
               const cfg = typeConfig[session.type];
@@ -342,11 +342,11 @@ export default function InterviewPage() {
                           </span>
                         )}
                       </div>
-                      <p className="text-sm text-slate-300">{format(new Date(session.startedAt), "MMM d, yyyy")}</p>
+                      <p className="text-base text-slate-300">{format(new Date(session.startedAt), "MMM d, yyyy")}</p>
                     </div>
                     {session.overallScore !== null && (
-                      <div className={`text-2xl font-black shrink-0 ${scoreColor}`}>
-                        {session.overallScore}<span className="text-sm font-normal text-slate-400">/100</span>
+                      <div className={`text-3xl font-black shrink-0 ${scoreColor}`}>
+                        {session.overallScore}<span className="text-base font-normal text-slate-400">/100</span>
                       </div>
                     )}
                     {isExpanded
@@ -377,7 +377,7 @@ export default function InterviewPage() {
       {/* In-progress / non-complete session history (legacy view for incomplete sessions) */}
       {!loading && sessions.filter(s => s.status !== "complete").length > 0 && (
         <div>
-          <h2 className="text-xl font-semibold mb-4">In progress</h2>
+          <h2 className="text-2xl font-semibold mb-4">In progress</h2>
           <div className="space-y-3">
             {sessions.filter(s => s.status !== "complete").map((s) => (
               <Card
@@ -399,7 +399,7 @@ export default function InterviewPage() {
                           </span>
                         )}
                       </div>
-                      <div className="text-sm text-slate-300">
+                      <div className="text-base text-slate-300">
                         {format(new Date(s.startedAt), "MMM d, yyyy")}
                       </div>
                     </div>
