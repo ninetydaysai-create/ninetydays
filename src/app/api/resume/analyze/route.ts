@@ -10,6 +10,7 @@ import { z } from "zod";
 import { assertPlanAllows } from "@/lib/plan-guard";
 import { buildResumeAnalysisPrompt } from "@/prompts/resume-analysis";
 import { parseTimelineYears, mergeTimelineWithModel } from "@/lib/timeline-parser";
+import { applyResumeAnalysisScores } from "@/lib/skill-scores";
 
 // z.record() generates `propertyNames` in JSON Schema which Anthropic rejects.
 // Use arrays of objects instead, then convert to records after generation.
@@ -115,6 +116,12 @@ export async function POST(req: Request) {
 
   await db.activityLog.create({
     data: { userId, type: "resume_analyzed", metadata: { score: object.overallScore } },
+  });
+
+  await applyResumeAnalysisScores(userId, analysis.id, {
+    overallScore:        analysis.overallScore,
+    keywordDensityScore: analysis.keywordDensityScore,
+    impactScore:         analysis.impactScore,
   });
 
   return NextResponse.json({ analysisId: analysis.id, score: analysis.overallScore });

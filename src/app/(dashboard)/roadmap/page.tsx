@@ -19,6 +19,7 @@ import {
   Zap,
   ChevronDown,
   ChevronUp,
+  ChevronRight,
   ExternalLink,
   Clock,
   Target,
@@ -586,17 +587,22 @@ export default function RoadmapPage() {
                       {week.tasks.map((task) => (
                         <div
                           key={task.id}
-                          className={`rounded-xl border cursor-pointer transition-all group ${
+                          className={`rounded-xl border transition-all group ${
                             task.completed
                               ? "bg-slate-50 border-slate-200 opacity-70"
                               : "bg-white border-slate-200 hover:border-indigo-400 hover:shadow-sm"
                           }`}
-                          onClick={() => !toggling && toggleTask(task.id, task.completed, task.label, task.impactScore, week.weekNumber)}
                         >
                           <div className="p-5">
                             <div className="flex items-start gap-3">
-                              {/* Checkbox */}
-                              <div className="mt-0.5 shrink-0">
+                              {/* Checkbox — quick-complete, stops propagation */}
+                              <button
+                                className="mt-0.5 shrink-0"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  if (!toggling) toggleTask(task.id, task.completed, task.label, task.impactScore, week.weekNumber);
+                                }}
+                              >
                                 {toggling === task.id ? (
                                   <Loader2 className="h-5 w-5 animate-spin text-slate-400" />
                                 ) : task.completed ? (
@@ -604,17 +610,19 @@ export default function RoadmapPage() {
                                 ) : (
                                   <Circle className="h-5 w-5 text-slate-400 group-hover:text-indigo-500 transition-colors" />
                                 )}
-                              </div>
+                              </button>
 
                               <div className="flex-1 min-w-0">
-                                {/* Title row */}
+                                {/* Title — navigates to task step page */}
                                 <div className="flex items-start justify-between gap-2">
-                                  <p className={`text-base font-bold leading-snug ${
-                                    task.completed ? "line-through text-slate-400" : "text-slate-900"
-                                  }`}>
+                                  <Link
+                                    href={`/roadmap/task/${task.id}`}
+                                    className={`text-base font-bold leading-snug hover:text-indigo-600 transition-colors ${
+                                      task.completed ? "line-through text-slate-400" : "text-slate-900"
+                                    }`}
+                                  >
                                     {task.label}
-                                  </p>
-                                  {/* Impact badge */}
+                                  </Link>
                                   {!task.completed && task.impactScore >= 7 && (
                                     <span className="shrink-0 text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center gap-1 whitespace-nowrap">
                                       <TrendingUp className="h-3 w-3" />
@@ -629,7 +637,6 @@ export default function RoadmapPage() {
                                       {task.description}
                                     </p>
 
-                                    {/* Why it matters */}
                                     {task.whyItMatters && (
                                       <div className="flex items-start gap-2 mt-2.5 bg-indigo-50 border border-indigo-100 rounded-lg px-3 py-2.5">
                                         <Zap className="h-4 w-4 text-indigo-500 shrink-0 mt-0.5" />
@@ -639,7 +646,6 @@ export default function RoadmapPage() {
                                       </div>
                                     )}
 
-                                    {/* Meta row */}
                                     <div className="flex items-center gap-4 mt-3 flex-wrap">
                                       <span className="inline-flex items-center gap-1.5 text-sm text-slate-600">
                                         <Clock className="h-3.5 w-3.5" />
@@ -651,9 +657,15 @@ export default function RoadmapPage() {
                                           Impact: {task.impactScore}/10
                                         </span>
                                       )}
+                                      <Link
+                                        href={`/roadmap/task/${task.id}`}
+                                        className="inline-flex items-center gap-1 text-sm font-semibold text-indigo-600 hover:text-indigo-700 ml-auto"
+                                      >
+                                        Start learning
+                                        <ChevronRight className="h-3.5 w-3.5" />
+                                      </Link>
                                     </div>
 
-                                    {/* Resources */}
                                     {task.resourceUrls?.length > 0 && (
                                       <div className="flex items-center gap-2 mt-3 flex-wrap">
                                         <BookOpen className="h-4 w-4 text-slate-500 shrink-0" />
@@ -663,7 +675,6 @@ export default function RoadmapPage() {
                                             href={url}
                                             target="_blank"
                                             rel="noreferrer"
-                                            onClick={(e) => e.stopPropagation()}
                                             className="inline-flex items-center gap-1.5 text-sm font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 px-3 py-1.5 rounded-lg transition-colors"
                                           >
                                             {getDomainLabel(url)}

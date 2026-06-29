@@ -44,6 +44,50 @@ enum JobStatus {
   rejected
 }
 
+enum TaskStepType {
+  why_it_matters
+  lesson
+  example_gallery
+  practice
+  quiz
+  deliverable
+}
+
+enum DeliverableType {
+  resume_bullets
+  linkedin_summary
+  star_story
+  portfolio_project
+  interview_answers
+  case_study
+  flashcard_deck
+  project_doc
+}
+
+enum SkillDimension {
+  resume_quality
+  ats_score
+  ownership_language
+  impact_writing
+  interview_confidence
+  system_design
+  business_thinking
+  leadership
+  communication
+  ai_knowledge
+  problem_solving
+  recruiter_readiness
+}
+
+enum DailyChallengeType {
+  interview_question
+  flashcard
+  case_study
+  star_story
+  bullet_rewrite
+  ai_conversation
+}
+
 // ─── User ─────────────────────────────────────────────────────────────────────
 
 model User {
@@ -93,6 +137,10 @@ model User {
   bulletRewrites    BulletRewrite[]
   mentorMessages    MentorMessage[]
   cohortMember      CohortMember?
+  skillScores       UserSkillScore[]
+  skillHistory      SkillScoreHistory[]
+  dailyChallenges   DailyChallenge[]
+  deliverables      Deliverable[]
 
   @@map("users")
 }
@@ -201,6 +249,9 @@ model RoadmapWeek {
   deliverable     String
   deliverableUrl  String?
   deliverableDone Boolean @default(false)
+  stageLabel      String?          // e.g. "Level 1: Resume Foundations"
+  unlockPolicy    String  @default("completion") // "completion" | "mastery" | "deliverable"
+  unlockThreshold Int     @default(80)           // minimum score when unlockPolicy = "mastery"
 
   tasks RoadmapTask[]
 
@@ -219,10 +270,106 @@ model RoadmapTask {
   impactScore  Int         @default(5) // 1-10, how much this task boosts readiness
   whyItMatters String?                 // "Asked in 80% ML interviews"
   gapLabel     String?                 // matches a gap label from the gap report
-  completed    Boolean     @default(false)
-  completedAt  DateTime?
+  completed        Boolean     @default(false)
+  completedAt      DateTime?
+  masteryScore     Int?                  // user's earned score on this task (0-100)
+  masteryThreshold Int         @default(0) // 0 = completion only; >0 = quiz score required
+
+  steps        TaskStep[]
+  deliverables Deliverable[]
 
   @@map("roadmap_tasks")
+}
+
+// ─── Task Steps ───────────────────────────────────────────────────────────────
+
+model TaskStep {
+  id          String       @id @default(cuid())
+  taskId      String
+  task        RoadmapTask  @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  type        TaskStepType
+  order       Int
+  title       String
+  content     Json         // shape varies by type: lesson=string, quiz={question,options[],correct}[], example={label,text,annotation}[]
+  completedAt DateTime?
+  userInput   String?      @db.Text // practice steps: user's submission
+  aiFeedback  Json?                 // { score, strengths[], improvements[] }
+  score       Int?                  // quiz steps: 0-100
+
+  @@unique([taskId, order])
+  @@map("task_steps")
+}
+
+// ─── Deliverables ─────────────────────────────────────────────────────────────
+
+model Deliverable {
+  id          String          @id @default(cuid())
+  userId      String
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  taskId      String?
+  task        RoadmapTask?    @relation(fields: [taskId], references: [id], onDelete: SetNull)
+  type        DeliverableType
+  title       String
+  content     Json            // bullets[], story text, flashcard pairs, etc.
+  fileUrl     String?
+  aiScore     Int?            // 0-100
+  aiFeedback  Json?           // { strengths[], improvements[], suggestions[] }
+  isPublished Boolean         @default(false)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([userId])
+  @@map("deliverables")
+}
+
+// ─── Skill Scores ─────────────────────────────────────────────────────────────
+
+model UserSkillScore {
+  id        String         @id @default(cuid())
+  userId    String
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dimension SkillDimension
+  score     Int            // 0-100, current readiness score
+  updatedAt DateTime       @updatedAt
+
+  @@unique([userId, dimension])
+  @@map("user_skill_scores")
+}
+
+model SkillScoreHistory {
+  id         String         @id @default(cuid())
+  userId     String
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dimension  SkillDimension
+  score      Int
+  source     String         // "task_complete" | "quiz" | "interview" | "resume_analyze" | "practice"
+  sourceId   String?        // taskId / sessionId that triggered the change
+  recordedAt DateTime       @default(now())
+
+  @@index([userId, dimension])
+  @@map("skill_score_history")
+}
+
+// ─── Daily Challenges ─────────────────────────────────────────────────────────
+
+model DailyChallenge {
+  id           String             @id @default(cuid())
+  userId       String
+  user         User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date         DateTime           // UTC midnight — enforced one per user per day
+  type         DailyChallengeType
+  dimension    SkillDimension?
+  difficulty   String             @default("medium") // "easy" | "medium" | "hard"
+  prompt       String             @db.Text
+  userResponse String?            @db.Text
+  aiFeedback   Json?
+  score        Int?               // 0-100
+  completedAt  DateTime?
+  createdAt    DateTime           @default(now())
+
+  @@unique([userId, date])
+  @@index([userId])
+  @@map("daily_challenges")
 }
 
 // ─── Portfolio ────────────────────────────────────────────────────────────────

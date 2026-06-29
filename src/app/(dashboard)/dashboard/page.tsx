@@ -29,6 +29,8 @@ import {
 import { GapItem } from "@/types/gaps";
 import { ROLE_LABELS } from "@/lib/constants";
 import { TargetRole } from "@prisma/client";
+import { EvidenceGraph } from "@/components/shared/EvidenceGraph";
+import { DailyChallengeCard } from "@/components/shared/DailyChallengeCard";
 
 
 function getLevel(readiness: number): { level: number; label: string; next: number } {
@@ -102,7 +104,7 @@ export default async function DashboardPage() {
   if (!user.onboardingDone) redirect("/onboarding");
 
   // Fetch gap report, resume analysis, streak data, and cohort
-  const [gapReport, _latestAnalysis, streakData, cohortMember] = await Promise.all([
+  const [gapReport, _latestAnalysis, streakData, cohortMember, skillScoresRaw] = await Promise.all([
     db.gapReport.findFirst({ where: { userId }, orderBy: { createdAt: "desc" } }),
     db.resumeAnalysis.findFirst({ where: { userId }, orderBy: { createdAt: "desc" }, select: { overallScore: true } }),
     getUserStreak(userId),
@@ -120,7 +122,10 @@ export default async function DashboardPage() {
         },
       },
     }),
+    db.userSkillScore.findMany({ where: { userId } }),
   ]);
+
+  const skillScores = Object.fromEntries(skillScoresRaw.map((r) => [r.dimension, r.score])) as Record<string, number>;
 
   // Career metrics
   const readinessScore = gapReport?.totalGapScore ?? null;
@@ -299,6 +304,12 @@ export default async function DashboardPage() {
           ))}
         </div>
       )}
+
+      {/* ── Evidence Graph ── */}
+      <EvidenceGraph skillScores={skillScores} />
+
+      {/* ── Daily Challenge ── */}
+      <DailyChallengeCard />
 
       {/* ── If you apply today ── */}
       {readinessScore !== null && rejectionRisk && (

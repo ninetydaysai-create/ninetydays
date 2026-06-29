@@ -8,6 +8,7 @@ import { buildInterviewEvaluationPrompt } from "@/prompts/interview-evaluator";
 import { TranscriptMessage } from "@/types/interview";
 import { ResumeAnalysisResult } from "@/types/resume";
 import { GapReportResult } from "@/types/gaps";
+import { applyInterviewScores } from "@/lib/skill-scores";
 
 const ScorecardSchema = z.object({
   overallScore: z.number(),
@@ -86,6 +87,8 @@ export async function POST(req: Request) {
       completedAt: new Date(),
     },
   });
+
+  await applyInterviewScores(userId, sessionId, scorecard.overallScore, session.type);
 
   return NextResponse.json({ scorecard: updated.scorecard });
 }

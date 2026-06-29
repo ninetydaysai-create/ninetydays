@@ -2,6 +2,79 @@ import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { triggerReadyToApplyEmail } from "@/lib/email-triggers";
+import { defaultModel } from "@/lib/ai";
+import { generateObject } from "ai";
+import { TaskStepsSchema, buildTaskStepsPrompt, type GeneratedSteps } from "@/prompts/task-steps";
+import { TaskStepType } from "@prisma/client";
+
+// GET /api/roadmap/tasks/[taskId]
+// Returns the task with its ordered steps, generating them the first time.
+export async function GET(
+  _req: Request,
+  { params }: { params: Promise<{ taskId: string }> }
+) {
+  const { userId } = await auth();
+  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const { taskId } = await params;
+
+  const task = await db.roadmapTask.findFirst({
+    where: { id: taskId, week: { roadmap: { userId } } },
+    include: {
+      steps: { orderBy: { order: "asc" } },
+      week: { include: { roadmap: { select: { targetRole: true } } } },
+    },
+  });
+  if (!task) return NextResponse.json({ error: "Task not found" }, { status: 404 });
+
+  // Steps already generated — return immediately
+  if (task.steps.length > 0) {
+    return NextResponse.json({ task });
+  }
+
+  // Generate all 6 steps in one AI call
+  const targetRole = task.week.roadmap.targetRole ?? "product_swe";
+  let generated: GeneratedSteps;
+  try {
+    const { object } = await generateObject({
+      model: defaultModel,
+      schema: TaskStepsSchema,
+      prompt: buildTaskStepsPrompt({
+        label:        task.label,
+        description:  task.description,
+        whyItMatters: task.whyItMatters,
+        gapLabel:     task.gapLabel,
+        targetRole,
+        impactScore:  task.impactScore,
+      }),
+    });
+    generated = object;
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("task-steps generation error:", msg);
+    return NextResponse.json({ error: "Failed to generate steps" }, { status: 500 });
+  }
+
+  const STEP_ORDER: TaskStepType[] = [
+    "why_it_matters", "lesson", "example_gallery", "practice", "quiz", "deliverable",
+  ];
+
+  const steps = await db.$transaction(
+    STEP_ORDER.map((type, order) =>
+      db.taskStep.create({
+        data: {
+          taskId,
+          type,
+          order,
+          title: (generated[type as keyof GeneratedSteps] as { title: string }).title,
+          content: generated[type as keyof GeneratedSteps] as object,
+        },
+      })
+    )
+  );
+
+  return NextResponse.json({ task: { ...task, steps } });
+}
 
 interface GapItem {
   label: string;
