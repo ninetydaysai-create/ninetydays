@@ -2,7 +2,7 @@
  * Regional pricing configuration.
  * All prices are in local currency, PPP-adjusted.
  *
- * Lemon Squeezy handles multi-currency internally — one variant ID per plan
+ * Paddle handles multi-currency internally — one price ID per plan
  * covers all regions. This file only manages display strings per region.
  *
  * Regions:

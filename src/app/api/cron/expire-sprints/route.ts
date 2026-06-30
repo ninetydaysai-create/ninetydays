@@ -41,7 +41,7 @@ export async function GET(req: Request) {
       userId: u.id,
       type: "sprint_expired",
       title: "Your 90-Day Sprint has ended",
-      body: "Upgrade to Pro ($9/mo) to keep your AI mentor, roadmap, and interview coaching.",
+      body: "Upgrade to Pro ($12/mo) to keep your AI mentor, roadmap, and interview coaching.",
     })),
     skipDuplicates: true,
   });

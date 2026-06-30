@@ -49,7 +49,7 @@ export default function PrivacyPage() {
             ["Career & Resume Data", "Resume text, work history, skills, job descriptions you upload", "Contract performance / Legitimate interest"],
             ["AI Interaction Data", "Messages to AI Mentor, interview answers", "Contract performance"],
             ["Usage & Analytics", "Pages visited, features used, session duration (anonymized)", "Legitimate interest / Consent"],
-            ["Payment Data", "Billing name, last 4 digits (card details handled by Stripe, not stored by us)", "Contract performance"],
+            ["Payment Data", "Billing name, last 4 digits (card details handled by Paddle, not stored by us)", "Contract performance"],
             ["Device & Technical", "IP address, browser type, operating system", "Legitimate interest (security)"],
             ["Communications", "Emails you send us, support requests", "Legitimate interest / Consent"],
           ]} />
@@ -75,7 +75,7 @@ export default function PrivacyPage() {
             ["Processor", "Purpose", "Location", "Privacy Policy"],
             ["NinetyDays AI Engine", "Resume and career AI analysis", "USA", "ninetydays.ai/privacy"],
             ["Clerk", "Authentication & user management", "USA (EU servers available)", "clerk.com/privacy"],
-            ["Stripe", "Payment processing", "USA/EU", "stripe.com/privacy"],
+            ["Paddle", "Payment processing (Merchant of Record)", "USA/EU", "paddle.com/legal/privacy"],
             ["UploadThing", "Secure file storage (resumes)", "USA", "uploadthing.com/privacy"],
             ["Resend", "Transactional email delivery", "USA", "resend.com/privacy"],
             ["PostHog", "Product analytics (anonymized)", "EU (EU Cloud)", "posthog.com/privacy"],
@@ -150,7 +150,7 @@ export default function PrivacyPage() {
             ["Cookie Type", "Purpose", "Can Opt Out"],
             ["Essential (Clerk session)", "Authentication — required for login", "No (required)"],
             ["Analytics (PostHog)", "Product usage analytics", "Yes — see browser settings"],
-            ["Payment (Stripe)", "Fraud prevention on checkout", "No (required for payments)"],
+            ["Payment (Paddle)", "Fraud prevention on checkout", "No (required for payments)"],
           ]} />
           <p className="mt-3 text-xs text-slate-500">We do not use advertising, tracking, or third-party marketing cookies.</p>
         </Section>

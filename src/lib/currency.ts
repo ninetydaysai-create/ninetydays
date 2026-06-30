@@ -1,5 +1,5 @@
 // Global currency support — detects user locale and formats prices accordingly.
-// Stripe handles the actual currency conversion server-side via presentment currencies.
+// Paddle handles the actual currency conversion server-side via presentment currencies.
 // This file handles display formatting only.
 
 export const SUPPORTED_CURRENCIES = {

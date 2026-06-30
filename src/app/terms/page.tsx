@@ -101,8 +101,8 @@ export default function TermsPage() {
           <TableBlock rows={[
             ["Plan", "Price", "Billing"],
             ["Free", "$0", "No charge — usage limits apply as described on the pricing page"],
-            ["Pro (Monthly)", "$9 / month", "Billed monthly via Stripe"],
-            ["Pro (Annual)", "$84 / year", "Billed annually; equivalent to $7/month"],
+            ["Pro (Monthly)", "$12 / month", "Billed monthly via Paddle"],
+            ["Pro (Annual)", "$99 / year", "Billed annually; equivalent to $8.25/month"],
           ]} />
 
           <strong className="text-white block mt-4 mb-2">General billing terms:</strong>
@@ -200,11 +200,11 @@ export default function TermsPage() {
         </Section>
 
         <Section title="10. Third-Party Services">
-          The Service integrates third-party providers including Clerk (authentication), Stripe (payments),
+          The Service integrates third-party providers including Clerk (authentication), Paddle (payments, acting as Merchant of Record),
           UploadThing (file storage), Resend (email), and others listed in our{" "}
           <Link href="/privacy" className="text-indigo-400 hover:underline">Privacy Policy</Link>. Your use of the Service
-          is also subject to the terms of these third-party providers where applicable (e.g., Stripe&apos;s{" "}
-          <a href="https://stripe.com/legal/consumer" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline">Connected Account Agreement</a>{" "}
+          is also subject to the terms of these third-party providers where applicable (e.g., Paddle&apos;s{" "}
+          <a href="https://www.paddle.com/legal/checkout-buyer-terms" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline">Checkout Buyer Terms</a>{" "}
           for payment processing). We are not responsible for the acts or omissions of third-party providers.
         </Section>
 

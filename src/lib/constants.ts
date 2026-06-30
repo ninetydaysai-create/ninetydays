@@ -30,7 +30,7 @@ export const PLAN_LIMITS = {
     linkedinOptimizationsPerMonth: 10, // 10 × $0.014 = $0.14/month
     githubOptimizationsPerMonth: 10,
     portfolioBioPerMonth: 30,
-    // Total worst-case: ~$4/month — 55% gross margin at $9/month
+    // Total worst-case: ~$4/month — 67% gross margin at $12/month
   },
 } as const;
 
@@ -62,16 +62,6 @@ export const COMPANY_OPTIONS = [
   { value: "Product", label: "Already at a Product Company" },
   { value: "Other", label: "Other" },
 ];
-
-// ─── Lemon Squeezy Variant IDs ────────────────────────────────────────────────
-// One variant per plan — LS handles multi-currency internally.
-
-export const LS_VARIANTS = {
-  PRO_MONTHLY:    process.env.LS_VARIANT_PRO_MONTHLY!,    // $12/mo (₹899, £10, €11)
-  PRO_MONTHLY_15: process.env.LS_VARIANT_PRO_MONTHLY_15!, // $15/mo mentor variant
-  PRO_ANNUAL:     process.env.LS_VARIANT_PRO_ANNUAL!,     // $99/yr ($8.25/mo)
-  SPRINT:         process.env.LS_VARIANT_SPRINT!,          // $49 one-time, 90-day access
-};
 
 // ─── Pricing Display ─────────────────────────────────────────────────────────
 

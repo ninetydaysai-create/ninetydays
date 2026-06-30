@@ -119,7 +119,7 @@ export function UpgradeGate({ feature, description, className, inline = false }:
         <Link href="/settings" className="block">
           <Button className="w-full gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold">
             <Sparkles className="h-4 w-4" />
-            Unlock with Pro — $9/mo
+            Unlock with Pro — $12/mo
           </Button>
         </Link>
         <p className="text-xs text-muted-foreground">Cancel anytime · Instant access</p>

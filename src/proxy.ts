@@ -8,7 +8,7 @@ const isPublicRoute = createRouteMatcher([
   "/pricing(.*)",
   "/about(.*)",
   "/p/(.*)",            // public portfolio pages
-  "/api/webhooks/(.*)", // Clerk + Stripe webhooks
+  "/api/webhooks/(.*)", // Clerk + Paddle webhooks
 ]);
 
 const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
