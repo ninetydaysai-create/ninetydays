@@ -397,12 +397,13 @@ model DailyChallenge {
   type         DailyChallengeType
   dimension    SkillDimension?
   difficulty   String             @default("medium") // "easy" | "medium" | "hard"
-  prompt       String             @db.Text
-  userResponse String?            @db.Text
-  aiFeedback   Json?
-  score        Int?               // 0-100
-  completedAt  DateTime?
-  createdAt    DateTime           @default(now())
+  prompt         String             @db.Text
+  coachingReason String?            @db.Text  // why this challenge was chosen today
+  userResponse   String?            @db.Text
+  aiFeedback     Json?
+  score          Int?               // 0-100
+  completedAt    DateTime?
+  createdAt      DateTime           @default(now())
 
   @@unique([userId, date])
   @@index([userId])

@@ -27,6 +27,7 @@ interface Challenge {
   dimension: string | null;
   difficulty: string;
   prompt: string;
+  coachingReason: string | null;
   userResponse: string | null;
   aiFeedback: AiFeedback | null;
   score: number | null;
@@ -205,6 +206,17 @@ export function DailyChallengeCard() {
         <Icon className={`h-3 w-3 ${config.text}`} />
         <span className={`text-[11px] font-bold ${config.text}`}>{config.label}</span>
       </div>
+
+      {/* ── Coaching reason — why this challenge today ── */}
+      {challenge.coachingReason && (
+        <div className="flex items-start gap-2 bg-violet-500/10 border border-violet-500/20 rounded-xl px-3 py-2.5 mb-3">
+          <Brain className="h-3.5 w-3.5 text-violet-400 shrink-0 mt-0.5" />
+          <p className="text-xs text-slate-300 leading-snug">
+            <span className="font-bold text-violet-300">Why today: </span>
+            {challenge.coachingReason}
+          </p>
+        </div>
+      )}
 
       {/* ── Challenge prompt ── */}
       <div className="bg-white/[0.03] border border-white/[0.08] rounded-xl p-4 mb-4">

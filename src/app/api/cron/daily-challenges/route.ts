@@ -4,6 +4,7 @@ import { fastModel } from "@/lib/ai";
 import { generateText } from "ai";
 import { DailyChallengeType, SkillDimension, TargetRole } from "@prisma/client";
 import { buildChallengeGenerationPrompt } from "@/prompts/daily-challenge";
+import { generateCoachingReason } from "@/lib/proactive-coaching";
 
 function todayUTC(): Date {
   const n = new Date();
@@ -121,14 +122,18 @@ export async function GET(req: Request) {
                                   : "hard";
 
       try {
-        const { text } = await generateText({
-          model: fastModel,
-          prompt: buildChallengeGenerationPrompt(type, dimension, user.targetRole ?? "product_swe", currentScore),
-        });
+        const [{ text }, coachingReason] = await Promise.all([
+          generateText({
+            model: fastModel,
+            prompt: buildChallengeGenerationPrompt(type, dimension, user.targetRole ?? "product_swe", currentScore),
+          }),
+          generateCoachingReason(user.id, type, dimension, user.targetRole ?? "product_swe"),
+        ]);
 
         await db.dailyChallenge.create({
           data: {
-            userId:     user.id,
+            userId:        user.id,
+            coachingReason,
             date,
             type,
             dimension,

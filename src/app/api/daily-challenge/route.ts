@@ -5,6 +5,7 @@ import { fastModel } from "@/lib/ai";
 import { generateText } from "ai";
 import { DailyChallengeType, SkillDimension, TargetRole } from "@prisma/client";
 import { buildChallengeGenerationPrompt } from "@/prompts/daily-challenge";
+import { generateCoachingReason } from "@/lib/proactive-coaching";
 
 // UTC midnight for today — used as the @@unique date key
 function todayUTC(): Date {
@@ -76,6 +77,7 @@ async function generateChallenge(userId: string): Promise<{
   dimension: SkillDimension;
   prompt: string;
   difficulty: string;
+  coachingReason: string;
 }> {
   const [user, scores, profile] = await Promise.all([
     db.user.findUnique({ where: { id: userId }, select: { targetRole: true } }),
@@ -89,10 +91,14 @@ async function generateChallenge(userId: string): Promise<{
   const currentScore = scores.find((s) => s.dimension === dimension)?.score;
   const roleStr = user?.targetRole ?? "product_swe";
 
-  const { text } = await generateText({
-    model: fastModel,
-    prompt: buildChallengeGenerationPrompt(type, dimension, roleStr, currentScore),
-  });
+  // Generate challenge prompt + coaching reason in parallel (both use Haiku)
+  const [{ text }, coachingReason] = await Promise.all([
+    generateText({
+      model: fastModel,
+      prompt: buildChallengeGenerationPrompt(type, dimension, roleStr, currentScore),
+    }),
+    generateCoachingReason(userId, type, dimension, roleStr),
+  ]);
 
   // Derive difficulty from current score
   const difficulty =
@@ -101,7 +107,7 @@ async function generateChallenge(userId: string): Promise<{
     : currentScore < 70       ? "medium"
                               : "hard";
 
-  return { type, dimension, prompt: text.trim(), difficulty };
+  return { type, dimension, prompt: text.trim(), difficulty, coachingReason };
 }
 
 // GET /api/daily-challenge — returns today's challenge, generating it if needed
@@ -119,10 +125,10 @@ export async function GET() {
 
   // Generate and persist a new challenge
   try {
-    const { type, dimension, prompt, difficulty } = await generateChallenge(userId);
+    const { type, dimension, prompt, difficulty, coachingReason } = await generateChallenge(userId);
 
     const challenge = await db.dailyChallenge.create({
-      data: { userId, date, type, dimension, difficulty, prompt },
+      data: { userId, date, type, dimension, difficulty, prompt, coachingReason },
     });
 
     return NextResponse.json({ challenge });

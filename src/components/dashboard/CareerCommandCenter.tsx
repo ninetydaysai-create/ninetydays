@@ -46,7 +46,7 @@ export async function CareerCommandCenter() {
     }),
     db.dailyChallenge.findUnique({
       where: { userId_date: { userId, date: todayUTC() } },
-      select: { completedAt: true, type: true, dimension: true },
+      select: { completedAt: true, type: true, dimension: true, coachingReason: true },
     }),
     getUserStreak(userId),
     db.deliverable.count({ where: { userId } }),
@@ -79,9 +79,10 @@ export async function CareerCommandCenter() {
     label: dailyChallenge?.completedAt ? "Daily challenge done" : "Complete today's challenge",
     sub: dailyChallenge?.completedAt
       ? "✓ Streak maintained"
-      : dailyChallenge
-        ? `${(dailyChallenge.type as string).replace(/_/g, " ")} · 5 min`
-        : "5-min practice · AI-scored",
+      : (dailyChallenge as { coachingReason?: string | null } | null)?.coachingReason
+        ?? (dailyChallenge
+          ? `${(dailyChallenge.type as string).replace(/_/g, " ")} · 5 min`
+          : "5-min practice · AI-scored"),
     href: "/dashboard#challenge",
     done: !!dailyChallenge?.completedAt,
     accent: "text-amber-400",
