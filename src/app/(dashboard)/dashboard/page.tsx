@@ -31,6 +31,7 @@ import { ROLE_LABELS } from "@/lib/constants";
 import { TargetRole } from "@prisma/client";
 import { EvidenceGraph } from "@/components/shared/EvidenceGraph";
 import { DailyChallengeCard } from "@/components/shared/DailyChallengeCard";
+import { TransformationView } from "@/components/shared/TransformationView";
 
 
 function getLevel(readiness: number): { level: number; label: string; next: number } {
@@ -307,6 +308,9 @@ export default async function DashboardPage() {
 
       {/* ── Evidence Graph ── */}
       <EvidenceGraph skillScores={skillScores} />
+
+      {/* ── Transformation View ── */}
+      <TransformationView />
 
       {/* ── Daily Challenge ── */}
       <DailyChallengeCard />
