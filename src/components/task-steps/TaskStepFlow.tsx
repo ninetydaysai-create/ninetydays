@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useTransition } from "react";
+import { TaskMentor } from "@/components/task-steps/TaskMentor";
 import {
   Lightbulb, BookOpen, Layers, PenLine, HelpCircle, Award,
   CheckCircle2, ChevronRight, Loader2, AlertTriangle,
@@ -584,6 +585,15 @@ export function TaskStepFlow({ taskId, taskLabel, existingSteps, alreadyComplete
 
         {/* Step content */}
         {renderStep()}
+
+        {/* Embedded AI Mentor — always available on every step */}
+        <TaskMentor
+          taskId={taskId}
+          stepType={currentStep.type}
+          stepTitle={currentStep.title}
+          hasSubmitted={!!currentStep.userInput}
+          userInput={currentStep.userInput}
+        />
 
         {/* Continue button for simple steps or after practice/quiz */}
         {(isSimpleStep || practiceOrQuizDone) && currentIdx < steps.length - 1 && (
