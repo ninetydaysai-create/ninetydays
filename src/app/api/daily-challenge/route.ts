@@ -37,18 +37,37 @@ const ROLE_DEFAULT_DIMENSION: Record<string, SkillDimension> = {
   data_scientist: "problem_solving",
 };
 
+// Goal Engine priority → skill dimensions (ordered by importance within each area)
+const PRIORITY_DIMENSIONS: Record<string, SkillDimension[]> = {
+  interview:    ["interview_confidence", "communication", "leadership"],
+  resume:       ["impact_writing", "resume_quality", "ownership_language", "ats_score"],
+  system_design:["system_design", "problem_solving"],
+  product:      ["business_thinking"],
+  ai:           ["ai_knowledge"],
+};
+
 function pickDimension(
   scores: { dimension: SkillDimension; score: number }[],
-  targetRole: TargetRole | null
+  targetRole: TargetRole | null,
+  priority: string[] = []
 ): SkillDimension {
-  // Exclude derived composite from selection
   const component = scores.filter((s) => s.dimension !== "recruiter_readiness");
 
+  // If user has set a priority, find the weakest dimension in their top priority area
+  for (const priorityKey of priority) {
+    const dims = PRIORITY_DIMENSIONS[priorityKey] ?? [];
+    const inCategory = component.filter((s) => dims.includes(s.dimension));
+    if (inCategory.length > 0) {
+      return inCategory.reduce((min, s) => (s.score < min.score ? s : min)).dimension;
+    }
+    // No scores yet for this category — return first dim in it
+    if (dims.length > 0) return dims[0];
+  }
+
+  // No priority set: pick overall weakest
   if (component.length === 0) {
     return ROLE_DEFAULT_DIMENSION[targetRole ?? "product_swe"] ?? "impact_writing";
   }
-
-  // Pick the dimension with the lowest score
   return component.reduce((min, s) => (s.score < min.score ? s : min)).dimension;
 }
 
@@ -58,12 +77,14 @@ async function generateChallenge(userId: string): Promise<{
   prompt: string;
   difficulty: string;
 }> {
-  const [user, scores] = await Promise.all([
+  const [user, scores, profile] = await Promise.all([
     db.user.findUnique({ where: { id: userId }, select: { targetRole: true } }),
     db.userSkillScore.findMany({ where: { userId } }),
+    db.careerProfile.findUnique({ where: { userId }, select: { priority: true } }),
   ]);
 
-  const dimension = pickDimension(scores, user?.targetRole ?? null);
+  const priority = (profile?.priority as string[]) ?? [];
+  const dimension = pickDimension(scores, user?.targetRole ?? null, priority);
   const type = DIMENSION_TO_TYPE[dimension];
   const currentScore = scores.find((s) => s.dimension === dimension)?.score;
   const roleStr = user?.targetRole ?? "product_swe";

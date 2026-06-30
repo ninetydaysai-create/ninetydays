@@ -19,6 +19,8 @@ export async function PATCH(req: Request) {
   const allowed = [
     "careerGoal", "targetCompanies", "targetSalary", "targetLocation",
     "strengths", "weaknesses", "achievements", "notes",
+    // Goal Engine
+    "targetRoleTitle", "priority", "currentStage", "needsVisa",
   ];
 
   const data: Record<string, unknown> = {};

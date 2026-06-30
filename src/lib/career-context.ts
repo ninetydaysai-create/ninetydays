@@ -49,6 +49,12 @@ export interface CareerContext {
   weaknesses: string[];
   achievements: string[];
   notes: string | null;
+
+  // Goal Engine
+  targetRoleTitle: string | null;
+  priority: string[];        // ordered focus areas e.g. ["interview","resume","system_design"]
+  currentStage: string | null;
+  needsVisa: boolean;
 }
 
 // ─── Builder ──────────────────────────────────────────────────────────────────
@@ -164,6 +170,12 @@ export async function buildCareerContext(userId: string): Promise<CareerContext>
     weaknesses:   (profile?.weaknesses   as string[]) ?? [],
     achievements: (profile?.achievements as string[]) ?? [],
     notes:        profile?.notes ?? null,
+
+    // Goal Engine
+    targetRoleTitle: profile?.targetRoleTitle ?? null,
+    priority:        (profile?.priority        as string[]) ?? [],
+    currentStage:    profile?.currentStage     ?? null,
+    needsVisa:       profile?.needsVisa        ?? false,
   };
 }
 
@@ -173,10 +185,27 @@ export async function buildCareerContext(userId: string): Promise<CareerContext>
 export function formatCareerContextForAI(ctx: CareerContext): string {
   const sections: string[] = [];
 
+  const STAGE_LABELS: Record<string, string> = {
+    not_applying:       "Not applying yet — in preparation",
+    applying:           "Actively applying (no interviews yet)",
+    getting_interviews: "Getting interviews — working on conversion",
+    final_rounds:       "In final rounds",
+  };
+
+  const PRIORITY_LABELS: Record<string, string> = {
+    interview:    "Interview Skills",
+    resume:       "Resume & Writing",
+    system_design:"System Design",
+    product:      "Product Thinking",
+    ai:           "AI & ML Knowledge",
+  };
+
   // Identity + goals
   const identity = [
     `Candidate: ${ctx.name ?? "Unknown"}`,
-    `Target role: ${ctx.targetRole.replace(/_/g, " ")}`,
+    ctx.targetRoleTitle
+      ? `Target: ${ctx.targetRoleTitle} (${ctx.targetRole.replace(/_/g, " ")})`
+      : `Target role: ${ctx.targetRole.replace(/_/g, " ")}`,
     ctx.currentRole &&
       `Current: ${ctx.currentRole}${ctx.currentCompany ? ` at ${ctx.currentCompany}` : ""}${ctx.yearsExperience ? ` · ${ctx.yearsExperience} yrs exp` : ""}`,
     ctx.careerGoal      && `Goal: "${ctx.careerGoal}"`,
@@ -185,6 +214,14 @@ export function formatCareerContextForAI(ctx: CareerContext): string {
     ctx.targetLocation  && `Location: ${ctx.targetLocation}`,
   ].filter(Boolean).join("\n");
   sections.push(identity);
+
+  // Goal Engine context
+  const goalParts = [
+    ctx.currentStage && `Job search stage: ${STAGE_LABELS[ctx.currentStage] ?? ctx.currentStage}`,
+    ctx.priority.length && `Focus priority: ${ctx.priority.map((p, i) => `${i + 1}. ${PRIORITY_LABELS[p] ?? p}`).join(", ")}`,
+    ctx.needsVisa && "Visa sponsorship required: Yes",
+  ].filter(Boolean);
+  if (goalParts.length) sections.push(goalParts.join("\n"));
 
   // Resume & gaps
   const resumeParts = [

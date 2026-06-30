@@ -169,6 +169,12 @@ model CareerProfile {
   achievements    Json     @default("[]")    // string[]
   notes           String?  @db.Text          // anything else the user wants AI to know
 
+  // Goal Engine fields
+  targetRoleTitle String?                    // specific title e.g. "Senior AI PM"
+  priority        Json     @default("[]")    // string[] ordered focus areas e.g. ["interview","resume","system_design"]
+  currentStage    String?                    // "not_applying"|"applying"|"getting_interviews"|"final_rounds"
+  needsVisa       Boolean  @default(false)
+
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 

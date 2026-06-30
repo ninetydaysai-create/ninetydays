@@ -67,15 +67,24 @@ export async function GET(req: Request) {
 
   if (toProcess.length === 0) return NextResponse.json({ generated: 0 });
 
-  // Load user + skill scores for each target user
+  // Load user + skill scores + priority for each target user
   const users = await db.user.findMany({
     where: { id: { in: toProcess } },
     select: {
       id: true,
       targetRole: true,
-      skillScores: { select: { dimension: true, score: true } },
+      skillScores:   { select: { dimension: true, score: true } },
+      careerProfile: { select: { priority: true } },
     },
   });
+
+  const PRIORITY_DIMENSIONS: Record<string, SkillDimension[]> = {
+    interview:    ["interview_confidence", "communication", "leadership"],
+    resume:       ["impact_writing", "resume_quality", "ownership_language", "ats_score"],
+    system_design:["system_design", "problem_solving"],
+    product:      ["business_thinking"],
+    ai:           ["ai_knowledge"],
+  };
 
   let generated = 0;
   let failed = 0;
@@ -83,10 +92,25 @@ export async function GET(req: Request) {
   await Promise.allSettled(
     users.map(async (user) => {
       const component = user.skillScores.filter((s) => s.dimension !== "recruiter_readiness");
-      const dimension: SkillDimension =
-        component.length > 0
-          ? component.reduce((min, s) => (s.score < min.score ? s : min)).dimension
-          : (ROLE_DEFAULT_DIMENSION[user.targetRole ?? "product_swe"] ?? "impact_writing");
+      const priority  = (user.careerProfile?.priority as string[]) ?? [];
+
+      let dimension: SkillDimension = ROLE_DEFAULT_DIMENSION[user.targetRole ?? "product_swe"] ?? "impact_writing";
+
+      // Respect user's stated priority order
+      for (const p of priority) {
+        const dims = PRIORITY_DIMENSIONS[p] ?? [];
+        const inCat = component.filter((s) => dims.includes(s.dimension as SkillDimension));
+        if (inCat.length > 0) {
+          dimension = inCat.reduce((min, s) => s.score < min.score ? s : min).dimension as SkillDimension;
+          break;
+        }
+        if (dims.length > 0) { dimension = dims[0]; break; }
+      }
+
+      // No priority or no match: pick overall weakest
+      if (!priority.length && component.length > 0) {
+        dimension = component.reduce((min, s) => s.score < min.score ? s : min).dimension as SkillDimension;
+      }
 
       const type = DIMENSION_TO_TYPE[dimension];
       const currentScore = user.skillScores.find((s) => s.dimension === dimension)?.score;
