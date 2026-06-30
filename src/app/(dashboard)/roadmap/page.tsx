@@ -20,7 +20,6 @@ import {
   ChevronDown,
   ChevronUp,
   ChevronRight,
-  ExternalLink,
   Clock,
   Target,
   BookOpen,
@@ -142,49 +141,6 @@ function isWeekMasteryUnlocked(weeks: Week[], weekNumber: number): boolean {
   return prev.tasks.every((t) => t.completed);
 }
 
-function getDomainLabel(url: string): string {
-  try {
-    const u = new URL(url);
-    const host = u.hostname.replace(/^www\./, "");
-    const map: Record<string, string> = {
-      "youtube.com":            "YouTube",
-      "youtu.be":               "YouTube",
-      "github.com":             "GitHub",
-      "arxiv.org":              "arXiv Paper",
-      "huggingface.co":         "HuggingFace",
-      "docs.python.org":        "Python Docs",
-      "pytorch.org":            "PyTorch Docs",
-      "tensorflow.org":         "TensorFlow",
-      "kaggle.com":             "Kaggle",
-      "medium.com":             "Medium",
-      "towardsdatascience.com": "Towards DS",
-      "coursera.org":           "Coursera",
-      "fast.ai":                "fast.ai",
-      "deeplearning.ai":        "DeepLearning.AI",
-      "langchain.com":          "LangChain",
-      "neetcode.io":            "NeetCode",
-      "leetcode.com":           "LeetCode",
-      "techinterviewhandbook.org": "Interview Handbook",
-      "levels.fyi":             "Levels.fyi",
-      "realpython.com":         "Real Python",
-      "javascript.info":        "javascript.info",
-      "web.dev":                "web.dev",
-      "refactoring.guru":       "Refactoring Guru",
-      "d2l.ai":                 "D2L Book",
-      "dataintensive.net":      "DDIA Book",
-      "3blue1brown.com":        "3Blue1Brown",
-      "interviewing.io":        "interviewing.io",
-      "pramp.com":              "Pramp",
-      "goodfirstissue.dev":     "Good First Issue",
-    };
-    // For search fallback URLs, add helpful suffix
-    if (host === "youtube.com" && u.pathname === "/results") return "YouTube Search";
-    if (host === "github.com" && u.pathname === "/search")   return "GitHub Search";
-    return map[host] ?? host;
-  } catch {
-    return "Resource";
-  }
-}
 
 export default function RoadmapPage() {
   const [roadmap, setRoadmap] = useState<Roadmap | null>(null);
@@ -699,23 +655,6 @@ export default function RoadmapPage() {
                                       </Link>
                                     </div>
 
-                                    {task.resourceUrls?.length > 0 && (
-                                      <div className="flex items-center gap-2 mt-3 flex-wrap">
-                                        <BookOpen className="h-4 w-4 text-slate-500 shrink-0" />
-                                        {task.resourceUrls.slice(0, 3).map((url, i) => (
-                                          <a
-                                            key={i}
-                                            href={url}
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            className="inline-flex items-center gap-1.5 text-sm font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 px-3 py-1.5 rounded-lg transition-colors"
-                                          >
-                                            {getDomainLabel(url)}
-                                            <ExternalLink className="h-3 w-3" />
-                                          </a>
-                                        ))}
-                                      </div>
-                                    )}
                                   </>
                                 )}
                               </div>
