@@ -32,6 +32,9 @@ import { TargetRole } from "@prisma/client";
 import { EvidenceGraph } from "@/components/shared/EvidenceGraph";
 import { DailyChallengeCard } from "@/components/shared/DailyChallengeCard";
 import { TransformationView } from "@/components/shared/TransformationView";
+import { CareerCommandCenter } from "@/components/dashboard/CareerCommandCenter";
+import { CompanyReadiness } from "@/components/dashboard/CompanyReadiness";
+import { getCompanyReadiness } from "@/lib/company-readiness";
 
 
 function getLevel(readiness: number): { level: number; label: string; next: number } {
@@ -126,7 +129,8 @@ export default async function DashboardPage() {
     db.userSkillScore.findMany({ where: { userId } }),
   ]);
 
-  const skillScores = Object.fromEntries(skillScoresRaw.map((r) => [r.dimension, r.score])) as Record<string, number>;
+  const skillScores     = Object.fromEntries(skillScoresRaw.map((r) => [r.dimension, r.score])) as Record<string, number>;
+  const companies       = getCompanyReadiness(skillScores, user.targetRole ?? "product_swe");
 
   // Career metrics
   const readinessScore = gapReport?.totalGapScore ?? null;
@@ -176,56 +180,8 @@ export default async function DashboardPage() {
     <div className="space-y-7">
       <Suspense fallback={null}><UpgradeSuccessToast /></Suspense>
 
-      {/* ── Outcome hero banner ── */}
-      <div className="rounded-2xl overflow-hidden relative bg-gradient-to-br from-indigo-600 via-indigo-500 to-violet-600 p-5 sm:p-8 text-white shadow-xl shadow-indigo-500/20">
-        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: "radial-gradient(circle at 70% 50%, white 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
-        <div className="relative">
-          {readinessScore !== null ? (
-            <>
-              <p className="text-indigo-200 text-sm font-semibold mb-2 uppercase tracking-widest">
-                {weeksLeft ? `${weeksLeft} weeks to ${roleLabel} readiness` : `You're ${roleLabel} ready`}
-              </p>
-              <h1 className="text-4xl font-bold mb-2">
-                {user.name ? `Welcome back, ${user.name.split(" ")[0]}` : "Welcome back"}
-              </h1>
-              <p className="text-indigo-100 text-lg leading-relaxed mb-5">
-                Current readiness: <span className="font-bold text-white">{readinessScore}%</span>
-                {readinessScore < TARGET_READINESS && (
-                  <> · Top companies expect <span className="font-bold text-white">{TARGET_READINESS}%+</span></>
-                )}
-              </p>
-              <div className="flex items-center gap-4 max-w-md">
-                <div className="flex-1 bg-white/20 rounded-full h-3">
-                  <div
-                    className="h-3 rounded-full bg-white transition-all"
-                    style={{ width: `${Math.min(readinessScore, 100)}%` }}
-                  />
-                </div>
-                <span className="text-lg font-bold shrink-0">{readinessScore}%</span>
-              </div>
-              {weeksLeft && (
-                <p className="text-indigo-200 text-sm mt-3">
-                  At current pace — you need {TARGET_READINESS - readinessScore}% more readiness to compete confidently
-                </p>
-              )}
-            </>
-          ) : (
-            <>
-              <p className="text-indigo-200 text-sm font-semibold mb-2 uppercase tracking-widest">
-                {roadmap ? `Day ${dayOfJourney} of 90` : "Let's get started"}
-              </p>
-              <h1 className="text-4xl font-bold mb-3">
-                {user.name ? `Welcome back, ${user.name.split(" ")[0]} 👋` : "Welcome back 👋"}
-              </h1>
-              <p className="text-indigo-100 text-lg">
-                {roadmap
-                  ? `${progressPct}% of your 90-day roadmap complete — keep pushing.`
-                  : "Upload your resume to get your readiness score and 90-day plan."}
-              </p>
-            </>
-          )}
-        </div>
-      </div>
+      {/* ── Career Command Center — replaces static hero banner ── */}
+      <CareerCommandCenter />
 
       {/* ── Career outcome metrics ── */}
       {readinessScore !== null ? (
@@ -305,6 +261,9 @@ export default async function DashboardPage() {
           ))}
         </div>
       )}
+
+      {/* ── Company Readiness ── */}
+      <CompanyReadiness companies={companies} hasScores={skillScoresRaw.length > 0} />
 
       {/* ── Evidence Graph ── */}
       <EvidenceGraph skillScores={skillScores} />

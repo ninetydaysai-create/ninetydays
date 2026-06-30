@@ -1,6 +1,6 @@
 import {
   LayoutDashboard, FileText, Target, Map, Briefcase, MessageSquare,
-  ExternalLink, GitFork, Kanban, ScanSearch, Mail, FileEdit, Bot, Users, FolderOpen, BookUser,
+  ExternalLink, GitFork, Kanban, ScanSearch, Mail, FileEdit, Bot, Users, FolderOpen, BookUser, BarChart3,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -15,6 +15,7 @@ export interface NavItem {
 export const nav: NavItem[] = [
   { href: "/dashboard",       label: "Dashboard",      icon: LayoutDashboard, color: "text-indigo-400", bg: "bg-indigo-500/10" },
   { href: "/career-profile",  label: "Career Profile", icon: BookUser,        color: "text-violet-400", bg: "bg-violet-500/10" },
+  { href: "/report",          label: "My Report",      icon: BarChart3,       color: "text-emerald-400",bg: "bg-emerald-500/10"},
   { href: "/mentor",          label: "AI Mentor",      icon: Bot,             color: "text-purple-400", bg: "bg-purple-500/10" },
   { href: "/resume",       label: "Resume",        icon: FileText,        color: "text-blue-400",   bg: "bg-blue-500/10"   },
   { href: "/gaps",         label: "Gap Engine",    icon: Target,          color: "text-red-400",    bg: "bg-red-500/10"    },

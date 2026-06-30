@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Activity } from "lucide-react";
 import Link from "next/link";
 
@@ -67,6 +68,8 @@ export interface EvidenceGraphProps {
 export function EvidenceGraph({ skillScores }: EvidenceGraphProps) {
   const composite = skillScores.recruiter_readiness;
   const hasScores = DIMENSIONS.some((d) => skillScores[d] !== undefined);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { const t = setTimeout(() => setMounted(true), 100); return () => clearTimeout(t); }, []);
 
   return (
     <div className="bg-[#161820] rounded-2xl border border-white/10 shadow-sm p-6">
@@ -113,7 +116,7 @@ export function EvidenceGraph({ skillScores }: EvidenceGraphProps) {
               <div className="w-full bg-white/10 rounded-full h-2.5">
                 <div
                   className={`h-2.5 rounded-full transition-all duration-700 ${barColor(composite)}`}
-                  style={{ width: `${composite}%` }}
+                  style={{ width: mounted ? `${composite}%` : "0%" }}
                 />
               </div>
               <p className="text-xs text-slate-500 mt-2">Weighted composite of all dimensions below</p>
@@ -132,7 +135,7 @@ export function EvidenceGraph({ skillScores }: EvidenceGraphProps) {
                   <div className="flex-1 bg-white/[0.06] rounded-full h-1.5 overflow-hidden">
                     <div
                       className={`h-1.5 rounded-full transition-all duration-700 ${score !== undefined ? barColor(score) : ""}`}
-                      style={{ width: score !== undefined ? `${score}%` : "0%" }}
+                      style={{ width: score !== undefined && mounted ? `${score}%` : "0%" }}
                     />
                   </div>
                   <span
