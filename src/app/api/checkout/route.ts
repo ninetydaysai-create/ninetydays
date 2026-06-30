@@ -33,11 +33,14 @@ export async function POST(req: Request) {
   // Include email in customData (Paddle collects it during checkout if not pre-filled).
   const transaction = await paddle.transactions.create({
     items: [{ priceId, quantity: 1 }],
-    customData: { userId, plan, email: user?.email ?? "" } as Record<string, unknown>,
+    // Pre-fill email on Paddle's hosted checkout page
+    ...(user?.email ? { customer: { email: user.email } } : {}),
+    // customData is passed through to every webhook event for user identification
+    customData: { userId, plan } as Record<string, unknown>,
     checkout: {
       url: isSprint
-        ? `${APP_URL}/dashboard?upgraded=1&plan=sprint`
-        : `${APP_URL}/dashboard?upgraded=1`,
+        ? `${APP_URL}/settings?checkout=sprint`
+        : `${APP_URL}/settings?checkout=success`,
     },
   });
 

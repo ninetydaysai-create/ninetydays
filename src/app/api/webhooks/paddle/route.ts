@@ -48,13 +48,13 @@ export async function POST(req: Request) {
       // Idempotency: skip if already a PRO Sprint user with a future end date
       const existing = await db.user.findUnique({
         where: { id: userId },
-        select: { plan: true, stripeCurrentPeriodEnd: true, stripeSubscriptionId: true },
+        select: { plan: true, paddleCurrentPeriodEnd: true, paddleSubscriptionId: true },
       });
       const alreadyActive =
         existing?.plan === Plan.PRO &&
-        existing.stripeCurrentPeriodEnd !== null &&
-        existing.stripeCurrentPeriodEnd > new Date() &&
-        !existing.stripeSubscriptionId; // Sprint has no subscription ID
+        existing.paddleCurrentPeriodEnd !== null &&
+        existing.paddleCurrentPeriodEnd > new Date() &&
+        !existing.paddleSubscriptionId; // Sprint has no subscription ID
 
       if (!alreadyActive) {
         const sprintEnd = new Date();
@@ -64,7 +64,7 @@ export async function POST(req: Request) {
           where: { id: userId },
           data: {
             plan: Plan.PRO,
-            stripeCurrentPeriodEnd: sprintEnd,
+            paddleCurrentPeriodEnd: sprintEnd,
           },
         });
 
@@ -110,9 +110,9 @@ export async function POST(req: Request) {
     // Idempotency: skip if this subscription is already stored for this user
     const existing = await db.user.findUnique({
       where: { id: userId },
-      select: { stripeSubscriptionId: true },
+      select: { paddleSubscriptionId: true },
     });
-    if (existing?.stripeSubscriptionId === subId) {
+    if (existing?.paddleSubscriptionId === subId) {
       return NextResponse.json({ received: true });
     }
 
@@ -120,10 +120,10 @@ export async function POST(req: Request) {
       where: { id: userId },
       data: {
         plan: Plan.PRO,
-        stripeSubscriptionId:   subId,
-        stripeCustomerId:       custId,
-        stripePriceId:          firstItemId,
-        stripeCurrentPeriodEnd: renewsAt,
+        paddleSubscriptionId:   subId,
+        paddleCustomerId:       custId,
+        paddlePriceId:          firstItemId,
+        paddleCurrentPeriodEnd: renewsAt,
       },
     });
 
@@ -156,18 +156,18 @@ export async function POST(req: Request) {
     const priceId   = data?.items?.[0]?.price?.id ?? null;
 
     await db.user.updateMany({
-      where: { stripeSubscriptionId: subId },
+      where: { paddleSubscriptionId: subId },
       data: {
         plan: isActive ? Plan.PRO : Plan.FREE,
-        stripePriceId: priceId,
-        stripeCurrentPeriodEnd: renewsAt,
+        paddlePriceId: priceId,
+        paddleCurrentPeriodEnd: renewsAt,
       },
     });
 
     // Warn user when payment is overdue but access is still active
     if (isPastDue) {
       const affected = await db.user.findFirst({
-        where: { stripeSubscriptionId: subId },
+        where: { paddleSubscriptionId: subId },
         select: { id: true },
       });
       if (affected) {
@@ -193,10 +193,10 @@ export async function POST(req: Request) {
                  : null;
 
     await db.user.updateMany({
-      where: { stripeSubscriptionId: subId },
+      where: { paddleSubscriptionId: subId },
       data: {
-        // Keep PRO — cron will downgrade when stripeCurrentPeriodEnd passes
-        stripeCurrentPeriodEnd: endsAt,
+        // Keep PRO — cron will downgrade when paddleCurrentPeriodEnd passes
+        paddleCurrentPeriodEnd: endsAt,
       },
     });
 
@@ -213,9 +213,9 @@ export async function POST(req: Request) {
 
     // Prefer lookup by subscriptionId; fall back to customerId
     const user = subId
-      ? await db.user.findFirst({ where: { stripeSubscriptionId: subId }, select: { id: true } })
+      ? await db.user.findFirst({ where: { paddleSubscriptionId: subId }, select: { id: true } })
       : custId
-        ? await db.user.findFirst({ where: { stripeCustomerId: custId }, select: { id: true } })
+        ? await db.user.findFirst({ where: { paddleCustomerId: custId }, select: { id: true } })
         : null;
 
     if (user) {
@@ -223,9 +223,9 @@ export async function POST(req: Request) {
         where: { id: user.id },
         data: {
           plan: Plan.FREE,
-          stripeSubscriptionId:   null,
-          stripePriceId:          null,
-          stripeCurrentPeriodEnd: null,
+          paddleSubscriptionId:   null,
+          paddlePriceId:          null,
+          paddleCurrentPeriodEnd: null,
         },
       });
 

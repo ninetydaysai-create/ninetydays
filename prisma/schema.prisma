@@ -107,6 +107,10 @@ model User {
   stripeSubscriptionId   String?     @unique
   stripePriceId          String?
   stripeCurrentPeriodEnd DateTime?
+  paddleCustomerId       String?     @unique
+  paddleSubscriptionId   String?     @unique
+  paddlePriceId          String?
+  paddleCurrentPeriodEnd DateTime?
   hoursPerWeek           Int?        @default(10)
   targetTimeline         String?     // "3_months" | "6_months" | "12_months"
   targetCompanyType      String?     // "faang" | "funded_startup" | "any_product"

@@ -37,10 +37,10 @@ export default async function SettingsPage() {
   const user = await db.user.findUnique({
     where: { id: userId },
     select: {
-      email:                 true,
-      plan:                  true,
-      stripeCurrentPeriodEnd: true,
-      stripeSubscriptionId:  true,
+      email:                  true,
+      plan:                   true,
+      paddleCurrentPeriodEnd: true,
+      paddleSubscriptionId:   true,
       name:                  true,
       targetRole:            true,
       currentRole:           true,
@@ -57,7 +57,7 @@ export default async function SettingsPage() {
 
   const isPro = user.plan === "PRO";
   // Sprint users have Pro plan but no subscription ID (one-time payment)
-  const isSprint = isPro && !user.stripeSubscriptionId;
+  const isSprint = isPro && !user.paddleSubscriptionId;
 
   return (
     <div className="max-w-2xl mx-auto space-y-8">
@@ -95,10 +95,10 @@ export default async function SettingsPage() {
               {isPro ? "Pro" : "Free"}
             </Badge>
           </div>
-          {isPro && user.stripeCurrentPeriodEnd && (
+          {isPro && user.paddleCurrentPeriodEnd && (
             <div className="flex justify-between items-center py-1">
               <span className="text-slate-400">Renews</span>
-              <span className="font-medium">{format(user.stripeCurrentPeriodEnd, "MMM d, yyyy")}</span>
+              <span className="font-medium">{format(user.paddleCurrentPeriodEnd, "MMM d, yyyy")}</span>
             </div>
           )}
         </CardContent>
@@ -230,7 +230,7 @@ export default async function SettingsPage() {
             </div>
             <CardDescription>
               {isSprint
-                ? `Sprint access until ${user.stripeCurrentPeriodEnd ? format(user.stripeCurrentPeriodEnd, "MMM d, yyyy") : "—"} — upgrade to Pro to continue after.`
+                ? `Sprint access until ${user.paddleCurrentPeriodEnd ? format(user.paddleCurrentPeriodEnd, "MMM d, yyyy") : "—"} — upgrade to Pro to continue after.`
                 : "Manage your billing and subscription."}
             </CardDescription>
           </CardHeader>

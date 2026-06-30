@@ -15,12 +15,12 @@ export async function GET(req: Request) {
 
   const now = new Date();
 
-  // Sprint users: Pro plan, no subscription ID, period expired
+  // Sprint users: Pro plan, no subscription ID, Paddle period expired
   const expired = await db.user.findMany({
     where: {
       plan: Plan.PRO,
-      stripeSubscriptionId: null,
-      stripeCurrentPeriodEnd: { lt: now },
+      paddleSubscriptionId: null,
+      paddleCurrentPeriodEnd: { lt: now },
     },
     select: { id: true },
   });
@@ -31,7 +31,7 @@ export async function GET(req: Request) {
     where: { id: { in: expired.map((u) => u.id) } },
     data: {
       plan: Plan.FREE,
-      stripeCurrentPeriodEnd: null,
+      paddleCurrentPeriodEnd: null,
     },
   });
 
