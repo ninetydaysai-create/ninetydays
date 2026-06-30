@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { defaultModel } from "@/lib/ai";
 import { streamText } from "ai";
+import { buildCareerContext, formatCareerContextForAI } from "@/lib/career-context";
 
 function buildActionPrompt(
   action: string,
@@ -34,36 +35,30 @@ export async function POST(req: Request) {
   const { taskId, stepType, stepTitle, action, userInput, customMessage, conversationHistory } =
     await req.json();
 
-  const [task, user] = await Promise.all([
+  const [task, ctx] = await Promise.all([
     db.roadmapTask.findFirst({
       where: { id: taskId, week: { roadmap: { userId } } },
-      select: {
-        label: true,
-        description: true,
-        week: { select: { roadmap: { select: { targetRole: true } } } },
-      },
+      select: { label: true, description: true },
     }),
-    db.user.findUnique({ where: { id: userId }, select: { targetRole: true } }),
+    buildCareerContext(userId),
   ]);
 
   if (!task) return NextResponse.json({ error: "Task not found" }, { status: 404 });
 
-  const targetRole = (
-    task.week?.roadmap?.targetRole ?? user?.targetRole ?? "product_swe"
-  ).replace(/_/g, " ");
-
-  const systemPrompt = `You are an AI mentor embedded in a hands-on learning task. Help the student understand and practice this specific topic.
+  const systemPrompt = `You are an AI mentor helping with a specific learning task. You know this candidate's full career context — reference it when relevant.
 
 Task: ${task.label}
 ${task.description ? `Description: ${task.description}` : ""}
 Current step: ${stepTitle} (${stepType})
-Target role: ${targetRole}
+
+CANDIDATE CONTEXT:
+${formatCareerContextForAI(ctx)}
 
 Rules:
-- Be direct and specific. No generic affirmations ("great question", "I understand").
-- Stay focused on this task and step. Do not go off-topic.
-- Maximum 150 words unless the user explicitly asks for more detail.
-- Give the actual answer or feedback immediately — do not explain what you are about to do.`;
+- Stay focused on this task and step.
+- Reference their target companies, weak skills, or career goal when it adds value.
+- Max 150 words unless asked for more.
+- Give the actual answer immediately — no preamble.`;
 
   const userMessage =
     customMessage?.trim() ||

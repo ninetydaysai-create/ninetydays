@@ -141,8 +141,34 @@ model User {
   skillHistory      SkillScoreHistory[]
   dailyChallenges   DailyChallenge[]
   deliverables      Deliverable[]
+  careerProfile     CareerProfile?
 
   @@map("users")
+}
+
+// ─── Career OS Memory ─────────────────────────────────────────────────────────
+
+model CareerProfile {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Goals
+  careerGoal      String?  @db.Text          // "Become AI PM at Series B in 18 months"
+  targetCompanies Json     @default("[]")    // string[] — specific companies
+  targetSalary    String?                    // "180k–220k"
+  targetLocation  String?                    // "San Francisco, Remote"
+
+  // Self-assessment (user-supplied, AI reads every session)
+  strengths       Json     @default("[]")    // string[]
+  weaknesses      Json     @default("[]")    // string[]
+  achievements    Json     @default("[]")    // string[]
+  notes           String?  @db.Text          // anything else the user wants AI to know
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("career_profiles")
 }
 
 // ─── Resume ───────────────────────────────────────────────────────────────────
