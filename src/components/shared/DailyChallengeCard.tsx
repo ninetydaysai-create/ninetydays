@@ -185,16 +185,14 @@ export function DailyChallengeCard() {
   return (
     <div className="bg-[#161820] rounded-2xl border border-white/10 shadow-sm p-6">
       {/* ── Header ── */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-start justify-between gap-2 mb-4 flex-wrap">
         <div className="flex items-center gap-2.5">
           <div className={`h-8 w-8 rounded-lg ${config.bg} flex items-center justify-center shrink-0`}>
             <Icon className={`h-4 w-4 ${config.text}`} />
           </div>
-          <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Daily Challenge</p>
-          </div>
+          <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Daily Challenge</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <DimensionLabel dimension={challenge.dimension} />
           <span className={`text-[10px] font-bold uppercase tracking-wider ${diffConfig.color}`}>
             {diffConfig.label}
@@ -274,14 +272,14 @@ export function DailyChallengeCard() {
             className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-600 resize-none focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30 transition-colors"
           />
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap gap-2">
             <span className={`text-xs tabular-nums ${response.length < 30 ? "text-slate-600" : "text-slate-400"}`}>
               {response.length} chars {response.length < 30 && `· need ${30 - response.length} more`}
             </span>
             <button
               onClick={handleSubmit}
               disabled={isPending || response.trim().length < 30}
-              className="h-9 px-5 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-colors flex items-center gap-2"
+              className="h-9 px-4 sm:px-5 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-colors flex items-center gap-2"
             >
               {isPending ? (
                 <>

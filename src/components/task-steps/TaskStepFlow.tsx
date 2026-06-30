@@ -56,19 +56,21 @@ function StepIndicators({ steps, currentIdx }: { steps: Step[]; currentIdx: numb
         return (
           <div key={step.id} className="flex items-center">
             <div className={`flex flex-col items-center gap-1 ${i <= currentIdx ? "" : "opacity-40"}`}>
-              <div className={`h-9 w-9 rounded-xl flex items-center justify-center text-sm font-black transition-all ${
+              {/* Smaller circles on mobile (h-7 w-7) → normal on sm+ (h-9 w-9) */}
+              <div className={`h-7 w-7 sm:h-9 sm:w-9 rounded-lg sm:rounded-xl flex items-center justify-center text-sm font-black transition-all ${
                 isDone    ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30" :
                 isCurrent ? `${cfg.bg} ${cfg.color} border border-current/30` :
                             "bg-white/[0.04] text-slate-500 border border-white/10"
               }`}>
-                {isDone ? <CheckCircle2 className="h-4 w-4" /> : <Icon className="h-4 w-4" />}
+                {isDone ? <CheckCircle2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> : <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />}
               </div>
               <span className={`text-[9px] font-bold uppercase tracking-wider hidden sm:block ${isCurrent ? cfg.color : "text-slate-500"}`}>
                 {cfg.label}
               </span>
             </div>
             {i < steps.length - 1 && (
-              <div className={`w-6 h-px mx-1 mb-4 transition-colors ${isDone ? "bg-emerald-500/40" : "bg-white/10"}`} />
+              /* Shorter connectors on mobile (w-3) → normal on sm+ (w-6) */
+              <div className={`w-3 sm:w-6 h-px mx-0.5 sm:mx-1 mb-0 sm:mb-4 transition-colors ${isDone ? "bg-emerald-500/40" : "bg-white/10"}`} />
             )}
           </div>
         );
@@ -252,14 +254,14 @@ function PracticeStep({
         rows={6}
         className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-600 resize-none focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30 transition-colors"
       />
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-2">
         <span className={`text-xs tabular-nums ${value.length < 30 ? "text-slate-600" : "text-slate-400"}`}>
-          {value.length} chars {value.length < 30 && `· ${30 - value.length} more to submit`}
+          {value.length} chars {value.length < 30 && `· ${30 - value.length} more`}
         </span>
         <button
           onClick={submit}
           disabled={isPending || value.trim().length < 30}
-          className="h-9 px-5 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm flex items-center gap-2 transition-colors"
+          className="h-9 px-4 sm:px-5 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm flex items-center gap-2 transition-colors"
         >
           {isPending ? <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Evaluating…</> : "Submit for AI feedback"}
         </button>
@@ -411,14 +413,14 @@ function DeliverableStep({
         rows={8}
         className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-600 resize-none focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30 transition-colors font-mono"
       />
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-2">
         <span className={`text-xs tabular-nums ${value.length < 30 ? "text-slate-600" : "text-slate-400"}`}>
           {value.length} chars
         </span>
         <button
           onClick={submit}
           disabled={isPending || value.trim().length < 30}
-          className="h-9 px-5 rounded-xl bg-orange-600 hover:bg-orange-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm flex items-center gap-2 transition-colors"
+          className="h-9 px-4 sm:px-5 rounded-xl bg-orange-600 hover:bg-orange-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm flex items-center gap-2 transition-colors"
         >
           {isPending ? <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Saving…</> : "Save deliverable →"}
         </button>

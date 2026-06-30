@@ -126,7 +126,7 @@ export function EvidenceGraph({ skillScores }: EvidenceGraphProps) {
               const score = skillScores[dim];
               return (
                 <div key={dim} className="flex items-center gap-3">
-                  <span className="text-xs text-slate-400 w-44 shrink-0 truncate">
+                  <span className="text-xs text-slate-400 w-28 sm:w-44 shrink-0 truncate">
                     {LABELS[dim]}
                   </span>
                   <div className="flex-1 bg-white/[0.06] rounded-full h-1.5 overflow-hidden">
@@ -148,7 +148,7 @@ export function EvidenceGraph({ skillScores }: EvidenceGraphProps) {
           </div>
 
           {/* Legend */}
-          <div className="flex items-center gap-5 mt-5 pt-4 border-t border-white/[0.06]">
+          <div className="flex flex-wrap items-center gap-3 sm:gap-5 mt-5 pt-4 border-t border-white/[0.06]">
             <div className="flex items-center gap-1.5">
               <div className="h-2 w-2 rounded-full bg-emerald-500 shrink-0" />
               <span className="text-xs text-slate-500">Strong (70+)</span>
