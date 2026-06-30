@@ -46,7 +46,7 @@ export default async function TaskPage({ params }: Props) {
       <div className="bg-[#161820] rounded-2xl border border-white/10 shadow-sm p-6">
         <div className="flex items-start justify-between gap-4 flex-wrap mb-3">
           <span className="text-xs font-bold uppercase tracking-widest text-slate-500">
-            Week {task.week.weekNumber} · {task.week.theme}
+            Level {task.week.weekNumber} · {task.week.theme}
           </span>
           {task.completed && (
             <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">

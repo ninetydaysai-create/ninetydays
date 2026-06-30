@@ -273,7 +273,7 @@ export default function RoadmapPage() {
       <div className="max-w-3xl mx-auto space-y-6">
         <div>
           <h1 className="text-3xl font-bold">90-Day Roadmap</h1>
-          <p className="text-slate-400 mt-2 text-base">Your personalized week-by-week plan to get hired in AI.</p>
+          <p className="text-slate-400 mt-2 text-base">Your personalized 12-level plan to get hired in AI.</p>
         </div>
         <div className="rounded-2xl border border-white/10 bg-[#161820] overflow-hidden">
           {/* Top section */}
@@ -291,9 +291,9 @@ export default function RoadmapPage() {
             {/* Outcome preview */}
             <div className="grid grid-cols-3 gap-4 max-w-sm mx-auto pt-2">
               {[
-                { label: "Week 1–2", desc: "Fix resume + close top gaps" },
-                { label: "Week 3–8", desc: "Build portfolio + apply" },
-                { label: "Week 9–12", desc: "Interview prep + offers" },
+                { label: "Levels 1–2", desc: "Fix resume + close top gaps" },
+                { label: "Levels 3–8", desc: "Build portfolio + apply" },
+                { label: "Levels 9–12", desc: "Interview prep + offers" },
               ].map(({ label, desc }) => (
                 <div key={label} className="bg-white/5 rounded-xl p-3 text-left">
                   <p className="text-xs font-bold text-indigo-400">{label}</p>
@@ -306,13 +306,13 @@ export default function RoadmapPage() {
             {generating ? (
               <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-xl px-5 py-5 max-w-sm mx-auto space-y-3 text-left mt-2">
                 <div className="flex items-center justify-between">
-                  <p className="text-sm font-semibold text-indigo-300">Building your 12-week hiring plan…</p>
+                  <p className="text-sm font-semibold text-indigo-300">Building your 12-level hiring plan…</p>
                   <span className="text-xs font-mono tabular-nums text-indigo-400">{formatElapsed(elapsed)}</span>
                 </div>
                 {[
                   { label: "Reading your resume and gap report", done: true },
                   { label: "Mapping each gap to specific tasks", done: true },
-                  { label: "Writing 12 weeks of personalized work", done: false },
+                  { label: "Writing 12 levels of personalized work", done: false },
                 ].map(({ label, done }) => (
                   <div key={label} className="flex items-center gap-2 text-sm">
                     {done
@@ -393,7 +393,7 @@ export default function RoadmapPage() {
               </div>
             )}
             <Badge variant="outline" className="text-sm px-3 py-1.5 font-semibold border-white/15 text-slate-300">
-              Week {currentWeek} / 12
+              Level {currentWeek} / 12
             </Badge>
           </div>
         </div>
@@ -483,10 +483,10 @@ export default function RoadmapPage() {
               <div className={`h-2.5 w-2.5 rounded-full shrink-0 ${colors.dot}`} />
               <div className="flex-1 min-w-0">
                 <span className="font-bold text-white text-base">{phase.label} — {phase.name}</span>
-                <span className="text-slate-300 text-sm ml-2">Week {phase.weeks[0]}–{phase.weeks[phase.weeks.length - 1]}</span>
+                <span className="text-slate-300 text-sm ml-2">Levels {phase.weeks[0]}–{phase.weeks[phase.weeks.length - 1]}</span>
               </div>
               <Badge className={`text-sm font-semibold ${colors.badge} border-0 px-3 py-1`}>
-                {phaseWeeks.filter((w) => w.deliverableDone).length}/{phaseWeeks.length} weeks done
+                {phaseWeeks.filter((w) => w.deliverableDone).length}/{phaseWeeks.length} levels done
               </Badge>
             </div>
 
@@ -538,7 +538,7 @@ export default function RoadmapPage() {
                       <div className="flex items-center gap-2 flex-wrap mb-1">
                         {isCurrent && (
                           <span className={`text-xs font-bold px-2.5 py-1 rounded-full bg-gradient-to-r ${phase.gradient} text-white`}>
-                            Current week
+                            Current Level
                           </span>
                         )}
                         {allWeekDone && (
@@ -547,6 +547,7 @@ export default function RoadmapPage() {
                           </span>
                         )}
                       </div>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-0.5">Level {week.weekNumber}</p>
                       <p className="font-bold text-white text-base leading-tight">{week.theme}</p>
                       <div className="flex items-center gap-3 mt-2">
                         <div className="flex-1 max-w-[140px] h-2 bg-white/10 rounded-full overflow-hidden">
@@ -677,7 +678,7 @@ export default function RoadmapPage() {
                           )}
                           <div>
                             <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5">
-                              Week Deliverable
+                              Level Deliverable
                             </p>
                             <p className={`text-base font-medium leading-snug ${week.deliverableDone ? "text-emerald-400" : "text-slate-300"}`}>
                               {week.deliverable}
@@ -694,7 +695,7 @@ export default function RoadmapPage() {
                       <Link href="/settings">
                         <Button size="sm" variant="outline" className="gap-2 text-xs h-8 border-white/15 text-slate-400 hover:border-indigo-500/40 hover:text-indigo-400">
                           <Lock className="h-3 w-3" />
-                          Upgrade to unlock weeks {week.weekNumber}–12
+                          Upgrade to unlock levels {week.weekNumber}–12
                         </Button>
                       </Link>
                     </div>
@@ -706,9 +707,16 @@ export default function RoadmapPage() {
                       <div className="flex items-start gap-3 rounded-xl bg-white/[0.03] border border-white/[0.07] p-4">
                         <Lock className="h-4 w-4 text-slate-500 shrink-0 mt-0.5" />
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-semibold text-slate-300 mb-2">
-                            Complete Week {week.weekNumber - 1} to unlock
-                          </p>
+                          <div className="flex items-center gap-2 mb-2">
+                            <p className="text-sm font-semibold text-slate-300">
+                              Complete Level {week.weekNumber - 1} to unlock
+                            </p>
+                            {prevPct >= 80 && (
+                              <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 shrink-0">
+                                Almost there!
+                              </span>
+                            )}
+                          </div>
                           <div className="flex items-center justify-between text-xs text-slate-500 mb-1.5">
                             <span>{prevDone} of {prevTotal} tasks done</span>
                             <span>{prevPct}%</span>
@@ -721,7 +729,7 @@ export default function RoadmapPage() {
                           </div>
                           {prevPct > 0 && prevPct < 100 && (
                             <p className="text-xs text-slate-600 mt-2">
-                              {prevTotal - prevDone} task{prevTotal - prevDone !== 1 ? "s" : ""} left in Week {week.weekNumber - 1}
+                              {prevTotal - prevDone} task{prevTotal - prevDone !== 1 ? "s" : ""} left in Level {week.weekNumber - 1}
                             </p>
                           )}
                         </div>

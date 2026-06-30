@@ -94,8 +94,8 @@ export async function CareerCommandCenter() {
       icon: Target,
       label: currentTask.label,
       sub: taskStepsTotal > 0
-        ? `Step ${taskStepsDone + 1} of ${taskStepsTotal} · ${currentWeek?.theme ?? ""}`
-        : currentWeek?.theme ?? "Continue roadmap",
+        ? `Step ${taskStepsDone + 1} of ${taskStepsTotal} · Level ${currentWeek?.weekNumber}`
+        : `Level ${currentWeek?.weekNumber}: ${currentWeek?.theme ?? "Continue your plan"}`,
       href: `/roadmap/task/${currentTask.id}`,
       done: false,
       accent: "text-indigo-400",
