@@ -193,7 +193,8 @@ model Resume {
   rawText   String   @db.Text
   createdAt DateTime @default(now())
 
-  analyses ResumeAnalysis[]
+  analyses        ResumeAnalysis[]
+  jobApplications JobApplication[]
 
   @@index([userId])
   @@map("resumes")
@@ -526,8 +527,16 @@ model JobApplication {
   followUpDate    DateTime?
   followUpSent    Boolean   @default(false)
   appliedAt       DateTime?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+
+  // V2 — Applications Tracker 2.0
+  source          String?              // "LinkedIn" | "Referral" | "Company website" | "Cold outreach" | "Job board"
+  resumeVersionId String?              // which resume was submitted
+  resumeVersion   Resume?              @relation(fields: [resumeVersionId], references: [id], onDelete: SetNull)
+  rejectionStage  String?              // status at time of rejection — for pattern analysis
+  aiInsight       String?   @db.Text  // AI-generated coaching insight (set on rejection)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([userId])
   @@map("job_applications")

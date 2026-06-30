@@ -7,9 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Kanban, Plus, X, ExternalLink, Loader2, Trophy, TrendingUp } from "lucide-react";
+import { Kanban, Plus, X, ExternalLink, Loader2, Trophy, TrendingUp, Brain, AlertTriangle, ChevronRight } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
+import Link from "next/link";
 
 type JobStatus = "saved" | "applied" | "recruiter_screen" | "technical" | "final_round" | "offer" | "rejected";
 
@@ -25,6 +26,11 @@ interface Job {
   createdAt: string;
   keywordMatchPct: number | null;
   rawJd: string | null;
+  // V2 fields
+  source: string | null;
+  rejectionStage: string | null;
+  aiInsight: string | null;
+  notes: string | null;
 }
 
 const COLUMNS: { status: JobStatus; label: string; color: string }[] = [
@@ -37,8 +43,10 @@ const COLUMNS: { status: JobStatus; label: string; color: string }[] = [
   { status: "rejected", label: "Rejected", color: "bg-red-500/15 text-red-400" },
 ];
 
+const SOURCES = ["LinkedIn", "Referral", "Company website", "Cold outreach", "Job board", "Other"];
+
 function AddJobDialog({ onClose, onAdded }: { onClose: () => void; onAdded: (job: Job) => void }) {
-  const [form, setForm] = useState({ company: "", roleTitle: "", jobUrl: "", salary: "", location: "", rawJd: "" });
+  const [form, setForm] = useState({ company: "", roleTitle: "", jobUrl: "", salary: "", location: "", rawJd: "", source: "" });
   const [saving, setSaving] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -123,6 +131,17 @@ function AddJobDialog({ onClose, onAdded }: { onClose: () => void; onAdded: (job
               </div>
             </div>
             <div className="space-y-1.5">
+              <Label className="text-base font-medium text-slate-700">Where did you find it?</Label>
+              <select
+                value={form.source}
+                onChange={(e) => setForm({ ...form, source: e.target.value })}
+                className="w-full h-10 text-base text-slate-900 border border-slate-300 rounded-md px-3 bg-white"
+              >
+                <option value="">Select source…</option>
+                {SOURCES.map(s => <option key={s} value={s}>{s}</option>)}
+              </select>
+            </div>
+            <div className="space-y-1.5">
               <Label className="text-base font-medium text-slate-700">Job Description (optional)</Label>
               <textarea
                 value={form.rawJd}
@@ -146,6 +165,57 @@ function AddJobDialog({ onClose, onAdded }: { onClose: () => void; onAdded: (job
 }
 
 const INTERVIEW_STAGES: JobStatus[] = ["recruiter_screen", "technical", "final_round"];
+
+const STAGE_LABEL: Record<string, string> = {
+  saved: "before applying", applied: "at resume screen",
+  recruiter_screen: "at recruiter screen", technical: "at technical round", final_round: "at final round",
+};
+const STAGE_ACTION: Record<string, { label: string; href: string }> = {
+  saved:            { label: "Improve your resume",     href: "/resume"    },
+  applied:          { label: "Improve your resume",     href: "/resume"    },
+  recruiter_screen: { label: "Practice communication",  href: "/interview" },
+  technical:        { label: "Practice system design",  href: "/interview" },
+  final_round:      { label: "Practice leadership Q&A", href: "/interview" },
+};
+
+function RejectionPatternBanner({ jobs }: { jobs: Job[] }) {
+  const rejected = jobs.filter(j => j.status === "rejected" && j.rejectionStage);
+  if (rejected.length < 2) return null;
+
+  const counts: Record<string, number> = {};
+  for (const j of rejected) counts[j.rejectionStage!] = (counts[j.rejectionStage!] ?? 0) + 1;
+  const [topStage, topCount] = Object.entries(counts).sort((a, b) => b[1] - a[1])[0] ?? [];
+  if (!topStage || topCount < 2) return null;
+
+  const action = STAGE_ACTION[topStage] ?? { label: "Review your roadmap", href: "/roadmap" };
+  const latestInsight = rejected.find(j => j.rejectionStage === topStage && j.aiInsight)?.aiInsight;
+
+  return (
+    <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4 sm:p-5">
+      <div className="flex items-start gap-3">
+        <div className="h-8 w-8 rounded-lg bg-amber-500/15 flex items-center justify-center shrink-0">
+          <Brain className="h-4 w-4 text-amber-400" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-xs font-bold uppercase tracking-widest text-amber-400 mb-1">Pattern Detected</p>
+          <p className="text-sm font-bold text-white">
+            {topCount} rejection{topCount > 1 ? "s" : ""} {STAGE_LABEL[topStage] ?? "at the same stage"}
+          </p>
+          {latestInsight ? (
+            <p className="text-sm text-slate-300 mt-1 leading-relaxed">{latestInsight}</p>
+          ) : (
+            <p className="text-sm text-slate-400 mt-1">
+              This pattern suggests a specific skill gap — NinetyDays is generating your coaching insight.
+            </p>
+          )}
+          <Link href={action.href} className="inline-flex items-center gap-1 mt-2 text-xs font-semibold text-amber-400 hover:text-amber-300 transition-colors">
+            {action.label} <ChevronRight className="h-3 w-3" />
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function OutcomeModal({
   company, newStatus, onSave, onSkip,
@@ -248,12 +318,20 @@ export default function JobsPage() {
 
   async function moveJob(jobId: string, newStatus: JobStatus) {
     const job = jobs.find((j) => j.id === jobId);
+    const previousStatus = job?.status;
     setJobs((prev) => prev.map((j) => j.id === jobId ? { ...j, status: newStatus } : j));
     await fetch(`/api/jobs/${jobId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: newStatus, appliedAt: newStatus === "applied" ? new Date().toISOString() : undefined }),
+      body: JSON.stringify({
+        status: newStatus,
+        previousStatus,           // for rejection stage recording
+        appliedAt: newStatus === "applied" ? new Date().toISOString() : undefined,
+      }),
     });
+    if (newStatus === "rejected") {
+      toast.info("Analyzing rejection pattern…", { duration: 3000 });
+    }
     if ((newStatus === "offer" || newStatus === "rejected") && job && INTERVIEW_STAGES.includes(job.status)) {
       setPendingOutcome({ jobId, company: job.company, newStatus });
     }
@@ -304,7 +382,7 @@ export default function JobsPage() {
 
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-4xl font-bold">Job Tracker</h1>
+          <h1 className="text-4xl font-bold">Applications</h1>
           <p className="text-slate-300 mt-1.5 text-xl leading-relaxed">
             {jobs.length} application{jobs.length !== 1 ? "s" : ""} tracked
           </p>
@@ -314,6 +392,9 @@ export default function JobsPage() {
           Add job
         </Button>
       </div>
+
+      {/* AI rejection pattern banner */}
+      <RejectionPatternBanner jobs={jobs} />
 
       {jobs.length === 0 ? (
         <Card className="text-center py-20">
@@ -373,6 +454,14 @@ export default function JobsPage() {
                           >
                             {matchingJobId === job.id ? <><Loader2 className="h-3 w-3 animate-spin" />Analyzing...</> : "Check match →"}
                           </button>
+                        )}
+                        {job.status === "rejected" && job.aiInsight && (
+                          <div className="mt-2 p-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
+                            <div className="flex items-start gap-1.5">
+                              <AlertTriangle className="h-3 w-3 text-amber-400 shrink-0 mt-0.5" />
+                              <p className="text-[10px] text-amber-300 leading-snug">{job.aiInsight}</p>
+                            </div>
+                          </div>
                         )}
                         <div className="flex items-center gap-1.5 mt-2 flex-wrap">
                           {job.jobUrl && (
@@ -445,6 +534,14 @@ export default function JobsPage() {
                             >
                               {matchingJobId === job.id ? <><Loader2 className="h-3 w-3 animate-spin" />Analyzing...</> : "Check match →"}
                             </button>
+                          )}
+                          {job.status === "rejected" && job.aiInsight && (
+                            <div className="mt-2 p-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
+                              <div className="flex items-start gap-1.5">
+                                <AlertTriangle className="h-3 w-3 text-amber-400 shrink-0 mt-0.5" />
+                                <p className="text-[10px] text-amber-300 leading-snug">{job.aiInsight}</p>
+                              </div>
+                            </div>
                           )}
                           <div className="flex items-center gap-1.5 mt-2 flex-wrap">
                             {job.jobUrl && (
