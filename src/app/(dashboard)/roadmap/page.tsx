@@ -36,6 +36,8 @@ interface Task {
   hours: number;
   impactScore: number;
   completed: boolean;
+  masteryScore: number | null;
+  masteryThreshold: number;
 }
 
 interface Week {
@@ -45,6 +47,8 @@ interface Week {
   deliverable: string;
   deliverableDone: boolean;
   estimatedHours: number;
+  unlockPolicy: string;
+  unlockThreshold: number;
   tasks: Task[];
 }
 
@@ -106,6 +110,36 @@ const PHASE_COLORS = {
 
 function getPhaseForWeek(weekNumber: number) {
   return PHASES.find((p) => p.weeks.includes(weekNumber)) ?? PHASES[0];
+}
+
+// A week is mastery-unlocked when:
+//   1. It's week 1 (always open), OR
+//   2. The user already has at least one completed task in it (backward compat), OR
+//   3. The previous week's unlock policy is satisfied
+function isWeekMasteryUnlocked(weeks: Week[], weekNumber: number): boolean {
+  if (weekNumber <= 1) return true;
+
+  const thisWeek = weeks.find((w) => w.weekNumber === weekNumber);
+  // Already started — keep it open regardless of policy
+  if (thisWeek?.tasks.some((t) => t.completed)) return true;
+
+  const prev = weeks.find((w) => w.weekNumber === weekNumber - 1);
+  if (!prev || prev.tasks.length === 0) return true;
+
+  const policy = prev.unlockPolicy ?? "completion";
+
+  if (policy === "mastery") {
+    const threshold = prev.unlockThreshold ?? 80;
+    const scored = prev.tasks.filter((t) => t.masteryScore !== null);
+    if (scored.length === 0) return false;
+    const avg = scored.reduce((s, t) => s + (t.masteryScore ?? 0), 0) / scored.length;
+    return avg >= threshold;
+  }
+
+  if (policy === "deliverable") return prev.deliverableDone;
+
+  // default: "completion"
+  return prev.tasks.every((t) => t.completed);
 }
 
 function getDomainLabel(url: string): string {
@@ -176,17 +210,12 @@ export default function RoadmapPage() {
       setWeeks(weeksData);
       // Auto-expand current week and first incomplete week
       if (weeksData.length > 0) {
-        const startedAt = data.roadmap?.startedAt ? new Date(data.roadmap.startedAt).getTime() : Date.now();
-        const currentWeekNum = Math.min(
-          Math.ceil((Date.now() - startedAt) / (7 * 24 * 60 * 60 * 1000)) + 1,
-          12
-        );
         const defaultOpen = new Set<string>();
-        const currentWeek = weeksData.find((w) => w.weekNumber === currentWeekNum);
-        if (currentWeek) defaultOpen.add(currentWeek.id);
-        // Also expand first incomplete week if different
-        const firstIncomplete = weeksData.find((w) => w.tasks.some((t) => !t.completed));
-        if (firstIncomplete) defaultOpen.add(firstIncomplete.id);
+        // Auto-expand the first mastery-unlocked week that still has work
+        const firstActive = weeksData.find(
+          (w) => isWeekMasteryUnlocked(weeksData, w.weekNumber) && w.tasks.some((t) => !t.completed)
+        );
+        if (firstActive) defaultOpen.add(firstActive.id);
         setExpandedWeeks(defaultOpen);
       }
     }
@@ -275,16 +304,13 @@ export default function RoadmapPage() {
   const doneTasks = allTasks.filter((t) => t.completed).length;
   const pct = allTasks.length ? Math.round((doneTasks / allTasks.length) * 100) : 0;
 
-  const currentWeek = roadmap
-    ? Math.min(
-        Math.ceil(
-          (Date.now() - new Date(roadmap.startedAt).getTime()) / (7 * 24 * 60 * 60 * 1000)
-        ) + 1,
-        12
-      )
-    : 1;
+  // "Current week" = first mastery-unlocked week with remaining tasks (mastery-driven, not calendar-driven)
+  const currentWeek = weeks.find(
+    (w) => isWeekMasteryUnlocked(weeks, w.weekNumber) && w.tasks.some((t) => !t.completed)
+  )?.weekNumber ?? (weeks.length > 0 ? weeks[weeks.length - 1].weekNumber : 1);
 
-  const visibleWeeks = userPlan?.plan === "PRO" ? 12 : FREE_WEEKS_VISIBLE;
+  // Plan-based hard cap: FREE users can only see up to week FREE_WEEKS_VISIBLE
+  const planWeekCap = userPlan?.plan === "PRO" ? Infinity : FREE_WEEKS_VISIBLE;
 
   if (!roadmap || weeks.length === 0) {
     return (
@@ -510,8 +536,15 @@ export default function RoadmapPage() {
 
             {/* Week cards */}
             {phaseWeeks.map((week) => {
-              const isLocked = week.weekNumber > visibleWeeks;
-              const isCurrent = week.weekNumber === currentWeek;
+              const isPlanLocked    = week.weekNumber > planWeekCap;
+              const isMasteryLocked = !isPlanLocked && !isWeekMasteryUnlocked(weeks, week.weekNumber);
+              const isLocked        = isPlanLocked || isMasteryLocked;
+              const isCurrent       = week.weekNumber === currentWeek;
+              // Previous week data — used in mastery-locked UI
+              const prevWeek        = isMasteryLocked ? weeks.find((w) => w.weekNumber === week.weekNumber - 1) : null;
+              const prevDone        = prevWeek?.tasks.filter((t) => t.completed).length ?? 0;
+              const prevTotal       = prevWeek?.tasks.length ?? 0;
+              const prevPct         = prevTotal ? Math.round((prevDone / prevTotal) * 100) : 0;
               const isExpanded = expandedWeeks.has(week.id);
               const weekDoneTasks = week.tasks.filter((t) => t.completed).length;
               const weekPct = week.tasks.length ? Math.round((weekDoneTasks / week.tasks.length) * 100) : 0;
@@ -716,8 +749,8 @@ export default function RoadmapPage() {
                     </div>
                   )}
 
-                  {/* Locked upgrade prompt */}
-                  {isLocked && (
+                  {/* Plan-locked: upgrade wall */}
+                  {isPlanLocked && (
                     <div className="px-5 pb-4 pt-1">
                       <Link href="/settings">
                         <Button size="sm" variant="outline" className="gap-2 text-xs h-8 border-white/15 text-slate-400 hover:border-indigo-500/40 hover:text-indigo-400">
@@ -725,6 +758,35 @@ export default function RoadmapPage() {
                           Upgrade to unlock weeks {week.weekNumber}–12
                         </Button>
                       </Link>
+                    </div>
+                  )}
+
+                  {/* Mastery-locked: show previous week progress */}
+                  {isMasteryLocked && prevWeek && (
+                    <div className="px-5 pb-5 pt-2">
+                      <div className="flex items-start gap-3 rounded-xl bg-white/[0.03] border border-white/[0.07] p-4">
+                        <Lock className="h-4 w-4 text-slate-500 shrink-0 mt-0.5" />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-slate-300 mb-2">
+                            Complete Week {week.weekNumber - 1} to unlock
+                          </p>
+                          <div className="flex items-center justify-between text-xs text-slate-500 mb-1.5">
+                            <span>{prevDone} of {prevTotal} tasks done</span>
+                            <span>{prevPct}%</span>
+                          </div>
+                          <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                            <div
+                              className={`h-full rounded-full transition-all ${colors.bar}`}
+                              style={{ width: `${prevPct}%` }}
+                            />
+                          </div>
+                          {prevPct > 0 && prevPct < 100 && (
+                            <p className="text-xs text-slate-600 mt-2">
+                              {prevTotal - prevDone} task{prevTotal - prevDone !== 1 ? "s" : ""} left in Week {week.weekNumber - 1}
+                            </p>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
