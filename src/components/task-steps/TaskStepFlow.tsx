@@ -4,8 +4,86 @@ import { useEffect, useState, useTransition } from "react";
 import { TaskMentor } from "@/components/task-steps/TaskMentor";
 import {
   Lightbulb, BookOpen, Layers, PenLine, HelpCircle, Award,
-  CheckCircle2, ChevronRight, Loader2, AlertTriangle,
+  CheckCircle2, ChevronRight, Loader2, AlertTriangle, Sparkles,
 } from "lucide-react";
+
+// ─── Beautiful loading skeleton ───────────────────────────────────────────────
+
+const LOADING_STEPS = [
+  { icon: Lightbulb,  label: "Why It Matters",  color: "text-amber-400",   bg: "bg-amber-500/10"   },
+  { icon: BookOpen,   label: "Lesson",            color: "text-blue-400",    bg: "bg-blue-500/10"    },
+  { icon: Layers,     label: "Example Gallery",  color: "text-violet-400",  bg: "bg-violet-500/10"  },
+  { icon: PenLine,    label: "Practice",          color: "text-indigo-400",  bg: "bg-indigo-500/10"  },
+  { icon: HelpCircle, label: "Quiz",              color: "text-emerald-400", bg: "bg-emerald-500/10" },
+  { icon: Award,      label: "Deliverable",       color: "text-orange-400",  bg: "bg-orange-500/10"  },
+] as const;
+
+function GeneratingSkeleton({ taskLabel }: { taskLabel: string }) {
+  const [revealed, setRevealed] = useState(0);
+
+  useEffect(() => {
+    const timers = LOADING_STEPS.map((_, i) =>
+      setTimeout(() => setRevealed(i + 1), i * 900)
+    );
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
+  return (
+    <div className="bg-[#161820] rounded-2xl border border-white/10 shadow-sm p-6 space-y-5">
+      {/* Header */}
+      <div className="flex items-center gap-3">
+        <div className="h-9 w-9 rounded-xl bg-indigo-500/10 flex items-center justify-center shrink-0">
+          <Sparkles className="h-4 w-4 text-indigo-400 animate-pulse" />
+        </div>
+        <div>
+          <p className="font-bold text-white">Personalizing your learning path</p>
+          <p className="text-xs text-slate-400 mt-0.5">
+            AI is reading your skill scores and career goals
+          </p>
+        </div>
+      </div>
+
+      <p className="text-xs text-slate-500 truncate">
+        Building 6 steps for: <span className="text-slate-300">"{taskLabel}"</span>
+      </p>
+
+      {/* Progressive step reveal */}
+      <div className="space-y-2">
+        {LOADING_STEPS.map((step, i) => {
+          const Icon = step.icon;
+          const isVisible = i < revealed;
+          const isCurrent = i === revealed;
+          return (
+            <div
+              key={step.label}
+              className={`flex items-center gap-3 rounded-xl px-4 py-2.5 border transition-all duration-500 ${
+                isVisible
+                  ? `${step.bg} border-white/[0.07]`
+                  : "border-white/[0.04] bg-white/[0.02] opacity-25"
+              }`}
+            >
+              <div className={`h-6 w-6 rounded-lg flex items-center justify-center shrink-0 ${isVisible ? step.bg : "bg-white/[0.04]"}`}>
+                {isVisible
+                  ? <Icon className={`h-3.5 w-3.5 ${step.color}`} />
+                  : <div className="h-3 w-3 rounded bg-white/10" />
+                }
+              </div>
+              <span className={`text-sm font-medium flex-1 ${isVisible ? "text-slate-300" : "text-slate-600"}`}>
+                {step.label}
+              </span>
+              {isVisible  && <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500/60 shrink-0" />}
+              {isCurrent  && <Loader2 className="h-3.5 w-3.5 text-slate-500 animate-spin shrink-0" />}
+            </div>
+          );
+        })}
+      </div>
+
+      <p className="text-[11px] text-slate-600 text-center">
+        Usually 5–10 seconds · Only happens once per task
+      </p>
+    </div>
+  );
+}
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -483,13 +561,7 @@ export function TaskStepFlow({ taskId, taskLabel, existingSteps, alreadyComplete
 
   // ── Generating skeleton ────────────────────────────────────────────────────
   if (isGenerating) {
-    return (
-      <div className="bg-[#161820] rounded-2xl border border-white/10 shadow-sm p-8 text-center animate-pulse">
-        <Loader2 className="h-8 w-8 text-indigo-400 animate-spin mx-auto mb-4" />
-        <p className="text-white font-semibold">Building your learning experience…</p>
-        <p className="text-sm text-slate-400 mt-1">Personalizing 6 steps for "{taskLabel}"</p>
-      </div>
-    );
+    return <GeneratingSkeleton taskLabel={taskLabel} />;
   }
 
   if (steps.length === 0) return null;

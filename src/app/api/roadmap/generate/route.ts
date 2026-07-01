@@ -13,6 +13,7 @@ import { fetchGitHubSignal } from "@/lib/github-signal";
 import { enrichTaskResources } from "@/lib/resource-links";
 import { triggerRoadmapReadyEmail } from "@/lib/email-triggers";
 import { captureServerEvent, EVENTS } from "@/lib/analytics";
+import { generateAndSaveTaskSteps } from "@/lib/task-steps-generator";
 
 export const maxDuration = 120;
 
@@ -212,6 +213,17 @@ export async function POST(req: Request) {
 
   triggerRoadmapReadyEmail(userId, targetRole, weeks[0]?.theme ?? "Foundation")
     .catch((err) => console.error("[roadmap/generate] Email trigger failed:", err));
+
+  // Pre-generate steps for the first 2 tasks so users don't wait on first open
+  db.roadmapTask.findMany({
+    where: { week: { roadmapId: roadmap.id, weekNumber: 1 } },
+    select: { id: true },
+    take: 2,
+  }).then(firstTasks => {
+    for (const task of firstTasks) {
+      generateAndSaveTaskSteps(task.id, targetRole).catch(() => {});
+    }
+  }).catch(() => {});
 
   captureServerEvent(userId, EVENTS.ROADMAP_GENERATED, {
     targetRole,
