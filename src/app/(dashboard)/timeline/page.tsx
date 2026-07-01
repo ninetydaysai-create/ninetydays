@@ -5,6 +5,7 @@ import { differenceInDays, format } from "date-fns";
 import { defaultModel } from "@/lib/ai";
 import { generateText } from "ai";
 import { buildCareerContext } from "@/lib/career-context";
+import { captureServerEvent, EVENTS } from "@/lib/analytics";
 import { ROLE_LABELS } from "@/lib/constants";
 import { TargetRole } from "@prisma/client";
 import Link from "next/link";
@@ -215,6 +216,7 @@ export default async function TimelinePage() {
   const { userId } = await auth();
   if (!userId) redirect("/sign-in");
 
+  captureServerEvent(userId, EVENTS.TIMELINE_VIEWED);
   const ctx = await buildCareerContext(userId);
 
   const [roadmap, activityLogs, skillHistory, sessions, applications, deliverables, gapHistory, careerProfile] = await Promise.all([

@@ -1,6 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { captureServerEvent, EVENTS } from "@/lib/analytics";
 
 export async function GET() {
   const { userId } = await auth();
@@ -34,5 +35,10 @@ export async function PATCH(req: Request) {
     create: { userId, ...data },
   });
 
+  captureServerEvent(userId, EVENTS.GOAL_SAVED, {
+    hasTargetCompany: Array.isArray(body.targetCompanies) && body.targetCompanies.length > 0,
+    hasPriority:      Array.isArray(body.priority) && body.priority.length > 0,
+    currentStage:     body.currentStage ?? null,
+  });
   return NextResponse.json({ profile });
 }

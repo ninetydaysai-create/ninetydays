@@ -7,6 +7,7 @@ import { z } from "zod";
 import { SkillDimension } from "@prisma/client";
 import { buildPracticeEvaluationPrompt } from "@/prompts/task-steps";
 import { applyPracticeScore, applyQuizScore } from "@/lib/skill-scores";
+import { captureServerEvent, EVENTS } from "@/lib/analytics";
 
 interface PracticeContent {
   instructions: string;
@@ -167,5 +168,12 @@ export async function POST(
     }).catch(() => {});
   }
 
+  captureServerEvent(userId, EVENTS.STEP_COMPLETED, {
+    stepType: step.type, taskId, score: score ?? null,
+    taskCompleted: allDone,
+  });
+  if (step.type === "deliverable") {
+    captureServerEvent(userId, EVENTS.DELIVERABLE_CREATED, { taskId });
+  }
   return NextResponse.json({ ok: true, score, aiFeedback, quizResults, taskCompleted: allDone });
 }

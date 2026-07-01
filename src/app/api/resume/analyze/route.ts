@@ -11,6 +11,7 @@ import { assertPlanAllows } from "@/lib/plan-guard";
 import { buildResumeAnalysisPrompt } from "@/prompts/resume-analysis";
 import { parseTimelineYears, mergeTimelineWithModel } from "@/lib/timeline-parser";
 import { applyResumeAnalysisScores } from "@/lib/skill-scores";
+import { captureServerEvent, EVENTS } from "@/lib/analytics";
 
 // z.record() generates `propertyNames` in JSON Schema which Anthropic rejects.
 // Use arrays of objects instead, then convert to records after generation.
@@ -124,5 +125,6 @@ export async function POST(req: Request) {
     impactScore:         analysis.impactScore,
   });
 
+  captureServerEvent(userId, EVENTS.RESUME_ANALYZED, { score: analysis.overallScore, targetRole: user?.targetRole });
   return NextResponse.json({ analysisId: analysis.id, score: analysis.overallScore });
 }

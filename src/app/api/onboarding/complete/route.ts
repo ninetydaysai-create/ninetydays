@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { syncUser } from "@/lib/sync-user";
 import { TargetRole } from "@prisma/client";
+import { captureServerEvent, EVENTS } from "@/lib/analytics";
 
 const VALID_TARGET_ROLES = Object.values(TargetRole) as string[];
 
@@ -36,5 +37,6 @@ export async function POST(req: Request) {
     update: {},
   });
 
+  captureServerEvent(userId, EVENTS.ONBOARDING_COMPLETED, { targetRole, targetReason });
   return NextResponse.json({ ok: true });
 }

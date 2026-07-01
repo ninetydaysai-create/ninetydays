@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getPaddle } from "@/lib/paddle";
 import { db } from "@/lib/db";
 import { Plan } from "@prisma/client";
+import { captureServerEvent, EVENTS } from "@/lib/analytics";
 
 /**
  * Paddle webhook handler.
@@ -68,6 +69,8 @@ export async function POST(req: Request) {
           },
         });
 
+        captureServerEvent(userId, EVENTS.PAYMENT_COMPLETED, { plan: "sprint" });
+
         await db.notification.create({
           data: {
             userId,
@@ -125,6 +128,10 @@ export async function POST(req: Request) {
         paddlePriceId:          firstItemId,
         paddleCurrentPeriodEnd: renewsAt,
       },
+    });
+
+    captureServerEvent(userId, EVENTS.PAYMENT_COMPLETED, {
+      plan: customData?.plan ?? "monthly", paddleCustomerId: custId,
     });
 
     // Referral reward

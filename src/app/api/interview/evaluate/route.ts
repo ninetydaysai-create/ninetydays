@@ -9,6 +9,7 @@ import { TranscriptMessage } from "@/types/interview";
 import { ResumeAnalysisResult } from "@/types/resume";
 import { GapReportResult } from "@/types/gaps";
 import { applyInterviewScores } from "@/lib/skill-scores";
+import { captureServerEvent, EVENTS } from "@/lib/analytics";
 
 const ScorecardSchema = z.object({
   overallScore: z.number(),
@@ -89,6 +90,8 @@ export async function POST(req: Request) {
   });
 
   await applyInterviewScores(userId, sessionId, scorecard.overallScore, session.type);
-
+  captureServerEvent(userId, EVENTS.INTERVIEW_COMPLETED, {
+    score: scorecard.overallScore, interviewType: session.type, role: session.role,
+  });
   return NextResponse.json({ scorecard: updated.scorecard });
 }

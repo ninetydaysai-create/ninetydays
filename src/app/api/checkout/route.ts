@@ -2,6 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { getPaddle, getPaddlePriceId, type PaddlePlan } from "@/lib/paddle";
 import { db } from "@/lib/db";
+import { captureServerEvent, EVENTS } from "@/lib/analytics";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://ninetydays.ai";
 
@@ -50,5 +51,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Failed to create checkout" }, { status: 500 });
   }
 
+  captureServerEvent(userId, EVENTS.CHECKOUT_STARTED, { plan });
   return NextResponse.redirect(checkoutUrl, 303);
 }

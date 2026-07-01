@@ -12,6 +12,7 @@ import { assertPlanAllows } from "@/lib/plan-guard";
 import { fetchGitHubSignal } from "@/lib/github-signal";
 import { enrichTaskResources } from "@/lib/resource-links";
 import { triggerRoadmapReadyEmail } from "@/lib/email-triggers";
+import { captureServerEvent, EVENTS } from "@/lib/analytics";
 
 export const maxDuration = 120;
 
@@ -212,5 +213,10 @@ export async function POST(req: Request) {
   triggerRoadmapReadyEmail(userId, targetRole, weeks[0]?.theme ?? "Foundation")
     .catch((err) => console.error("[roadmap/generate] Email trigger failed:", err));
 
+  captureServerEvent(userId, EVENTS.ROADMAP_GENERATED, {
+    targetRole,
+    totalWeeks: weeks.length,
+    totalTasks: weeks.reduce((n, w) => n + w.tasks.length, 0),
+  });
   return NextResponse.json({ roadmapId: roadmap.id });
 }

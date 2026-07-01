@@ -7,6 +7,7 @@ import { z } from "zod";
 import { SkillDimension } from "@prisma/client";
 import { buildChallengeEvaluationPrompt } from "@/prompts/daily-challenge";
 import { applyPracticeScore } from "@/lib/skill-scores";
+import { captureServerEvent, EVENTS } from "@/lib/analytics";
 
 const EvaluationSchema = z.object({
   score:        z.number().min(0).max(100),
@@ -79,5 +80,8 @@ export async function POST(req: Request) {
     },
   });
 
+  captureServerEvent(userId, EVENTS.CHALLENGE_COMPLETED, {
+    score: evaluation.score, challengeType: challenge.type, dimension: challenge.dimension,
+  });
   return NextResponse.json({ challenge: updated, evaluation });
 }

@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { defaultModel } from "@/lib/ai";
 import { generateText } from "ai";
 import { buildCareerContext } from "@/lib/career-context";
+import { captureServerEvent, EVENTS } from "@/lib/analytics";
 import { getCompanyReadiness } from "@/lib/company-readiness";
 import { differenceInDays } from "date-fns";
 import crypto from "node:crypto";
@@ -116,6 +117,10 @@ export async function POST() {
     create: { userId, token, snapshot, aiSummary },
   });
 
+  captureServerEvent(userId, EVENTS.PORTFOLIO_EXPORTED, {
+    deliverableCount: ctx.deliverableCount, dayCount,
+    hasAiSummary: true,
+  });
   return NextResponse.json({
     url: `${APP_URL}/p/${token}`,
     token,
