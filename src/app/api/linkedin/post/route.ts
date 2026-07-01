@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import { defaultModel } from "@/lib/ai";
+import { fastModel } from "@/lib/ai";
 import { generateObject } from "ai";
 import { z } from "zod";
 
@@ -53,7 +53,7 @@ Requirements for each post:
 Return exactly 3 posts with variant labels "Motivational", "Technical", and "Story-driven".`;
 
   const { object } = await generateObject({
-    model: defaultModel,
+    model: fastModel,
     schema: PostsSchema,
     prompt,
   });

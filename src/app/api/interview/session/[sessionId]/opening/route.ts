@@ -2,7 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { streamText } from "ai";
-import { defaultModel } from "@/lib/ai";
+import { defaultModel, cachedSystemMessage } from "@/lib/ai";
 import { buildInterviewSystemPrompt } from "@/prompts/interview-evaluator";
 import { TranscriptMessage } from "@/types/interview";
 
@@ -24,8 +24,10 @@ export async function GET(
 
   const result = streamText({
     model: defaultModel,
-    system: systemPrompt,
-    messages: [{ role: "user", content: "Please begin the interview." }],
+    messages: [
+      cachedSystemMessage(systemPrompt),
+      { role: "user", content: "Please begin the interview." },
+    ],
     onFinish: async ({ text }) => {
       const openingMessage: TranscriptMessage = {
         role: "assistant",

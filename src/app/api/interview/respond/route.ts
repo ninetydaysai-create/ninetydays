@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { streamText } from "ai";
-import { defaultModel } from "@/lib/ai";
+import { defaultModel, cachedSystemMessage } from "@/lib/ai";
 import { buildInterviewSystemPrompt } from "@/prompts/interview-evaluator";
 import { assertPlanAllows } from "@/lib/plan-guard";
 import { TranscriptMessage } from "@/types/interview";
@@ -38,8 +38,10 @@ export async function POST(req: Request) {
 
   const result = streamText({
     model: defaultModel,
-    system: systemPrompt,
-    messages: updatedTranscript.map((m) => ({ role: m.role, content: m.content })),
+    messages: [
+      cachedSystemMessage(systemPrompt),
+      ...updatedTranscript.map((m) => ({ role: m.role, content: m.content })),
+    ],
     onFinish: async ({ text }) => {
       try {
         const assistantTurn: TranscriptMessage = {

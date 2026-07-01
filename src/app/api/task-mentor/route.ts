@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { defaultModel } from "@/lib/ai";
+import { defaultModel, cachedSystemMessage } from "@/lib/ai";
 import { streamText } from "ai";
 import { buildCareerContext, formatCareerContextForAI } from "@/lib/career-context";
 
@@ -71,8 +71,8 @@ Rules:
 
   const result = streamText({
     model: defaultModel,
-    system: systemPrompt,
     messages: [
+      cachedSystemMessage(systemPrompt),
       ...history.map((m) => ({ role: m.role as "user" | "assistant", content: m.content })),
       { role: "user", content: userMessage },
     ],

@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { defaultModel } from "@/lib/ai";
+import { fastModel } from "@/lib/ai";
 import { generateObject } from "ai";
 import { z } from "zod";
 import { buildLinkedInOptimizationPrompt } from "@/prompts/linkedin-optimizer";
@@ -65,7 +65,7 @@ export async function POST(req: Request) {
   let object;
   try {
     const result = await generateObject({
-      model: defaultModel,
+      model: fastModel,
       schema: LinkedInResultSchema,
       prompt: buildLinkedInOptimizationPrompt(
         headline,

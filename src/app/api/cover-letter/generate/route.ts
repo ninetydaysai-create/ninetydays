@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { defaultModel } from "@/lib/ai";
+import { fastModel } from "@/lib/ai";
 import { generateObject } from "ai";
 import { z } from "zod";
 import { ResumeAnalysisResult } from "@/types/resume";
@@ -92,7 +92,7 @@ Also return an array of exactly 3 short strings (highlights) describing the key 
   let object;
   try {
     const result = await generateObject({
-      model: defaultModel,
+      model: fastModel,
       schema: CoverLetterSchema,
       prompt,
     });

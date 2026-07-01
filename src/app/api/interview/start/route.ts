@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { syncUser } from "@/lib/sync-user";
 import { streamText } from "ai";
-import { defaultModel } from "@/lib/ai";
+import { defaultModel, cachedSystemMessage } from "@/lib/ai";
 import { buildInterviewSystemPrompt } from "@/prompts/interview-evaluator";
 import { assertPlanAllows } from "@/lib/plan-guard";
 import { InterviewType, TargetRole } from "@prisma/client";
@@ -41,8 +41,8 @@ export async function POST(req: Request) {
   // Stream the opening question
   const result = streamText({
     model: defaultModel,
-    system: systemPrompt,
     messages: [
+      cachedSystemMessage(systemPrompt),
       { role: "user", content: "Please begin the interview." },
     ],
     onFinish: async ({ text }) => {

@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { defaultModel } from "@/lib/ai";
+import { fastModel } from "@/lib/ai";
 import { generateObject } from "ai";
 import { z } from "zod";
 import { assertPlanAllows } from "@/lib/plan-guard";
@@ -100,7 +100,7 @@ Return one shared subject line that works for all three variants, and three emai
   let object;
   try {
     const result = await generateObject({
-      model: defaultModel,
+      model: fastModel,
       schema: OutreachSchema,
       prompt,
     });

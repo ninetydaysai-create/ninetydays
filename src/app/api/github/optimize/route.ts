@@ -2,7 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { syncUser } from "@/lib/sync-user";
-import { defaultModel } from "@/lib/ai";
+import { fastModel } from "@/lib/ai";
 import { generateText } from "ai";
 import { buildGithubReadmePrompt } from "@/prompts/linkedin-optimizer";
 import { assertPlanAllows } from "@/lib/plan-guard";
@@ -23,7 +23,7 @@ export async function POST(req: Request) {
   });
 
   const { text } = await generateText({
-    model: defaultModel,
+    model: fastModel,
     prompt: buildGithubReadmePrompt(
       currentReadme,
       user?.name ?? "Developer",

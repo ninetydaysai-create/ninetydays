@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { defaultModel } from "@/lib/ai";
+import { defaultModel, cachedSystemMessage } from "@/lib/ai";
 import { streamText } from "ai";
 import { PLAN_LIMITS } from "@/lib/constants";
 import { buildCareerContext, formatCareerContextForAI } from "@/lib/career-context";
@@ -70,11 +70,11 @@ MENTORING RULES:
     data: { userId, role: "user", content: message.trim() },
   });
 
-  // Stream response
+  // Stream response — system prompt cached (stable career context, large token count)
   const result = streamText({
     model: defaultModel,
-    system: systemPrompt,
     messages: [
+      cachedSystemMessage(systemPrompt),
       ...historyMessages,
       { role: "user", content: message.trim() },
     ],
