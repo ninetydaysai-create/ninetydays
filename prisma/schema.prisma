@@ -146,6 +146,7 @@ model User {
   dailyChallenges   DailyChallenge[]
   deliverables      Deliverable[]
   careerProfile     CareerProfile?
+  portfolioExport   PortfolioExport?
 
   @@map("users")
 }
@@ -179,6 +180,21 @@ model CareerProfile {
   updatedAt       DateTime @updatedAt
 
   @@map("career_profiles")
+}
+
+// ─── Portfolio Export ─────────────────────────────────────────────────────────
+
+model PortfolioExport {
+  id         String   @id @default(cuid())
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token      String   @unique  // public access token — URL is /p/[token]
+  snapshot   Json              // point-in-time career data
+  aiSummary  String   @db.Text // AI-generated transformation narrative
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("portfolio_exports")
 }
 
 // ─── Resume ───────────────────────────────────────────────────────────────────

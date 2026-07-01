@@ -7,7 +7,7 @@ import Link from "next/link";
 import { ROLE_LABELS } from "@/lib/constants";
 import { TargetRole, SkillDimension } from "@prisma/client";
 import { getCompanyReadiness } from "@/lib/company-readiness";
-import { ShareReportButton } from "@/components/report/ShareReportButton";
+import { ExportPortfolioButton } from "@/components/report/ExportPortfolioButton";
 
 const DIM_LABELS: Record<string, string> = {
   resume_quality:"Resume Quality", ats_score:"ATS Score", ownership_language:"Ownership Language",
@@ -96,7 +96,7 @@ export default async function ReportPage() {
           {user?.careerProfile?.careerGoal && (
             <p className="text-indigo-100 italic text-sm mb-4">"{user.careerProfile.careerGoal}"</p>
           )}
-          <ShareReportButton />
+          <ExportPortfolioButton />
         </div>
       </div>
 
