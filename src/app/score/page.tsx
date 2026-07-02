@@ -29,7 +29,7 @@ interface ScoreResult {
 const PRICING_VARIANT_COPY = {
   control: { plan: "monthly" as const, afterSignUpUrl: "/onboarding?plan=monthly" },
   sprint:  { plan: "sprint"  as const, afterSignUpUrl: "/onboarding?plan=sprint"  },
-  mentor:  { plan: "monthly_15" as const, afterSignUpUrl: "/onboarding?plan=monthly_15" },
+  mentor:  { plan: "monthly" as const, afterSignUpUrl: "/onboarding?plan=monthly" },
 } as const;
 
 type PricingVariant = keyof typeof PRICING_VARIANT_COPY;

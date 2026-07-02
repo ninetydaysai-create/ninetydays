@@ -67,10 +67,8 @@ export const COMPANY_OPTIONS = [
 
 export const PRICING = {
   FREE:   { monthly: 0,  label: "Free" },
-  PRO:    { monthly: 12, annual: 8.25, label: "Pro",  annualTotal: 99,  saving: "Save $45/yr" },
-  PRO_15: { monthly: 15, annual: 12,   label: "Pro",  annualTotal: 144, saving: "Save $36/yr" },
-  SPRINT: { oneTime: 49, label: "90-Day Sprint", days: 90 },
-  TEAM:   { monthly: 29, annual: 22,   label: "Team", annualTotal: 264, saving: "Save $84/yr", seats: 5 },
+  PRO:    { monthly: 12, annual: 8.25, label: "Pro", annualTotal: 99, saving: "Save $45/yr" },
+  SPRINT: { oneTime: 59, label: "90-Day Sprint", days: 90 },
 } as const;
 
 // ─── Navigation ───────────────────────────────────────────────────────────────

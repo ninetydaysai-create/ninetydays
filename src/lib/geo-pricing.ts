@@ -46,7 +46,7 @@ const USD: RegionalPricing = {
   plans: {
     monthly:    { display: "$12/mo",   note: "Cancel anytime" },
     annual:     { display: "$99/yr",   subDisplay: "$8.25/mo", badge: "Save $45/yr", note: "Billed once yearly · price locks forever" },
-    sprint:     { display: "$49",      note: "90-day full access · No subscription", isOneTime: true },
+    sprint:     { display: "$59",      note: "90-day full access · No subscription", isOneTime: true },
     monthly_15: { display: "$12/mo",   note: "Full AI mentor · Cancel anytime" },
   },
 };
@@ -56,10 +56,10 @@ const INR: RegionalPricing = {
   currency: "inr",
   symbol: "₹",
   plans: {
-    monthly:    { display: "₹1,299/mo",  note: "Cancel anytime" },
-    annual:     { display: "₹9,999/yr",  subDisplay: "₹833/mo", badge: "Save ₹5,589/yr", note: "Billed once yearly · price locks forever" },
-    sprint:     { display: "₹2,499",     note: "90-day full access · No subscription", isOneTime: true },
-    monthly_15: { display: "₹1,299/mo",  note: "Full AI mentor · Cancel anytime" },
+    monthly:    { display: "₹999/mo",    note: "Cancel anytime" },
+    annual:     { display: "₹7,999/yr",  subDisplay: "₹667/mo", badge: "Save ₹3,989/yr", note: "Billed once yearly · price locks forever" },
+    sprint:     { display: "₹2,999",     note: "90-day full access · No subscription", isOneTime: true },
+    monthly_15: { display: "₹999/mo",    note: "Full AI mentor · Cancel anytime" },
   },
 };
 
@@ -70,7 +70,7 @@ const GBP: RegionalPricing = {
   plans: {
     monthly:    { display: "£15/mo",   note: "Cancel anytime" },
     annual:     { display: "£119/yr",  subDisplay: "£9.92/mo", badge: "Save £61/yr", note: "Billed once yearly · price locks forever" },
-    sprint:     { display: "£39",      note: "90-day full access · No subscription", isOneTime: true },
+    sprint:     { display: "£45",      note: "90-day full access · No subscription", isOneTime: true },
     monthly_15: { display: "£15/mo",   note: "Full AI mentor · Cancel anytime" },
   },
 };
@@ -82,7 +82,7 @@ const EUR: RegionalPricing = {
   plans: {
     monthly:    { display: "€18/mo",   note: "Cancel anytime" },
     annual:     { display: "€139/yr",  subDisplay: "€11.58/mo", badge: "Save €77/yr", note: "Billed once yearly · price locks forever" },
-    sprint:     { display: "€44",      note: "90-day full access · No subscription", isOneTime: true },
+    sprint:     { display: "€52",      note: "90-day full access · No subscription", isOneTime: true },
     monthly_15: { display: "€18/mo",   note: "Full AI mentor · Cancel anytime" },
   },
 };
